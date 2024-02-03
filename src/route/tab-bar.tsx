@@ -59,8 +59,7 @@ const TabBar: FC<IProps> = () => {
                             <Icon name={'slightly-smile'} type={'fontisto'} />
                         )
                     },
-                    headerLeft: () => <MyLocation></MyLocation>,
-                    headerTitle: '',
+                    headerShown: false,
                 }}
             ></Tab.Screen>
             <Tab.Screen

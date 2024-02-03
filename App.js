@@ -14,6 +14,7 @@ import MyCamera from './src/components/camera'
 import FoodDetail from './src/views/diet/c-pages/food-detail'
 import theme from './src/styles/theme/color'
 import { Image, TouchableOpacity } from 'react-native'
+import MyShare from './src/components/share'
 export default function App() {
     const Stack = createStackNavigator()
     useEffect(() => {}, [])
@@ -115,16 +116,20 @@ export default function App() {
                                 ),
                                 headerRight: () => {
                                     return (
-                                        <TouchableOpacity>
-                                            <Image
-                                                source={require('./assets/icon/分享.png')}
-                                                style={{
-                                                    width: 25,
-                                                    height: 25,
-                                                    marginRight: 10,
-                                                }}
-                                            ></Image>
-                                        </TouchableOpacity>
+                                        <MyShare>
+                                            {{
+                                                content: (
+                                                    <Image
+                                                        source={require('./assets/icon/分享.png')}
+                                                        style={{
+                                                            width: 25,
+                                                            height: 25,
+                                                            marginRight: 10,
+                                                        }}
+                                                    ></Image>
+                                                ),
+                                            }}
+                                        </MyShare>
                                     )
                                 },
                             }}

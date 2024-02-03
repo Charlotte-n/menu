@@ -1,5 +1,6 @@
 package com.menuapp
 
+
 import android.app.Application
 import android.content.res.Configuration
 import androidx.annotation.NonNull
@@ -18,6 +19,9 @@ import com.facebook.soloader.SoLoader
 
 import expo.modules.ApplicationLifecycleDispatcher
 import expo.modules.ReactNativeHostWrapper
+
+//分享
+
 
 class MainApplication : Application(), ReactApplication {
 
@@ -63,3 +67,4 @@ class MainApplication : Application(), ReactApplication {
     ApplicationLifecycleDispatcher.onConfigurationChanged(this, newConfig)
   }
 }
+

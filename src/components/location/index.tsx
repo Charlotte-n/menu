@@ -2,31 +2,26 @@ import React, { memo, useEffect, useState } from 'react'
 import type { FC, ReactNode } from 'react'
 import Geolocation from 'react-native-geolocation-service'
 import { PermissionsAndroid, Text, View } from 'react-native'
-import Geocoder from 'react-native-geocoding'
+import { address } from '../../apis/diet'
 // 初始化 API key（必须在使用任何其他功能之前进行初始化）
 interface IProps {
     children?: ReactNode
 }
 
 const MyLocation: FC<IProps> = () => {
-    Geocoder.init('AIzaSyCDiI8RsFKdM9H7eFN9HTWk3ntVcHIDHI0')
     const [position, setPosition] = useState('')
     const getPosition = () => {
         // 获取当前位置
         Geolocation.getCurrentPosition(
-            (position) => {
-                console.log('Current Position: ', position)
+            async (position) => {
+                console.log('Current Position: ', position.coords)
                 // 通过经纬度获取地址（逆地理编码）
-                Geocoder.from(
-                    position.coords.latitude,
-                    position.coords.longitude,
-                )
-                    .then((json) => {
-                        const addressComponent =
-                            json.results[0].address_components[0]
-                        console.log(addressComponent)
-                    })
-                    .catch((error) => console.warn(error))
+                const param = {
+                    location: `${position.coords.latitude},${position.coords.longitude}`,
+                    ak: 'Kv4hNCt8Zjm79Fu7U7o6xV9ExjSt4JJz',
+                }
+                const res = await address(param)
+                console.log(res)
             },
             (error) => {
                 console.error('Error getting location: ', error)

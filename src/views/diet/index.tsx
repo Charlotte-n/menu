@@ -1,6 +1,6 @@
 import React, { memo } from 'react'
 import type { FC, ReactNode } from 'react'
-import { View} from 'react-native'
+import { View } from 'react-native'
 import SearchFilter from './components/search'
 import HotRecommend from '../../components/hot-recommend'
 import RecipeCategory from './components/recipe-catory'
@@ -14,7 +14,7 @@ const Diet: FC<IProps> = () => {
     return (
         <ScrollView
             style={{ flex: 1, overflow: 'hidden' }}
-            className="pl-[20] pr-[20]  bg-white"
+            className="pl-[20] pr-[20] pt-[15] bg-white"
             scrollEnabled={false}
         >
             <View>
@@ -26,7 +26,7 @@ const Diet: FC<IProps> = () => {
             <View>
                 <HotRecommend></HotRecommend>
             </View>
-            <View style={{ minHeight: 350 }}>
+            <View style={{ minHeight: 400 }}>
                 <FoodCategoryByTime></FoodCategoryByTime>
             </View>
         </ScrollView>
