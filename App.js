@@ -11,10 +11,11 @@ import { PersistGate } from 'redux-persist/es/integration/react'
 import UserAgree from './src/views/mine/profile/c-pages/user-agree'
 import Search from './src/views/diet/search'
 import MyCamera from './src/components/camera'
-import FoodDetail from './src/views/diet/c-pages/food-detail'
+import FoodDetail from './src/views/diet/c-pages/food-detail/food-detail'
 import theme from './src/styles/theme/color'
-import { Image, TouchableOpacity } from 'react-native'
+import { Image } from 'react-native'
 import MyShare from './src/components/share'
+import FoodNutrients from './src/views/diet/c-pages/food-nutrients/food-nutritents'
 export default function App() {
     const Stack = createStackNavigator()
     useEffect(() => {}, [])
@@ -112,6 +113,38 @@ export default function App() {
                                         name={'left'}
                                         type={'antdesign'}
                                         size={25}
+                                    ></Icon>
+                                ),
+                                headerRight: () => {
+                                    return (
+                                        <MyShare>
+                                            {{
+                                                content: (
+                                                    <Image
+                                                        source={require('./assets/icon/分享.png')}
+                                                        style={{
+                                                            width: 25,
+                                                            height: 25,
+                                                            marginRight: 10,
+                                                        }}
+                                                    ></Image>
+                                                ),
+                                            }}
+                                        </MyShare>
+                                    )
+                                },
+                            }}
+                        ></Stack.Screen>
+                        <Stack.Screen
+                            name={'food-nutrients'}
+                            component={FoodNutrients}
+                            options={{
+                                headerTitle: '食物详情',
+                                headerTitleAlign: 'center',
+                                headerBackImage: () => (
+                                    <Icon
+                                        name={'left'}
+                                        type={'antdesign'}
                                     ></Icon>
                                 ),
                                 headerRight: () => {

@@ -1,21 +1,18 @@
 import React, { memo, useRef, useState } from 'react'
 import type { FC, ReactNode } from 'react'
-import {
-    Image,
-    ScrollView,
-    TouchableOpacity,
-    View,
-} from 'react-native'
+import { Image, ScrollView, TouchableOpacity, View } from 'react-native'
 import { Icon, Tab, TabView, Text } from '@rneui/themed'
 import theme from '../../../styles/theme/color'
 import { RefreshControl } from 'react-native-gesture-handler'
-import { ActivityIndicator} from 'nativewind/dist/preflight'
+import { ActivityIndicator } from 'nativewind/dist/preflight'
 import { onMomentumScrollEnd } from '../../../utils/load-more'
+import RecordFood from '../../../components/record-food'
 interface IProps {
     children?: ReactNode
 }
 
 const Item = () => {
+    const [isVisible, setIsVisible] = useState(false)
     return (
         <View
             className="flex-row  items-end border rounded mt-[15] pt-[10] pb-[10] pl-[5] pr-[5]"
@@ -38,16 +35,29 @@ const Item = () => {
             </View>
             <View className="flex-row items-center ">
                 <Text className="">100g</Text>
-                <Icon
-                    type={'antdesign'}
-                    name={'pluscircle'}
-                    size={15}
-                    color={theme.colors.deep01Primary}
-                    style={{
-                        marginLeft: 5,
+                <TouchableOpacity
+                    onPress={() => {
+                        setIsVisible(true)
                     }}
-                ></Icon>
+                >
+                    <Icon
+                        type={'antdesign'}
+                        name={'pluscircle'}
+                        size={15}
+                        color={theme.colors.deep01Primary}
+                        style={{
+                            marginLeft: 5,
+                        }}
+                    ></Icon>
+                </TouchableOpacity>
             </View>
+            <RecordFood isVisible={isVisible}>
+                {{
+                    cancel: () => {
+                        setIsVisible(false)
+                    },
+                }}
+            </RecordFood>
         </View>
     )
 }

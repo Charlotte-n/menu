@@ -10,11 +10,13 @@ import {
     View,
 } from 'react-native'
 import SafeAreaView from 'react-native-safe-area-view'
-import theme from '../../../styles/theme/color'
+import theme from '../../../../styles/theme/color'
 import { Card } from '@rneui/themed'
-import { useAppDispatch } from '../../../store'
-import { changeUrl } from '../../../store/slice/diet'
+import { useAppDispatch } from '../../../../store'
+import { changeUrl } from '../../../../store/slice/diet'
 import ViewShot from 'react-native-view-shot'
+import { ingredients } from '../../../../data/diet'
+import RecordFood from '../../../../components/record-food'
 
 interface IProps {
     children?: ReactNode
@@ -24,7 +26,9 @@ const FoodDetail: FC<IProps> = () => {
     const [url, setUrl] = useState('')
     const view = useRef<any>()
     const [isCollect, setIsCollect] = useState(false)
+    const [isWrite, setIsWrite] = useState(false)
     const dispatch = useAppDispatch()
+    const [isVisible, setIsVisible] = useState(false)
     //进行
     const capturePic = () => {
         view.current.capture().then((uri: string) => {
@@ -35,43 +39,7 @@ const FoodDetail: FC<IProps> = () => {
         capturePic()
         dispatch(changeUrl(url))
     }, [url])
-    const ingredients = [
-        {
-            id: '0',
-            name: '鸡腿',
-            number: '3只',
-        },
-        {
-            id: '1',
-            name: '小米椒',
-            number: '2个',
-        },
-        {
-            id: '2',
-            name: '青椒',
-            number: '1个',
-        },
-        {
-            id: '3',
-            name: '蒜末',
-            number: '适量',
-        },
-        {
-            id: '4',
-            name: '白芝麻',
-            number: '1勺',
-        },
-        {
-            id: '5',
-            name: '辣椒粉',
-            number: '1勺',
-        },
-        {
-            id: '6',
-            name: '金针菇',
-            number: '1把',
-        },
-    ]
+
     return (
         <SafeAreaView
             style={{
@@ -101,7 +69,7 @@ const FoodDetail: FC<IProps> = () => {
                     <View className="h-[130]">
                         <View className="absolute top-[-100] items-center self-center">
                             <Image
-                                source={require('../../../../assets/images/bg_login_header.png')}
+                                source={require('../../../../../assets/images/bg_login_header.png')}
                                 style={{ width: 180, height: 180 }}
                                 className="rounded-full"
                             ></Image>
@@ -163,7 +131,7 @@ const FoodDetail: FC<IProps> = () => {
                                                 width: 20,
                                                 height: 40,
                                             }}
-                                            source={require('../../../../assets/icon/ic_蛋白质.png')}
+                                            source={require('../../../../../assets/icon/ic_蛋白质.png')}
                                         ></Image>
                                         <Text className="mt-[10]">420</Text>
                                     </View>
@@ -232,7 +200,7 @@ const FoodDetail: FC<IProps> = () => {
                                             步骤{item}
                                         </Text>
                                         <Image
-                                            source={require('../../../../assets/test/img.png')}
+                                            source={require('../../../../../assets/test/img.png')}
                                             style={{
                                                 width: '100%',
                                             }}
@@ -257,7 +225,6 @@ const FoodDetail: FC<IProps> = () => {
                 </Card>
             </ScrollView>
             {/*    底部固定*/}
-
             <View
                 className="absolute bottom-0  flex-row items-center pl-[10] border-t border-[#F1F3F4]  bg-white"
                 style={{
@@ -268,7 +235,7 @@ const FoodDetail: FC<IProps> = () => {
                 {isCollect ? (
                     <TouchableOpacity onPress={() => setIsCollect(!isCollect)}>
                         <Image
-                            source={require('../../../../assets/icon/collect1.png')}
+                            source={require('../../../../../assets/icon/collect1.png')}
                             style={{
                                 height: 25,
                                 width: 25,
@@ -278,7 +245,7 @@ const FoodDetail: FC<IProps> = () => {
                 ) : (
                     <TouchableOpacity onPress={() => setIsCollect(!isCollect)}>
                         <Image
-                            source={require('../../../../assets/icon/collect.png')}
+                            source={require('../../../../../assets/icon/collect.png')}
                             style={{
                                 height: 25,
                                 width: 25,
@@ -286,7 +253,47 @@ const FoodDetail: FC<IProps> = () => {
                         ></Image>
                     </TouchableOpacity>
                 )}
+                {isWrite ? (
+                    <TouchableOpacity
+                        onPress={() => {
+                            setIsWrite(!isWrite)
+                        }}
+                    >
+                        <Image
+                            source={require('../../../../../assets/icon/write1.png')}
+                            style={{
+                                marginLeft: 10,
+                                height: 25,
+                                width: 25,
+                            }}
+                        ></Image>
+                    </TouchableOpacity>
+                ) : (
+                    <TouchableOpacity
+                        onPress={() => {
+                            setIsWrite(!isWrite)
+                            setIsVisible(true)
+                        }}
+                    >
+                        <Image
+                            source={require('../../../../../assets/icon/write.png')}
+                            style={{
+                                marginLeft: 10,
+                                height: 25,
+                                width: 25,
+                            }}
+                        ></Image>
+                    </TouchableOpacity>
+                )}
             </View>
+            <RecordFood isVisible={isVisible}>
+                {{
+                    cancel: () => {
+                        setIsVisible(false)
+                        setIsWrite(false)
+                    },
+                }}
+            </RecordFood>
         </SafeAreaView>
     )
 }

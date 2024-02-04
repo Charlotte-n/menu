@@ -103,3 +103,41 @@ export const FoodCategory = [
         name: '其他',
     },
 ]
+
+export const ingredients = [
+    {
+        id: '0',
+        name: '鸡腿',
+        number: '3只',
+    },
+    {
+        id: '1',
+        name: '小米椒',
+        number: '2个',
+    },
+    {
+        id: '2',
+        name: '青椒',
+        number: '1个',
+    },
+    {
+        id: '3',
+        name: '蒜末',
+        number: '适量',
+    },
+    {
+        id: '4',
+        name: '白芝麻',
+        number: '1勺',
+    },
+    {
+        id: '5',
+        name: '辣椒粉',
+        number: '1勺',
+    },
+    {
+        id: '6',
+        name: '金针菇',
+        number: '1把',
+    },
+]

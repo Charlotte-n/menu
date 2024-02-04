@@ -9,6 +9,7 @@ import {
 } from 'react-native'
 import { searchFoodCategory } from '../../../../data/diet'
 import theme from '../../../../styles/theme/color'
+import { useNavigation } from '@react-navigation/native'
 
 interface IProps {
     children?: ReactNode
@@ -16,6 +17,7 @@ interface IProps {
 
 const OverViewFood: FC<IProps> = () => {
     const array: number[] = [0].fill(0, 0, 10)
+    const navigation = useNavigation()
     return (
         <View style={{ flex: 1, justifyContent: 'center' }}>
             <View className="flex-row items-center mb-[10]">
@@ -46,7 +48,13 @@ const OverViewFood: FC<IProps> = () => {
             >
                 {searchFoodCategory.map((item, index) => {
                     return (
-                        <TouchableOpacity key={item.name}>
+                        <TouchableOpacity
+                            key={item.name}
+                            onPress={() => {
+                                //@ts-ignore
+                                navigation.navigate('food-nutrients')
+                            }}
+                        >
                             <Text
                                 className="mr-[10] mb-[10] pl-[8] pr-[8] pt-[5] pb-[5] bg-[#E1E1E1]"
                                 style={{
