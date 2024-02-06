@@ -40,13 +40,15 @@
     "react-native-safe-area-view": "^1.1.1",
     "react-native-screens": "^3.29.0",
     "react-native-share": "^10.0.2",
+    "react-native-svg": "^14.1.0",
     "react-native-vector-icons": "^10.0.3",
     "react-native-view-shot": "^3.8.0",
     "react-native-vision-camera": "^3.8.2",
     "react-native-wheely": "^0.6.0",
     "react-redux": "^9.1.0",
     "redux": "^5.0.1",
-    "redux-persist": "^6.0.0"
+    "redux-persist": "^6.0.0",
+    "victory-native": "^36.9.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

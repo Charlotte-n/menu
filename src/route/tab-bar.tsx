@@ -40,6 +40,7 @@ const TabBar: FC<IProps> = () => {
                             <Icon name={'home'} type={'feather'} />
                         )
                     },
+                    headerTitleAlign: 'center',
                 }}
             ></Tab.Screen>
             <Tab.Screen
