@@ -226,7 +226,7 @@ const FoodDetail: FC<IProps> = () => {
             </ScrollView>
             {/*    底部固定*/}
             <View
-                className="absolute bottom-0  flex-row items-center pl-[10] border-t border-[#F1F3F4]  bg-white"
+                className="absolute bottom-0  flex-row items-center pl-[20] border-t border-[#F1F3F4]  bg-white"
                 style={{
                     width: Dimensions.get('screen').width,
                     height: 40,
@@ -262,7 +262,7 @@ const FoodDetail: FC<IProps> = () => {
                         <Image
                             source={require('../../../../../assets/icon/write1.png')}
                             style={{
-                                marginLeft: 10,
+                                marginLeft: 20,
                                 height: 25,
                                 width: 25,
                             }}
@@ -278,7 +278,7 @@ const FoodDetail: FC<IProps> = () => {
                         <Image
                             source={require('../../../../../assets/icon/write.png')}
                             style={{
-                                marginLeft: 10,
+                                marginLeft: 20,
                                 height: 25,
                                 width: 25,
                             }}

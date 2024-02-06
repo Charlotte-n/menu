@@ -16,6 +16,7 @@ import theme from './src/styles/theme/color'
 import { Image } from 'react-native'
 import MyShare from './src/components/share'
 import FoodNutrients from './src/views/diet/c-pages/food-nutrients/food-nutritents'
+import FoodCategory from './src/views/diet/c-pages/food-category'
 export default function App() {
     const Stack = createStackNavigator()
     useEffect(() => {}, [])
@@ -91,6 +92,21 @@ export default function App() {
                                 ),
                             }}
                         ></Stack.Screen>
+                        <Stack.Screen
+                            name={'category'}
+                            component={FoodCategory}
+                            options={{
+                                headerTitle: '食物分类',
+                                headerTitleAlign: 'center',
+                                headerBackImage: () => (
+                                    <Icon
+                                        name={'left'}
+                                        type={'antdesign'}
+                                    ></Icon>
+                                ),
+                            }}
+                        ></Stack.Screen>
+
                         <Stack.Screen
                             name={'camera'}
                             component={MyCamera}

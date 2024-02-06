@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import type { FC } from 'react'
 import {
     Dimensions,
@@ -8,8 +8,12 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native'
-import { BottomSheet, Button, Card, Icon } from '@rneui/themed'
+import { BottomSheet, Button, Card, Dialog, Icon } from '@rneui/themed'
 import theme from '../../styles/theme/color'
+import WheelPicker from 'react-native-wheely'
+import foodDetail from '../../views/diet/c-pages/food-detail/food-detail'
+import { foodTime } from '../../data/diet'
+import { useNavigation } from '@react-navigation/native'
 interface IProps {
     children: {
         cancel: () => void
@@ -19,31 +23,15 @@ interface IProps {
 
 const RecordFood: FC<IProps> = ({ isVisible, children }) => {
     const { cancel } = children
-    const pickerData = [
-        {
-            a: [1, 2, 3, 4],
-        },
-        {
-            b: [5, 6, 7, 8],
-        },
-    ]
-    const selectedValue = ['a', 2]
-    // Picker.init({
-    //     pickerData: pickerData,
-    //     selectedValue: ['a', 2],
-    //     onPickerConfirm: (data) => {
-    //         console.log(data)
-    //     },
-    //     onPickerCancel: (data) => {
-    //         console.log(data)
-    //     },
-    //     onPickerSelect: (data) => {
-    //         console.log(data)
-    //     },
-    // })
-    const show = () => {
-        // Picker.show()
+    const navigation = useNavigation()
+    const [selectedIndex, setSelectedIndex] = useState(0)
+    const [visible, setVisible] = useState(false)
+    const disShow = () => {
+        setVisible(false)
     }
+    useEffect(() => {
+        return () => cancel()
+    }, [])
     return (
         <BottomSheet isVisible={isVisible} containerStyle={{}}>
             <Card
@@ -52,17 +40,19 @@ const RecordFood: FC<IProps> = ({ isVisible, children }) => {
                     borderTopLeftRadius: 20,
                     borderTopRightRadius: 20,
                     margin: 0,
-                    // paddingRight: 0,
                 }}
             >
-                {/*换成选择器*/}
                 <View className="m-auto mb-[20] flex-row">
                     <TouchableOpacity
                         onPress={() => {
-                            show()
+                            setVisible(true)
                         }}
+                        className="flex-1 flex-row items-center justify-center ml-[20]"
                     >
-                        <Text className="flex-1 text-center">早餐</Text>
+                        <Text className="text-center mr-[10]">
+                            {foodTime[selectedIndex]}
+                        </Text>
+                        <Icon type={'antdesign'} name={'down'} size={15}></Icon>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
@@ -86,16 +76,26 @@ const RecordFood: FC<IProps> = ({ isVisible, children }) => {
                             height: 60,
                         }}
                     ></Image>
-                    <Text
-                        className="mt-[10] pt-[2] pb-[2] text-center"
+                    <TouchableOpacity
+                        className="flex-row items-center mt-[20] pt-[3] pb-[3] pr-[3]"
                         style={{
                             backgroundColor: theme.colors.primary,
                             borderRadius: 10,
                             width: 100,
                         }}
+                        onPress={() => {
+                            cancel()
+                            //@ts-ignore
+                            navigation.navigate('food-nutrients')
+                        }}
                     >
-                        鸡腿
-                    </Text>
+                        <Text className=" text-center flex-1">鸡腿</Text>
+                        <Icon
+                            type={'antdesign'}
+                            name={'right'}
+                            size={13}
+                        ></Icon>
+                    </TouchableOpacity>
                 </View>
                 {/*营养成分*/}
                 <View className="flex-row">
@@ -156,6 +156,45 @@ const RecordFood: FC<IProps> = ({ isVisible, children }) => {
                     ></Button>
                 </View>
             </Card>
+            <Dialog isVisible={visible}>
+                <TouchableOpacity
+                    onPress={() => {
+                        setVisible(false)
+                    }}
+                    className="items-end"
+                >
+                    <Icon type={'antdesign'} name={'close'}></Icon>
+                </TouchableOpacity>
+                {/*换成选择器*/}
+                <WheelPicker
+                    selectedIndex={selectedIndex}
+                    options={foodTime}
+                    onChange={(index) => {
+                        setSelectedIndex(index)
+                        console.log(selectedIndex)
+                    }}
+                />
+                <Dialog.Actions>
+                    <Dialog.Button
+                        title="确定"
+                        onPress={() => {
+                            disShow()
+                        }}
+                        titleStyle={{
+                            color: theme.colors.deep01Primary,
+                        }}
+                    />
+                    <Dialog.Button
+                        title="取消"
+                        onPress={() => {
+                            disShow()
+                        }}
+                        titleStyle={{
+                            color: theme.colors.deep01Primary,
+                        }}
+                    />
+                </Dialog.Actions>
+            </Dialog>
         </BottomSheet>
     )
 }

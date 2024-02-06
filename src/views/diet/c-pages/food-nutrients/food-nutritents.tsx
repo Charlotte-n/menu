@@ -2,7 +2,7 @@ import React, { memo, useEffect, useRef, useState } from 'react'
 import type { FC, ReactNode } from 'react'
 import { Dimensions, ScrollView, Text, View } from 'react-native'
 import theme from '../../../../styles/theme/color'
-import { BottomSheet, Button, Card } from '@rneui/themed'
+import { Button } from '@rneui/themed'
 import ViewShot from 'react-native-view-shot'
 import { useAppDispatch } from '../../../../store'
 import { changeUrl } from '../../../../store/slice/diet'
@@ -33,7 +33,7 @@ const FoodNutrients: FC<IProps> = () => {
                 options={{
                     fileName: 'food',
                     format: 'png',
-                    quality: 0.4,
+                    quality: 0.1,
                     result: 'base64',
                 }}
             >

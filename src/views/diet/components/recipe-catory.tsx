@@ -8,11 +8,13 @@ import {
     View,
 } from 'react-native'
 import { FoodCategory } from '../../../data/diet'
+import { useNavigation } from '@react-navigation/native'
 interface IProps {
     children?: ReactNode
 }
 
 const RecipeCategory: FC<IProps> = () => {
+    const navigation = useNavigation()
     const Item = ({ image, name }: any) => {
         return (
             <TouchableOpacity
@@ -20,6 +22,10 @@ const RecipeCategory: FC<IProps> = () => {
                     width: Dimensions.get('screen').width / 5,
                 }}
                 className="flex-col justify-center"
+                onPress={() => {
+                    //@ts-ignore
+                    navigation.navigate('category')
+                }}
             >
                 {image}
                 <Text style={{ fontSize: 13 }}>{name}</Text>

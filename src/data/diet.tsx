@@ -141,3 +141,5 @@ export const ingredients = [
         number: '1把',
     },
 ]
+
+export const foodTime = ['早餐', '午餐', '晚餐']
