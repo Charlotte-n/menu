@@ -7,8 +7,11 @@ import HealthMealScreen from './health-meal'
 import MineScreen from './mine'
 import { Icon } from '@rneui/themed'
 import theme from '../styles/theme/color'
-import { Text } from 'react-native'
-import MyLocation from '../components/location'
+import { Image, TouchableOpacity } from 'react-native'
+import { useAppDispatch, useAppSelector } from '../store'
+import { changeOpenAction } from '../store/slice/home'
+import { transformAdaption } from '../utils/adaptation'
+import { shallowEqual } from 'react-redux'
 
 interface IProps {
     children?: ReactNode
@@ -16,6 +19,12 @@ interface IProps {
 
 const TabBar: FC<IProps> = () => {
     const Tab = createBottomTabNavigator()
+    const dispatch = useAppDispatch()
+    const { isOpen } = useAppSelector((state) => {
+        return {
+            isOpen: state.HomeSlice.open,
+        }
+    }, shallowEqual)
     return (
         <Tab.Navigator
             screenOptions={{
@@ -40,6 +49,22 @@ const TabBar: FC<IProps> = () => {
                             <Icon name={'home'} type={'feather'} />
                         )
                     },
+                    headerLeft: () => (
+                        <TouchableOpacity
+                            onPress={() => {
+                                dispatch(changeOpenAction(!isOpen))
+                            }}
+                        >
+                            <Image
+                                source={require('../../assets/icon/more.png')}
+                                style={{
+                                    width: transformAdaption(30),
+                                    height: transformAdaption(30),
+                                    marginLeft: transformAdaption(10),
+                                }}
+                            ></Image>
+                        </TouchableOpacity>
+                    ),
                     headerTitleAlign: 'center',
                 }}
             ></Tab.Screen>
@@ -60,7 +85,7 @@ const TabBar: FC<IProps> = () => {
                             <Icon name={'slightly-smile'} type={'fontisto'} />
                         )
                     },
-                    headerShown: false,
+                    headerTitleAlign: 'center',
                 }}
             ></Tab.Screen>
             <Tab.Screen
@@ -80,6 +105,7 @@ const TabBar: FC<IProps> = () => {
                         )
                     },
                     tabBarActiveTintColor: theme.colors.deep01Primary,
+                    headerTitleAlign: 'center',
                 }}
             ></Tab.Screen>
             <Tab.Screen

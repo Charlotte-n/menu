@@ -8,11 +8,11 @@ import { useNavigation } from '@react-navigation/native'
 
 interface IProps {
     children?: ReactNode
+    title: string
 }
 
-const Index: FC<IProps> = () => {
+const Index: FC<IProps> = ({ title }) => {
     const navigation = useNavigation()
-
     return (
         <View>
             <View className="flex-row items-center mb-[10]">
@@ -32,7 +32,7 @@ const Index: FC<IProps> = () => {
                         fontSize: 15,
                     }}
                 >
-                    热门菜品
+                    {title}
                 </Text>
             </View>
             <View className="pl-[10] pr-[10] flex-row">

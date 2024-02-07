@@ -14,7 +14,7 @@ const Diet: FC<IProps> = () => {
     return (
         <ScrollView
             style={{ flex: 1, overflow: 'hidden' }}
-            className="pl-[20] pr-[20] pt-[15] bg-white"
+            className="pl-[20] pr-[20] bg-white"
             scrollEnabled={false}
         >
             <View>
@@ -24,7 +24,7 @@ const Diet: FC<IProps> = () => {
                 <RecipeCategory></RecipeCategory>
             </View>
             <View>
-                <HotRecommend></HotRecommend>
+                <HotRecommend title={'热门菜品'}></HotRecommend>
             </View>
             <View style={{ minHeight: 400 }}>
                 <FoodCategoryByTime></FoodCategoryByTime>

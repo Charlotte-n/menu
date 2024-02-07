@@ -33,7 +33,7 @@ const Search: FC<IProps> = () => {
                     <OverViewFood></OverViewFood>
                 </View>
                 <View style={{}}>
-                    <HotRecommend></HotRecommend>
+                    <HotRecommend title={'热门菜品'}></HotRecommend>
                 </View>
             </View>
         </ScrollView>

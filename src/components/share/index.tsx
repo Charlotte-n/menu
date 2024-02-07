@@ -1,9 +1,8 @@
 import React, { memo, useEffect, useRef, useState } from 'react'
 import type { FC, ReactNode } from 'react'
-import { TouchableOpacity, View } from 'react-native'
+import { TouchableOpacity } from 'react-native'
 import Share from 'react-native-share'
-import { changeIsCapture, changeUrl } from '../../store/slice/diet'
-import { useAppDispatch, useAppSelector } from '../../store'
+import { useAppSelector } from '../../store'
 import { shallowEqual } from 'react-redux'
 interface IProps {
     children?: any
@@ -21,6 +20,7 @@ const MyShare: FC<IProps> = ({ children }) => {
             url: `data:image/png;base64,${url}`,
             title: '口水鸡的做法',
             showAppsToView: true,
+            message: '口水鸡的做法',
         })
             .then((res) => {
                 console.log(res)

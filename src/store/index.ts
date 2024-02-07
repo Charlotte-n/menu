@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import LoginRegisterSlice from './slice/login-register-slice'
 import DietSlice from './slice/diet'
+import HomeSlice from './slice/home'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import { persistReducer, persistStore } from 'redux-persist'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -24,6 +25,7 @@ const store = configureStore({
     reducer: {
         LoginRegisterSlice: LoginStorePersist,
         DietSlice: DietSlice,
+        HomeSlice: HomeSlice,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

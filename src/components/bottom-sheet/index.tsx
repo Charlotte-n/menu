@@ -35,10 +35,14 @@ const MyBottomSheet: FC<IProps> = ({
         updateUserName({ username: value, id: userInfo.id })
             .then(async (res) => {
                 if (res.code === 1) {
-                    const res = await getUserInfo(userId)
-                    if (res.code === 1) {
-                        dispatch(changeUserInfoAction(res.data))
-                        cancel()
+                    try {
+                        const res = await getUserInfo(userId)
+                        if (res.code === 1) {
+                            dispatch(changeUserInfoAction(res.data))
+                            cancel()
+                        }
+                    } catch (e) {
+                        console.log(e)
                     }
                 }
             })

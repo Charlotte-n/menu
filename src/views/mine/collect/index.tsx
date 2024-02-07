@@ -10,7 +10,7 @@ interface IProps {
 const Collect: FC<IProps> = () => {
     const res = [1, 2, 3, 4]
     return (
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
             {res.map((item, index) => {
                 return <FoodCard key={index}></FoodCard>
             })}
