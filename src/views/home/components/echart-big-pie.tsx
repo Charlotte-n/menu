@@ -10,7 +10,8 @@ interface IProps {
 }
 
 const EchartBingPie: FC<IProps> = () => {
-    const sampleData = [{ y: 1 }, { y: 3 }]
+    //TODO:单位转化
+    const sampleData = [{ y: 100 }, { y: 100 }]
 
     return (
         <View className="m-auto">

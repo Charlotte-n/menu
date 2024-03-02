@@ -24,7 +24,9 @@ export default function App() {
         <Provider store={store}>
             <PersistGate persistor={persistor} loading={null}>
                 <NavigationContainer>
-                    <Stack.Navigator initialRouteName={'tabs'}>
+                    <Stack.Navigator
+                        initialRouteName={'LoginRegisterHomeScreen'}
+                    >
                         <Stack.Screen
                             name={'LoginRegisterHomeScreen'}
                             component={LoginRegisterHomeScreen}
@@ -115,6 +117,7 @@ export default function App() {
                         <Stack.Screen
                             name={'food-detail'}
                             component={FoodDetail}
+                            initialParams={{ id: 0 }}
                             options={{
                                 headerTitle: '',
                                 headerStyle: {

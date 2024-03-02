@@ -4,6 +4,7 @@ import { Dimensions, Text, View } from 'react-native'
 import { ScrollView } from 'nativewind/dist/preflight'
 import IntakeItem from './components/intake-item'
 import Total from './components/total'
+import AutoText from '../../../components/auto-text'
 
 interface IProps {
     children?: ReactNode
@@ -19,10 +20,24 @@ const Intake: FC<IProps> = () => {
                     justifyContent: 'flex-end',
                 }}
             >
-                <Text style={{ fontSize: 20 }} className="mb-[20]">
+                <AutoText
+                    fontSize={7}
+                    style={{
+                        marginBottom: 8,
+                    }}
+                >
                     今日摄入
-                </Text>
+                </AutoText>
+
                 <View>
+                    <AutoText
+                        fontSize={7}
+                        style={{
+                            marginBottom: 10,
+                        }}
+                    >
+                        早餐
+                    </AutoText>
                     {array.map((item, index) => {
                         return (
                             <View key={index} className="mb-[10]">

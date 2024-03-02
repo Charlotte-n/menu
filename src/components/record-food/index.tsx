@@ -12,26 +12,46 @@ import { BottomSheet, Button, Card, Dialog, Icon } from '@rneui/themed'
 import theme from '../../styles/theme/color'
 import WheelPicker from 'react-native-wheely'
 import foodDetail from '../../views/diet/c-pages/food-detail/food-detail'
-import { foodTime } from '../../data/diet'
+import { FoodNutrition, FoodNutritionData, foodTime } from '../../data/diet'
 import { useNavigation } from '@react-navigation/native'
+import AutoText from '../auto-text'
+import {
+    FoodListByCategoryType,
+    SingleFoodListType,
+} from '../../apis/types/food'
+import { FoodListByCategoryApi } from '../../apis/food'
+import * as url from 'url'
 interface IProps {
     children: {
         cancel: () => void
     }
     isVisible: boolean
+    id: number
 }
 
-const RecordFood: FC<IProps> = ({ isVisible, children }) => {
+const RecordFood: FC<IProps> = ({ isVisible, children, id }) => {
     const { cancel } = children
     const navigation = useNavigation()
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [visible, setVisible] = useState(false)
+    const [FoodDetail, setFoodDetail] = useState<SingleFoodListType>(
+        {} as SingleFoodListType,
+    )
     const disShow = () => {
         setVisible(false)
     }
+    const getFoodDetail = () => {
+        FoodListByCategoryApi({ id }).then((res) => {
+            setFoodDetail((res.data as FoodListByCategoryType)[0])
+        })
+    }
     useEffect(() => {
+        getFoodDetail()
         return () => cancel()
     }, [])
+    useEffect(() => {
+        getFoodDetail()
+    }, [visible])
     return (
         <BottomSheet isVisible={isVisible} containerStyle={{}}>
             <Card
@@ -68,14 +88,19 @@ const RecordFood: FC<IProps> = ({ isVisible, children }) => {
                 </View>
                 {/*食物*/}
                 <View className="m-auto items-center">
-                    <Image
-                        source={require('../../../assets/images/bg_welcome_header.png')}
-                        style={{
-                            borderRadius: 10,
-                            width: 60,
-                            height: 60,
-                        }}
-                    ></Image>
+                    {FoodDetail.image != null ? (
+                        <Image
+                            source={{
+                                uri: FoodDetail.image,
+                            }}
+                            style={{
+                                borderRadius: 10,
+                                width: 60,
+                                height: 60,
+                            }}
+                        ></Image>
+                    ) : null}
+
                     <TouchableOpacity
                         className="flex-row items-center mt-[20] pt-[3] pb-[3] pr-[3]"
                         style={{
@@ -86,10 +111,20 @@ const RecordFood: FC<IProps> = ({ isVisible, children }) => {
                         onPress={() => {
                             cancel()
                             //@ts-ignore
-                            navigation.navigate('food-nutrients')
+                            navigation.navigate('food-nutrients', { id })
                         }}
                     >
-                        <Text className=" text-center flex-1">鸡腿</Text>
+                        <AutoText
+                            fontSize={4.5}
+                            style={{
+                                flex: 1,
+                                textAlign: 'center',
+                            }}
+                            className=" text-center flex-1"
+                            numberOfLines={1}
+                        >
+                            {FoodDetail?.title}
+                        </AutoText>
                         <Icon
                             type={'antdesign'}
                             name={'right'}
@@ -99,7 +134,7 @@ const RecordFood: FC<IProps> = ({ isVisible, children }) => {
                 </View>
                 {/*营养成分*/}
                 <View className="flex-row">
-                    {[1, 2, 3, 4].map((item, index) => {
+                    {FoodNutritionData.map((item, index) => {
                         return (
                             <View
                                 key={item}
@@ -107,10 +142,27 @@ const RecordFood: FC<IProps> = ({ isVisible, children }) => {
                                     marginTop: 20,
                                     width: Dimensions.get('screen').width / 4.4,
                                 }}
-                                className="border-t border-b pt-[10] pb-[10] border-[#f4f4f4]"
+                                className="justify-center border-t border-b pt-[10] pb-[10] border-[#f4f4f4]"
                             >
-                                <Text className="color-[#666]">热量(千卡)</Text>
-                                <Text className="mt-[10] text-center">85</Text>
+                                <AutoText
+                                    fontSize={4.5}
+                                    style={{
+                                        textAlign: 'center',
+                                    }}
+                                >
+                                    {(FoodNutrition as any)[item]}
+                                </AutoText>
+                                <AutoText
+                                    fontSize={4.5}
+                                    style={{
+                                        marginTop: 10,
+                                        textAlign: 'center',
+                                    }}
+                                >
+                                    {(FoodDetail as any)[item]
+                                        ? (FoodDetail as any)[item]?.toFixed(2)
+                                        : 0}
+                                </AutoText>
                             </View>
                         )
                     })}
@@ -125,7 +177,7 @@ const RecordFood: FC<IProps> = ({ isVisible, children }) => {
                             borderColor: theme.colors.deep01Primary,
                         }}
                     >
-                        20.0
+                        100.00
                     </TextInput>
                     <Text
                         className="mt-[5] text-center"
@@ -138,7 +190,6 @@ const RecordFood: FC<IProps> = ({ isVisible, children }) => {
                     </Text>
                 </View>
                 {/*计算器组件*/}
-                {/*<View></View>*/}
                 <View className="m-auto mt-[20]">
                     <Button
                         onPress={() => {

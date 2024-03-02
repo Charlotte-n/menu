@@ -1,19 +1,23 @@
-import React, { memo, useState } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import type { FC, ReactNode } from 'react'
 import { Dimensions, TextInput, TouchableOpacity, View } from 'react-native'
 import { Icon } from '@rneui/themed'
 import theme from '../../../styles/theme/color'
 import { useNavigation } from '@react-navigation/native'
-
+import { FoodListByCategoryApi } from '../../../apis/food'
+import { FoodListByCategoryType } from '../../../apis/types/food'
 
 interface IProps {
-    children?: ReactNode
+    children?: any
     type: string
 }
 
-const SearchFilter: FC<IProps> = ({ type }) => {
+const SearchFilter: FC<IProps> = ({ type, children }) => {
+    const setRecommendShowFood = children?.setRecommendShowFood
+    const setSearchFoodResult = children?.setSearchFoodResult
     const [search, setSearch] = useState('')
     const navigation = useNavigation()
+    const [searchFood, setSearchFood] = useState<FoodListByCategoryType>()
     const clearAll = () => {
         setSearch('')
     }
@@ -21,6 +25,13 @@ const SearchFilter: FC<IProps> = ({ type }) => {
     const gotoCamera = () => {
         //@ts-ignore
         navigation.navigate('camera')
+    }
+    //获取到搜索的食物
+    const searchFoodData = () => {
+        FoodListByCategoryApi({ title: search }).then((res) => {
+            setRecommendShowFood(false)
+            setSearchFoodResult(res.data as FoodListByCategoryType)
+        })
     }
 
     return (
@@ -35,7 +46,11 @@ const SearchFilter: FC<IProps> = ({ type }) => {
         >
             <TouchableOpacity
                 onPress={() => {
-                    console.log('123')
+                    if (type === 'search') {
+                        if (search) {
+                            searchFoodData()
+                        }
+                    }
                 }}
             >
                 <Icon
@@ -47,6 +62,7 @@ const SearchFilter: FC<IProps> = ({ type }) => {
                     }}
                 ></Icon>
             </TouchableOpacity>
+            {/*搜索栏*/}
             <TextInput
                 placeholder={'搜索相关菜品食物的热量'}
                 style={{
@@ -55,7 +71,6 @@ const SearchFilter: FC<IProps> = ({ type }) => {
                 onChangeText={(value) => setSearch(value)}
                 value={search}
                 onFocus={() => {
-                    console.log('相关菜品', type)
                     if (type === 'home') {
                         //@ts-ignore
                         navigation.navigate('search')

@@ -10,7 +10,7 @@ interface IProps {
 }
 
 const AutoText = ({ children, style, fontSize, ...props }: any) => {
-    const size = PixelRatio.get() * transformAdaption(fontSize ? fontSize : 15)
+    const size = PixelRatio.get() * transformAdaption(fontSize ? fontSize : 5)
     return (
         <Text style={[style, { fontSize: size }]} {...props}>
             {children}

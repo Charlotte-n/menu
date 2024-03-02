@@ -51,13 +51,15 @@ const Item = () => {
                     ></Icon>
                 </TouchableOpacity>
             </View>
-            <RecordFood isVisible={isVisible}>
-                {{
-                    cancel: () => {
-                        setIsVisible(false)
-                    },
-                }}
-            </RecordFood>
+            {isVisible ? (
+                <RecordFood isVisible={isVisible} id={414}>
+                    {{
+                        cancel: () => {
+                            setIsVisible(false)
+                        },
+                    }}
+                </RecordFood>
+            ) : null}
         </View>
     )
 }

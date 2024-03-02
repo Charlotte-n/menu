@@ -1,12 +1,7 @@
-import React, { memo, useEffect, useRef } from 'react'
+import React, { memo } from 'react'
 import type { FC, ReactNode } from 'react'
-import { View, Text } from 'nativewind/dist/preflight'
-import {
-    Dimensions,
-    Image,
-    ScrollView,
-    DrawerLayoutAndroid,
-} from 'react-native'
+import { View } from 'nativewind/dist/preflight'
+import { Dimensions, Image, ScrollView } from 'react-native'
 import HotRecommend from '../../components/hot-recommend'
 import EchartBigPie from './components/echart-big-pie'
 import EchartSmallPie from './components/echart-small-pie'
@@ -16,19 +11,19 @@ import { useAppDispatch, useAppSelector } from '../../store'
 import { shallowEqual } from 'react-redux'
 import { Drawer } from 'react-native-drawer-layout'
 import { changeOpenAction } from '../../store/slice/home'
-import { withDecay } from 'react-native-reanimated'
+import DrawerContent from './components/drawer-content'
 interface IProps {
     children?: ReactNode
 }
 
 const Home: FC<IProps> = () => {
     const dispatch = useAppDispatch()
-    const drawer = useRef<any>()
     const { open } = useAppSelector((state) => {
         return {
             open: state.HomeSlice.open,
         }
     }, shallowEqual)
+    //静态资源
     const data = [
         {
             id: '0',
@@ -82,10 +77,10 @@ const Home: FC<IProps> = () => {
             onOpen={() => dispatch(changeOpenAction(true))}
             onClose={() => dispatch(changeOpenAction(false))}
             renderDrawerContent={() => {
-                return <Text>Drawer content</Text>
+                return <DrawerContent />
             }}
             layout={{
-                width: 250,
+                width: 280,
                 height: Dimensions.get('window').height,
             }}
         >

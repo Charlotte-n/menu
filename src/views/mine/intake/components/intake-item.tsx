@@ -1,9 +1,8 @@
 import React, { memo } from 'react'
 import type { FC, ReactNode } from 'react'
-import { Text, View } from 'react-native'
+import { Text, View, Animated } from 'react-native'
 import { Icon } from '@rneui/themed'
 import theme from '../../../../styles/theme/color'
-
 interface IProps {
     children?: ReactNode
 }

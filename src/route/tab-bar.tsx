@@ -30,7 +30,7 @@ const TabBar: FC<IProps> = () => {
             screenOptions={{
                 headerShadowVisible: false,
             }}
-            initialRouteName={'DietScreen'}
+            initialRouteName={'HomeScreen'}
         >
             <Tab.Screen
                 name={'HomeScreen'}

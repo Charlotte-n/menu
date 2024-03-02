@@ -7,14 +7,22 @@ import ViewShot from 'react-native-view-shot'
 import { useAppDispatch } from '../../../../store'
 import { changeUrl } from '../../../../store/slice/diet'
 import RecordFood from '../../../../components/record-food'
+import { useRoute } from '@react-navigation/native'
+import { FoodListByCategoryApi } from '../../../../apis/food'
+import {
+    FoodListByCategoryType,
+    SingleFoodListType,
+} from '../../../../apis/types/food'
+import AutoText from '../../../../components/auto-text'
+import { FoodNutrition, FoodNutritionData } from '../../../../data/diet'
 
-interface IProps {
-    children?: ReactNode
-}
-
-const FoodNutrients: FC<IProps> = () => {
+const FoodNutrients: FC = () => {
+    const route = useRoute()
     const view = useRef<any>()
     const dispatch = useAppDispatch()
+    const [FoodDetail, setFoodDetail] = useState<SingleFoodListType>(
+        {} as SingleFoodListType,
+    )
     const [url, setUrl] = useState('')
     const [isVisible, setIsVisible] = useState(false)
     const capturePic = () => {
@@ -22,7 +30,17 @@ const FoodNutrients: FC<IProps> = () => {
             setUrl(url)
         })
     }
+
+    const getFoodDetail = (id: number) => {
+        FoodListByCategoryApi({ id }).then((res) => {
+            setFoodDetail(
+                (res.data as FoodListByCategoryType)[0] as SingleFoodListType,
+            )
+        })
+    }
     useEffect(() => {
+        //获取食物详情
+        getFoodDetail((route.params as { id: number }).id)
         capturePic()
         dispatch(changeUrl(url))
     }, [url])
@@ -46,12 +64,13 @@ const FoodNutrients: FC<IProps> = () => {
                     >
                         <View>
                             <Text
-                                className="z-20"
+                                className="z-20 "
                                 style={{
-                                    fontSize: 20,
+                                    fontSize: 18,
                                 }}
+                                numberOfLines={1}
                             >
-                                鸡腿
+                                {FoodDetail.title}
                             </Text>
                             <Text
                                 className="absolute top-[15] left-0"
@@ -63,14 +82,14 @@ const FoodNutrients: FC<IProps> = () => {
                                 }}
                             ></Text>
                         </View>
-                        <Text
-                            className="mt-[10]"
+                        <AutoText
                             style={{
+                                marginTop: 10,
                                 fontSize: 13,
                             }}
                         >
-                            181.00Kcal/100g
-                        </Text>
+                            {FoodDetail.calories?.toFixed(2)}Kcal/100g
+                        </AutoText>
                     </View>
                     <View
                         style={{
@@ -87,10 +106,10 @@ const FoodNutrients: FC<IProps> = () => {
                                     backgroundColor: theme.colors.deep01Primary,
                                 }}
                             ></View>
-                            <Text>热量解析</Text>
+                            <AutoText fontSize={5}>热量解析</AutoText>
                         </View>
                         <View className="pl-[10]">
-                            {[1, 2, 3, 4].map((item, index) => {
+                            {FoodNutritionData.map((item, index) => {
                                 return (
                                     <View
                                         key={item}
@@ -99,13 +118,20 @@ const FoodNutrients: FC<IProps> = () => {
                                             borderColor: theme.colors.secondary,
                                         }}
                                     >
-                                        <Text className="flex-1">热量</Text>
+                                        <Text className="flex-1">
+                                            {(FoodNutrition as any)[item]}
+                                        </Text>
                                         <Text
                                             style={{
                                                 color: '#888',
                                             }}
                                         >
-                                            56.00kcal
+                                            {(FoodDetail as any)[item]
+                                                ? (FoodDetail as any)[
+                                                      item
+                                                  ]?.toFixed(2)
+                                                : 0}
+                                            kcal
                                         </Text>
                                     </View>
                                 )

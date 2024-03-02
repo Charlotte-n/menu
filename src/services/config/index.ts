@@ -1,6 +1,6 @@
 // 1.手动切换
 //开发环境
-export const BASE_URL = 'http://1.92.102.221:80'
+export const BASE_URL = 'http://123.57.175.4:80'
 //生产环境
 // export const BASE_URL = 'http://codercba.prod:9002'
 export const TIME_OUT = 10000

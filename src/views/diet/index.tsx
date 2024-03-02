@@ -16,6 +16,7 @@ const Diet: FC<IProps> = () => {
             style={{ flex: 1, overflow: 'hidden' }}
             className="pl-[20] pr-[20] bg-white"
             scrollEnabled={false}
+            showsVerticalScrollIndicator={false}
         >
             <View>
                 <SearchFilter type={'home'}></SearchFilter>

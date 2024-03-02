@@ -54,7 +54,13 @@ const Index: FC<IProps> = ({ title }) => {
                     )
                 })}
             </View>
-            <TouchableOpacity className="flex-row items-center justify-end">
+            <TouchableOpacity
+                className="flex-row items-center justify-end"
+                onPress={() => {
+                    //@ts-ignore
+                    navigation.navigate('HealthMealScreen')
+                }}
+            >
                 <Text
                     style={{
                         fontSize: 14,
@@ -64,6 +70,7 @@ const Index: FC<IProps> = ({ title }) => {
                 </Text>
                 <Icon type={'antdesign'} name={'right'} size={14}></Icon>
             </TouchableOpacity>
+            <View className="h-[10]"></View>
         </View>
     )
 }

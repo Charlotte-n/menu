@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import type { FC, ReactNode } from 'react'
 import {
     View,
@@ -9,13 +9,46 @@ import {
 } from 'react-native'
 import SearchFilter from '../../components/search'
 import FoodContent from './components/food-content'
+import { FoodCategoryApi, FoodListByCategoryApi } from '../../../../apis/food'
+import {
+    FoodCategoryType,
+    FoodListByCategoryType,
+} from '../../../../apis/types/food'
+import { Skeleton } from '@rneui/base'
+import { LinearGradient } from 'react-native-svg'
 
 interface IProps {
     children?: ReactNode
 }
 
 const FoodCategory: FC<IProps> = () => {
-    const [activeIndex, setActiveIndex] = useState(0)
+    const [activeIndex, setActiveIndex] = useState(1)
+    const [FoodCategory, setFoodCategory] = useState<FoodCategoryType>(
+        [] as FoodCategoryType,
+    )
+    const [FoodList, setFoodList] = useState([] as FoodListByCategoryType)
+    //获取分类列表
+    const getFoodCategory = () => {
+        FoodCategoryApi().then((res) => {
+            setFoodCategory(res.data.slice(0, 8))
+        })
+    }
+    //获取分类下的食物列表
+    const getFoodList = () => {
+        FoodListByCategoryApi({ category_id: activeIndex }).then((res) => {
+            setFoodList(res.data as FoodListByCategoryType)
+        })
+    }
+
+    useEffect(() => {
+        // 获取列表
+        getFoodCategory()
+        getFoodList()
+    }, [])
+    useEffect(() => {
+        getFoodList()
+    }, [activeIndex])
+
     return (
         <View className="flex-row">
             <View
@@ -24,20 +57,37 @@ const FoodCategory: FC<IProps> = () => {
                     height: Dimensions.get('screen').height,
                 }}
             >
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, index) => {
-                    return (
-                        <TouchableOpacity
-                            key={index}
-                            className="pl-[30] pr-[30] pt-[20] pb-[20]"
-                            style={index === activeIndex ? styles.active : null}
-                            onPress={() => {
-                                setActiveIndex(index)
-                            }}
-                        >
-                            <Text>谷类</Text>
-                        </TouchableOpacity>
-                    )
-                })}
+                {FoodCategory.length !== 0
+                    ? FoodCategory.map((item, index) => {
+                          return (
+                              <TouchableOpacity
+                                  key={item.id}
+                                  className="pl-[12] pr-[12] pt-[20] pb-[20]"
+                                  style={
+                                      item.id === activeIndex
+                                          ? styles.active
+                                          : null
+                                  }
+                                  onPress={() => {
+                                      setActiveIndex(item.id)
+                                  }}
+                              >
+                                  <Text>{item.title}</Text>
+                              </TouchableOpacity>
+                          )
+                      })
+                    : new Array(8).fill(0).map((item, index) => (
+                          <Skeleton
+                              key={index}
+                              LinearGradientComponent={LinearGradient}
+                              animation="wave"
+                              width={94}
+                              height={50}
+                              style={{
+                                  marginBottom: 10,
+                              }}
+                          ></Skeleton>
+                      ))}
             </View>
             <View
                 className="ml-[10] mt-[5]"
@@ -46,8 +96,8 @@ const FoodCategory: FC<IProps> = () => {
                 }}
             >
                 <SearchFilter type={''}></SearchFilter>
-                <View className="mt-[10]">
-                    <FoodContent></FoodContent>
+                <View className="mt-[10] mb-[160]">
+                    <FoodContent FoodList={FoodList}></FoodContent>
                 </View>
             </View>
         </View>

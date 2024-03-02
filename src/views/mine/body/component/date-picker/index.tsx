@@ -12,7 +12,7 @@ interface IProps {
 }
 
 const DatePicker: FC<IProps> = ({ birth, setBirth }) => {
-    const [date, setDate] = useState(new Date(1598051730000))
+    const [date, setDate] = useState(() => new Date(1598051730000))
     const [mode, setMode] = useState('date')
     const [show, setShow] = useState(false)
     const [currentDate, setCurrentDate] = useState('')

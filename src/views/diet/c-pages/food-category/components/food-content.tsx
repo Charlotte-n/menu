@@ -2,22 +2,54 @@ import React, { memo } from 'react'
 import type { FC, ReactNode } from 'react'
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import theme from '../../../../../styles/theme/color'
+import {
+    FoodListByCategoryData,
+    FoodListByCategoryType,
+} from '../../../../../apis/types/food'
+import AutoText from '../../../../../components/auto-text'
+import { useNavigation } from '@react-navigation/native'
+import { Selection } from 'victory-native'
+import { LinearGradient } from 'react-native-svg'
+import { Skeleton } from '@rneui/base'
 
 interface IProps {
     children?: ReactNode
+    FoodList: FoodListByCategoryType
 }
 
-const FoodContent: FC<IProps> = () => {
-    const Item = () => {
+const FoodContent: FC<IProps> = ({ FoodList }) => {
+    const navigation = useNavigation()
+    const gotoFoodDetail = (id: number) => {
+        //@ts-ignore
+        navigation.navigate('food-nutrients', { id })
+    }
+    const Item = ({
+        hot,
+        title,
+        id,
+    }: {
+        hot: number
+        title: string
+        id: number
+    }) => {
         return (
             <View
-                className="flex-row pl-[20] pr-[20] pt-[25] pb-[25] border-b"
+                className=" pl-[20] pr-[20] pt-[25] pb-[25] border-b"
                 style={{
                     borderColor: theme.colors.secondary,
                 }}
             >
-                <Text className="flex-1">米饭</Text>
-                <Text>116.00kcal/100g</Text>
+                <AutoText className="flex-1" numberOfLines={1} fontSize={4.5}>
+                    {title}
+                </AutoText>
+                <AutoText
+                    fontSize={4.5}
+                    style={{
+                        marginTop: 10,
+                    }}
+                >
+                    {hot}kcal/100g
+                </AutoText>
             </View>
         )
     }
@@ -29,9 +61,30 @@ const FoodContent: FC<IProps> = () => {
             }}
         >
             <ScrollView scroll-y showsVerticalScrollIndicator={false}>
-                {new Array(20).fill(0).map((item, index) => (
-                    <Item key={item + index}></Item>
-                ))}
+                {FoodList.length !== 0
+                    ? FoodList.map((item, index) => (
+                          <TouchableOpacity
+                              key={item.id}
+                              onPress={() => gotoFoodDetail(item.id)}
+                          >
+                              <Item
+                                  title={item.title}
+                                  hot={item.calories}
+                                  id={item.id}
+                              ></Item>
+                          </TouchableOpacity>
+                      ))
+                    : new Array(6).fill(0).map((item, index) => (
+                          <Skeleton
+                              key={index}
+                              LinearGradientComponent={LinearGradient}
+                              animation="wave"
+                              style={{
+                                  flex: 1,
+                              }}
+                              height={150}
+                          ></Skeleton>
+                      ))}
             </ScrollView>
         </View>
     )

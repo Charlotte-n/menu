@@ -36,6 +36,13 @@ export const searchFoodCategory = [
     },
 ]
 
+export const FoodNutritionData = ['carbohydrate', 'cellulose', 'fat', 'protein']
+export const FoodNutrition = {
+    carbohydrate: '碳水化合物',
+    fat: '脂肪',
+    protein: '蛋白质',
+    cellulose: '纤维素',
+}
 export const FoodCategory = [
     {
         id: 0,
