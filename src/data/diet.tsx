@@ -45,7 +45,7 @@ export const FoodNutrition = {
 }
 export const FoodCategory = [
     {
-        id: 0,
+        id: 1,
         icon: (
             <Image
                 source={require('../../assets/icon/主食.png')}
@@ -58,7 +58,7 @@ export const FoodCategory = [
         name: '主食',
     },
     {
-        id: 1,
+        id: 2,
         icon: (
             <Image
                 source={require('../../assets/icon/肉类.png')}
@@ -71,20 +71,20 @@ export const FoodCategory = [
         name: '肉类',
     },
     {
-        id: 2,
+        id: 3,
         icon: (
             <Image
-                source={require('../../assets/icon/饮料.png')}
+                source={require('../../assets/icon/nai.png')}
                 style={{
                     width: Dimensions.get('screen').width / 5 - 40,
                     height: 30,
                 }}
             />
         ),
-        name: '饮料',
+        name: '奶类',
     },
     {
-        id: 3,
+        id: 4,
         icon: (
             <Image
                 source={require('../../assets/icon/猕猴桃.png')}
@@ -97,17 +97,56 @@ export const FoodCategory = [
         name: '水果',
     },
     {
-        id: 4,
+        id: 5,
         icon: (
             <Image
-                source={require('../../assets/icon/guwu.png')}
+                source={require('../../assets/icon/jianguo.png')}
                 style={{
                     width: Dimensions.get('screen').width / 5 - 40,
                     height: 30,
                 }}
             />
         ),
-        name: '其他',
+        name: '坚果',
+    },
+    {
+        id: 6,
+        icon: (
+            <Image
+                source={require('../../assets/icon/饮料.png')}
+                style={{
+                    width: Dimensions.get('screen').width / 5 - 40,
+                    height: 30,
+                }}
+            />
+        ),
+        name: '饮料',
+    },
+    {
+        id: 7,
+        icon: (
+            <Image
+                source={require('../../assets/icon/you.png')}
+                style={{
+                    width: Dimensions.get('screen').width / 5 - 40,
+                    height: 30,
+                }}
+            />
+        ),
+        name: '油制品',
+    },
+    {
+        id: 8,
+        icon: (
+            <Image
+                source={require('../../assets/icon/tiaowei.png')}
+                style={{
+                    width: Dimensions.get('screen').width / 5 - 40,
+                    height: 30,
+                }}
+            />
+        ),
+        name: '调味品',
     },
 ]
 

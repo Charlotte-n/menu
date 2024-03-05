@@ -286,14 +286,14 @@ const FoodDetail: FC<IProps> = () => {
                     </TouchableOpacity>
                 )}
             </View>
-            <RecordFood isVisible={isVisible}>
-                {{
-                    cancel: () => {
-                        setIsVisible(false)
-                        setIsWrite(false)
-                    },
-                }}
-            </RecordFood>
+            {/*<RecordFood isVisible={isVisible}>*/}
+            {/*    {{*/}
+            {/*        cancel: () => {*/}
+            {/*            setIsVisible(false)*/}
+            {/*            setIsWrite(false)*/}
+            {/*        },*/}
+            {/*    }}*/}
+            {/*</RecordFood>*/}
         </SafeAreaView>
     )
 }

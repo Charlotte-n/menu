@@ -21,9 +21,10 @@ const SearchResult: FC<IProps> = ({ FoodData }) => {
         setId(id)
         setShowEdit(true)
     }
-    const gotoFoodDetail = () => {
+    const gotoFoodDetail = (id: number) => {
         //@ts-ignore
         navigation.navigate('food-nutrients', { id })
+        console.log(id)
     }
     return (
         <View>
@@ -34,7 +35,7 @@ const SearchResult: FC<IProps> = ({ FoodData }) => {
             {FoodData.map((item) => {
                 return (
                     <TouchableOpacity
-                        onPress={() => gotoFoodDetail()}
+                        onPress={() => gotoFoodDetail(item.id)}
                         key={item.id}
                         className="flex-row justify-between items-center border rounded mb-[10] pt-[10] pb-[10] pl-[5] pr-[5]"
                         style={{ borderColor: theme.colors.primary }}

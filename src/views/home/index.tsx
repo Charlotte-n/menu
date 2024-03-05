@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import type { FC, ReactNode } from 'react'
 import { View } from 'nativewind/dist/preflight'
 import { Dimensions, Image, ScrollView } from 'react-native'
@@ -10,19 +10,63 @@ import { transformAdaption } from '../../utils/adaptation'
 import { useAppDispatch, useAppSelector } from '../../store'
 import { shallowEqual } from 'react-redux'
 import { Drawer } from 'react-native-drawer-layout'
-import { changeOpenAction } from '../../store/slice/home'
+import { changeDailyIntake, changeOpenAction } from '../../store/slice/home'
 import DrawerContent from './components/drawer-content'
+import { Dialog } from '@rneui/themed'
+import DialogContent from './components/dialog-content'
+import { FoodListByCategoryApi } from '../../apis/food'
+import { FoodListByCategoryType } from '../../apis/types/food'
+import { DailyIntakeApi } from '../../apis/home'
 interface IProps {
     children?: ReactNode
 }
 
 const Home: FC<IProps> = () => {
     const dispatch = useAppDispatch()
-    const { open } = useAppSelector((state) => {
+    const { open, dailyIntake } = useAppSelector((state) => {
         return {
             open: state.HomeSlice.open,
+            dailyIntake: state.HomeSlice.dailyIntake,
         }
     }, shallowEqual)
+    const { userInfo } = useAppSelector((state) => {
+        return {
+            userInfo: state.LoginRegisterSlice.userInfo,
+        }
+    }, shallowEqual)
+    //弹窗显示
+    const [dialogVisible, setDialogVisible] = useState(false)
+    const toggleDialog = async () => {
+        //判断信息
+        if (userInfo.height && userInfo.weight && userInfo.habit) {
+            //获取用户的每日摄入量，放入仓库存储
+            DailyIntakeApi(userInfo.id).then((res) => {
+                dispatch(changeDailyIntake(res.data))
+            })
+            setDialogVisible(false)
+            return
+        }
+        setDialogVisible(true)
+    }
+    const cancel = () => {
+        setDialogVisible(false)
+    }
+
+    useEffect(() => {
+        toggleDialog()
+    }, [])
+
+    //获取每日推荐食谱
+    const [RecipeFood, setRecipeFood] = useState([] as FoodListByCategoryType)
+    const getRecipeData = () => {
+        FoodListByCategoryApi({ category_id: 9 }).then((res) => {
+            setRecipeFood(res.data as FoodListByCategoryType)
+        })
+    }
+    useEffect(() => {
+        getRecipeData()
+    }, [])
+
     //静态资源
     const data = [
         {
@@ -111,8 +155,26 @@ const Home: FC<IProps> = () => {
                 </View>
                 {/*    热门推荐*/}
                 <View className="mt-[20]">
-                    <HotRecommend title={'推荐菜品'}></HotRecommend>
+                    <HotRecommend
+                        title={'推荐菜品'}
+                        data={RecipeFood}
+                    ></HotRecommend>
                 </View>
+                {/*    初次登录的用户弹窗*/}
+                <Dialog
+                    isVisible={dialogVisible}
+                    overlayStyle={{
+                        marginTop: -100,
+                    }}
+                >
+                    <Dialog.Title title={'个人信息'}></Dialog.Title>
+                    {/*内容*/}
+                    {dialogVisible ? (
+                        <View>
+                            <DialogContent>{{ cancel: cancel }}</DialogContent>
+                        </View>
+                    ) : null}
+                </Dialog>
             </ScrollView>
         </Drawer>
     )

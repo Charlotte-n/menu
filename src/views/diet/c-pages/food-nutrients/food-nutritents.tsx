@@ -143,7 +143,6 @@ const FoodNutrients: FC = () => {
             <View className="m-auto">
                 <Button
                     onPress={() => {
-                        console.log(123)
                         setIsVisible(true)
                     }}
                     title="记录饮食"
@@ -154,7 +153,10 @@ const FoodNutrients: FC = () => {
                     }}
                 ></Button>
             </View>
-            <RecordFood isVisible={isVisible}>
+            <RecordFood
+                isVisible={isVisible}
+                id={(route.params as { id: number }).id}
+            >
                 {{
                     cancel: () => {
                         setIsVisible(false)

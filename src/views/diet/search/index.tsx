@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react'
+import React, { memo, useEffect, useRef, useState } from 'react'
 import type { FC, ReactNode } from 'react'
 import { View } from 'react-native'
 import SearchFilter from '../components/search'
@@ -7,6 +7,10 @@ import OverViewFood from './components/show-food'
 import HotRecommend from '../../../components/hot-recommend'
 import SearchResult from './components/search-result'
 import { FoodListByCategoryType } from '../../../apis/types/food'
+import Empty from './components/empty'
+import { FoodListByCategoryApi } from '../../../apis/food'
+import { randomFood } from '../../../apis/diet'
+import { RandomFoodDataType } from '../../../apis/types/diet'
 
 interface IProps {
     children?: ReactNode
@@ -17,6 +21,27 @@ const Search: FC<IProps> = () => {
     const [searchFoodResult, setSearchFoodResult] = useState(
         [] as FoodListByCategoryType,
     )
+    const [empty, setEmpty] = useState(false)
+    //获取热门菜谱食物
+    const [RecipeFood, setRecipeFood] = useState([] as FoodListByCategoryType)
+    const getRecipeData = () => {
+        FoodListByCategoryApi({ category_id: 8 }).then((res) => {
+            setRecipeFood(res.data as FoodListByCategoryType)
+        })
+    }
+    //获取随机食物
+    const [randomFoodData, setRandomFoodData] = useState(
+        [] as RandomFoodDataType[],
+    )
+    const getRandomFood = () => {
+        randomFood().then((res) => {
+            setRandomFoodData(res.data)
+        })
+    }
+    useEffect(() => {
+        getRecipeData()
+        getRandomFood()
+    }, [])
     return (
         <ScrollView
             style={{
@@ -34,6 +59,7 @@ const Search: FC<IProps> = () => {
                     {{
                         setRecommendShowFood: setRecommendShowFood,
                         setSearchFoodResult,
+                        setEmpty: setEmpty,
                     }}
                 </SearchFilter>
                 {showRecommendFood ? (
@@ -43,8 +69,10 @@ const Search: FC<IProps> = () => {
                             height: 300,
                         }}
                     >
-                        <OverViewFood></OverViewFood>
+                        <OverViewFood data={randomFoodData}></OverViewFood>
                     </View>
+                ) : empty ? (
+                    <Empty></Empty>
                 ) : (
                     <View className="mt-[20]  flex-1 min-h-[300]">
                         <SearchResult
@@ -59,7 +87,10 @@ const Search: FC<IProps> = () => {
                         marginTop: 10,
                     }}
                 >
-                    <HotRecommend title={'热门菜品'}></HotRecommend>
+                    <HotRecommend
+                        title={'热门菜品'}
+                        data={RecipeFood}
+                    ></HotRecommend>
                 </View>
             </View>
         </ScrollView>

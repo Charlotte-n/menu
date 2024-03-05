@@ -1,10 +1,16 @@
 import hyRequest from '../services'
-import { RecognizeFoodResponse } from './types/diet'
+import {
+    CaloriesBodyData,
+    RandomFoodDataType,
+    RecognizeFoodResponse,
+} from './types/diet'
 import { CommonResponseType } from './types'
 import axios from 'axios'
 
 enum URL {
     RECOGNIZE_FOOD_URL = '/api/dish/parse',
+    RANDOM_FOOD_URL = '/api/food/recommend',
+    ADD_CALORIES = '/api/user/setcalorie',
 }
 interface recognizeFoodParamType {
     image: string
@@ -35,5 +41,25 @@ interface addressParamType {
 export const address = (param: addressParamType) => {
     return axios.get('https://api.map.baidu.com/reverse_geocoding/v3', {
         params: param,
+    })
+}
+
+/**
+ * 随机获取的食物
+ */
+export const randomFood = () => {
+    return hyRequest.get<CommonResponseType<RandomFoodDataType[]>>({
+        url: URL.RANDOM_FOOD_URL,
+    })
+}
+
+/**
+ * 用户添加食物
+ * @param data
+ */
+export const addCaloriesApi = (data: CaloriesBodyData) => {
+    return hyRequest.post<CommonResponseType<any>>({
+        url: URL.ADD_CALORIES,
+        data,
     })
 }

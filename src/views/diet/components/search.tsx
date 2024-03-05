@@ -10,11 +10,13 @@ import { FoodListByCategoryType } from '../../../apis/types/food'
 interface IProps {
     children?: any
     type: string
+    category_id?: number
 }
 
-const SearchFilter: FC<IProps> = ({ type, children }) => {
+const SearchFilter: FC<IProps> = ({ type, children, category_id }) => {
     const setRecommendShowFood = children?.setRecommendShowFood
     const setSearchFoodResult = children?.setSearchFoodResult
+    const setEmpty = children?.setEmpty
     const [search, setSearch] = useState('')
     const navigation = useNavigation()
     const [searchFood, setSearchFood] = useState<FoodListByCategoryType>()
@@ -28,9 +30,34 @@ const SearchFilter: FC<IProps> = ({ type, children }) => {
     }
     //获取到搜索的食物
     const searchFoodData = () => {
-        FoodListByCategoryApi({ title: search }).then((res) => {
+        FoodListByCategoryApi({ title: search }).then((res: any) => {
             setRecommendShowFood(false)
+            //什么也没有搜索到
+            if (res.data.length === 0) {
+                setEmpty(true)
+            } else {
+                setEmpty(false)
+            }
             setSearchFoodResult(res.data as FoodListByCategoryType)
+        })
+    }
+    //种类 + 文字搜索食物
+    const searchFoodByCategoryTitle = (category: number) => {
+        FoodListByCategoryApi({ title: search, category_id: category }).then(
+            (res: any) => {
+                setEmpty(false)
+                if (res.data.length === 0) {
+                    //搜索为空的时候
+                    setEmpty(true)
+                }
+                setSearchFoodResult(res.data as FoodListByCategoryType)
+            },
+        )
+    }
+    const searchFoodByCategory = (category: number) => {
+        FoodListByCategoryApi({ category_id: category }).then((res) => {
+            setEmpty(false)
+            setSearchFoodResult(res.data)
         })
     }
 
@@ -49,6 +76,13 @@ const SearchFilter: FC<IProps> = ({ type, children }) => {
                     if (type === 'search') {
                         if (search) {
                             searchFoodData()
+                        }
+                    }
+                    if (type === 'category') {
+                        if (search) {
+                            searchFoodByCategoryTitle(category_id as number)
+                        } else {
+                            searchFoodByCategory(category_id as number)
                         }
                     }
                 }}

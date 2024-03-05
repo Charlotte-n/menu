@@ -11,6 +11,8 @@ interface IProps {
     inputContent: string
     content: string
     setValue: any
+    height?: number
+    fontSize?: number
 }
 
 const HighPicker: FC<IProps> = ({
@@ -19,6 +21,8 @@ const HighPicker: FC<IProps> = ({
     inputContent,
     content,
     setValue,
+    height,
+    fontSize,
 }) => {
     const [isShow, setIsShow] = useState(false)
     const [contentValue, setContentValue] = useState('')
@@ -30,25 +34,45 @@ const HighPicker: FC<IProps> = ({
         switch (title) {
             case '身高':
                 return (
-                    <Text style={{ fontSize: 15, fontWeight: '300' }}>
+                    <Text
+                        style={{
+                            fontSize: fontSize ? fontSize : 15,
+                            fontWeight: '300',
+                        }}
+                    >
                         {selected.current ? selected.current : content}
                     </Text>
                 )
             case '体重':
                 return (
-                    <Text style={{ fontSize: 15, fontWeight: '300' }}>
+                    <Text
+                        style={{
+                            fontSize: fontSize ? fontSize : 15,
+                            fontWeight: '300',
+                        }}
+                    >
                         {selected.current ? selected.current : content}
                     </Text>
                 )
             case '运动习惯':
                 return (
-                    <Text style={{ fontSize: 15, fontWeight: '300' }}>
+                    <Text
+                        style={{
+                            fontSize: fontSize ? fontSize : 15,
+                            fontWeight: '300',
+                        }}
+                    >
                         {selected.current ? selected.current : content}
                     </Text>
                 )
             default:
                 return (
-                    <Text style={{ fontSize: 15, fontWeight: '300' }}>
+                    <Text
+                        style={{
+                            fontSize: fontSize ? fontSize : 15,
+                            fontWeight: '300',
+                        }}
+                    >
                         {content}
                     </Text>
                 )
@@ -57,12 +81,18 @@ const HighPicker: FC<IProps> = ({
     useEffect(() => {}, [])
     return (
         <TouchableOpacity
-            className="flex-row items-center h-[58] border-[#F1F3F4] border-b"
+            className="flex-row items-center  border-[#F1F3F4] border-b"
             onPress={() => setIsShow(true)}
+            style={{
+                height: height ? height : 59,
+            }}
         >
             <Text
                 className="flex-1"
-                style={{ fontSize: 15, fontWeight: '300' }}
+                style={{
+                    fontSize: fontSize ? fontSize : 15,
+                    fontWeight: '300',
+                }}
             >
                 {title}
             </Text>

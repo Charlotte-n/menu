@@ -11,7 +11,6 @@ import {
 import { BottomSheet, Button, Card, Dialog, Icon } from '@rneui/themed'
 import theme from '../../styles/theme/color'
 import WheelPicker from 'react-native-wheely'
-import foodDetail from '../../views/diet/c-pages/food-detail/food-detail'
 import { FoodNutrition, FoodNutritionData, foodTime } from '../../data/diet'
 import { useNavigation } from '@react-navigation/native'
 import AutoText from '../auto-text'
@@ -20,7 +19,10 @@ import {
     SingleFoodListType,
 } from '../../apis/types/food'
 import { FoodListByCategoryApi } from '../../apis/food'
-import * as url from 'url'
+import { addCaloriesApi } from '../../apis/diet'
+import { CaloriesBodyData } from '../../apis/types/diet'
+import { useAppSelector } from '../../store'
+import { shallowEqual } from 'react-redux'
 interface IProps {
     children: {
         cancel: () => void
@@ -37,6 +39,11 @@ const RecordFood: FC<IProps> = ({ isVisible, children, id }) => {
     const [FoodDetail, setFoodDetail] = useState<SingleFoodListType>(
         {} as SingleFoodListType,
     )
+    const { userInfo } = useAppSelector((state) => {
+        return {
+            userInfo: state.LoginRegisterSlice.userInfo,
+        }
+    }, shallowEqual)
     const disShow = () => {
         setVisible(false)
     }
@@ -52,6 +59,24 @@ const RecordFood: FC<IProps> = ({ isVisible, children, id }) => {
     useEffect(() => {
         getFoodDetail()
     }, [visible])
+    //添加饮食
+    const addFood = () => {
+        const data: CaloriesBodyData = {
+            fat: 0,
+            calories: 0,
+            carbohydrate: 0,
+            cellulose: 0,
+            type: 0,
+            protein: 0,
+            id: userInfo.id,
+        }
+        addCaloriesApi(data).then((res) => {
+            if (res.code === 1) {
+                //TODO:可以添加一个弹窗
+                disShow()
+            }
+        })
+    }
     return (
         <BottomSheet isVisible={isVisible} containerStyle={{}}>
             <Card
@@ -194,6 +219,7 @@ const RecordFood: FC<IProps> = ({ isVisible, children, id }) => {
                     <Button
                         onPress={() => {
                             cancel()
+                            addFood()
                         }}
                         title="保存"
                         containerStyle={{
@@ -222,7 +248,6 @@ const RecordFood: FC<IProps> = ({ isVisible, children, id }) => {
                     options={foodTime}
                     onChange={(index) => {
                         setSelectedIndex(index)
-                        console.log(selectedIndex)
                     }}
                 />
                 <Dialog.Actions>

@@ -9,9 +9,11 @@ interface IProps {
     children?: ReactNode
     birth: any
     setBirth: any
+    height?: number
+    fontSize?: number
 }
 
-const DatePicker: FC<IProps> = ({ birth, setBirth }) => {
+const DatePicker: FC<IProps> = ({ birth, setBirth, height, fontSize }) => {
     const [date, setDate] = useState(() => new Date(1598051730000))
     const [mode, setMode] = useState('date')
     const [show, setShow] = useState(false)
@@ -41,16 +43,24 @@ const DatePicker: FC<IProps> = ({ birth, setBirth }) => {
         <TouchableOpacity
             className="flex-row items-center border-[#F1F3F4] border-b"
             onPress={() => setShow(true)}
-            style={{ height: 58 }}
+            style={{ height: height ? height : 58 }}
         >
             <Text
                 className="flex-1"
-                style={{ fontSize: 15, fontWeight: '300' }}
+                style={{
+                    fontSize: fontSize ? fontSize : 15,
+                    fontWeight: '300',
+                }}
             >
                 出生日期
             </Text>
             <View className="flex-row items-center">
-                <Text style={{ fontSize: 15, fontWeight: '300' }}>
+                <Text
+                    style={{
+                        fontSize: fontSize ? fontSize : 15,
+                        fontWeight: '300',
+                    }}
+                >
                     {currentDate
                         ? currentDate
                         : String(moment(date).format('YYYY-MM-DD'))}

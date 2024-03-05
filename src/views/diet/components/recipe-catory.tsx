@@ -15,7 +15,7 @@ interface IProps {
 
 const RecipeCategory: FC<IProps> = () => {
     const navigation = useNavigation()
-    const Item = ({ image, name }: any) => {
+    const Item = ({ image, name, index }: any) => {
         return (
             <TouchableOpacity
                 style={{
@@ -24,7 +24,7 @@ const RecipeCategory: FC<IProps> = () => {
                 className="flex-col justify-center"
                 onPress={() => {
                     //@ts-ignore
-                    navigation.navigate('category')
+                    navigation.navigate('category', { activeIndex: index })
                 }}
             >
                 {image}
@@ -37,7 +37,7 @@ const RecipeCategory: FC<IProps> = () => {
             <FlatList
                 data={FoodCategory}
                 renderItem={({ item }) => (
-                    <Item image={item.icon} name={item.name} />
+                    <Item image={item.icon} name={item.name} index={item.id} />
                 )}
                 horizontal={true}
                 keyExtractor={(item) => String(item.id)}

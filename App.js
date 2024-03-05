@@ -5,8 +5,8 @@ import TabBar from './src/route/tab-bar'
 import LoginRegisterHomeScreen from './src/route/login'
 import { Icon } from '@rneui/themed'
 import { MineOtherScreen } from './src/data/app-path'
-import { Provider } from 'react-redux'
-import store, { persistor } from './src/store'
+import { Provider, shallowEqual } from 'react-redux'
+import store, { persistor, useAppSelector } from './src/store'
 import { PersistGate } from 'redux-persist/es/integration/react'
 import UserAgree from './src/views/mine/profile/c-pages/user-agree'
 import Search from './src/views/diet/search'
@@ -19,13 +19,16 @@ import FoodNutrients from './src/views/diet/c-pages/food-nutrients/food-nutriten
 import FoodCategory from './src/views/diet/c-pages/food-category'
 export default function App() {
     const Stack = createStackNavigator()
-    useEffect(() => {}, [])
     return (
         <Provider store={store}>
             <PersistGate persistor={persistor} loading={null}>
                 <NavigationContainer>
                     <Stack.Navigator
-                        initialRouteName={'LoginRegisterHomeScreen'}
+                        initialRouteName={
+                            store.getState().LoginRegisterSlice.token
+                                ? 'tabs'
+                                : 'LoginRegisterHomeScreen'
+                        }
                     >
                         <Stack.Screen
                             name={'LoginRegisterHomeScreen'}

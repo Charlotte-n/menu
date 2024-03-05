@@ -1,12 +1,7 @@
-import React, { memo,  useRef, useState } from 'react'
+import React, { memo, useRef, useState } from 'react'
 import type { FC, ReactNode } from 'react'
 import { Image, ScrollView, Text, View } from 'nativewind/dist/preflight'
-import {
-    Alert,
-    Dimensions,
-    StatusBar,
-    StyleSheet,
-} from 'react-native'
+import { Alert, Dimensions, StatusBar, StyleSheet } from 'react-native'
 import { Button, Icon, Input } from '@rneui/themed'
 import { TouchableOpacity } from 'react-native'
 import theme from '../../../styles/theme/color'
@@ -60,11 +55,11 @@ const Login: FC<IProps> = ({ navigation }) => {
             }
             try {
                 const res = await LoginApi(param)
-                console.log(res.data)
+                console.log(res.data, res.code)
                 if (res.code === 1) {
-                    navigation.dispatch(StackActions.replace('tabs'))
                     dispatch(changeUserInfoAction(res.data.user))
                     dispatch(changeTokenAction(res.data.token))
+                    navigation.dispatch(StackActions.replace('tabs'))
                 } else {
                     Alert.alert('', '邮箱或者密码错误,请重新输入', [
                         {

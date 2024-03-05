@@ -1,14 +1,17 @@
 import React, { memo, useRef, useState } from 'react'
 import type { FC, ReactNode } from 'react'
-import {  Text, TouchableOpacity, View } from 'react-native'
+import { Text, TouchableOpacity, View } from 'react-native'
 import { Dialog, Icon } from '@rneui/themed'
+import { foodTime } from '../../../../../data/diet'
 interface IProps {
     children?: ReactNode
     sex: number
     setSex: (value: string) => void
+    height?: number
+    fontSize?: number
 }
 
-const SexPicker: FC<IProps> = ({ sex, setSex }) => {
+const SexPicker: FC<IProps> = ({ sex, setSex, height, fontSize }) => {
     const [isShow, setIsShow] = useState(false)
     //进行联动
     const selected = useRef(String(sex))
@@ -17,17 +20,25 @@ const SexPicker: FC<IProps> = ({ sex, setSex }) => {
             className="flex-row items-center border-[#F1F3F4] border-b"
             onPress={() => setIsShow(true)}
             style={{
-                height: 59,
+                height: height ? height : 59,
             }}
         >
             <Text
                 className="flex-1"
-                style={{ fontSize: 15, fontWeight: '300' }}
+                style={{
+                    fontSize: fontSize ? fontSize : 15,
+                    fontWeight: '300',
+                }}
             >
                 性别
             </Text>
             <View className="flex-row items-center">
-                <Text style={{ fontSize: 15, fontWeight: '300' }}>
+                <Text
+                    style={{
+                        fontSize: fontSize ? fontSize : 15,
+                        fontWeight: '300',
+                    }}
+                >
                     {selected.current
                         ? selected.current === '0'
                             ? '男'

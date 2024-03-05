@@ -19,3 +19,24 @@ export type RecognizeFood = {
     probability: number
 }
 //endregion
+
+//#region 获取随机食物返回来的数据
+export interface RandomFoodDataType {
+    id: number
+    title: string
+}
+
+//endregion
+
+//#region 热量添加
+export interface CaloriesBodyData {
+    calories: number
+    carbohydrate: number
+    cellulose: number
+    fat: number
+    id: number
+    protein: number
+    type: number
+}
+
+//endregion

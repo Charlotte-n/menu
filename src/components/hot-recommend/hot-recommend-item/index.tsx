@@ -1,16 +1,21 @@
 import React, { memo } from 'react'
 import type { FC, ReactNode } from 'react'
 import { Image, Text, View } from 'react-native'
+import { SingleFoodListType } from '../../../apis/types/food'
+import AutoText from '../../auto-text'
 
 interface IProps {
     children?: ReactNode
+    data: SingleFoodListType
 }
 
-const HotRecommendItem: FC<IProps> = () => {
+const HotRecommendItem: FC<IProps> = ({ data }) => {
     return (
         <View>
             <Image
-                source={require('../../../../assets/images/bg_welcome_header.png')}
+                source={{
+                    uri: data.image,
+                }}
                 style={{
                     height: 60,
                     width: 88,
@@ -20,16 +25,18 @@ const HotRecommendItem: FC<IProps> = () => {
             <Text
                 style={{
                     fontSize: 14,
+                    marginTop: 3,
                 }}
+                numberOfLines={1}
             >
-                口水鸡
+                {data.title}
             </Text>
             <Text
                 style={{
                     fontSize: 11,
                 }}
             >
-                115kcal
+                {data.calories}kcal
             </Text>
         </View>
     )

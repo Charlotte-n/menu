@@ -3,38 +3,39 @@ import type { FC, ReactNode } from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 import { Dialog, Icon } from '@rneui/themed'
 import AutoText from '../../../../../components/auto-text'
+
 interface IProps {
     children?: ReactNode
-    habit: any
-    setHabit: any
+    target: string
+    setTarget: any
     height?: number
     fontSize?: number
 }
 
-const HabitPicker: FC<IProps> = ({ habit, setHabit, height, fontSize }) => {
+const HealthTarget: FC<IProps> = ({ height, fontSize, target, setTarget }) => {
     const [isShow, setIsShow] = useState(false)
     //进行联动
-    const selected = useRef(habit)
-    const BodyData = [
+    const selected = useRef(target)
+    const BodyTargetData = [
         {
             key: '0',
-            habit: '久坐不动',
+            target: '减脂',
         },
         {
             key: '1',
-            habit: '轻度活动',
+            target: '温和减脂',
         },
         {
             key: '2',
-            habit: '中度活动',
+            target: '保持体型',
         },
         {
             key: '3',
-            habit: '重度活动',
+            target: '温和增肌',
         },
         {
             key: '4',
-            habit: '非常重度活动',
+            target: '增肌',
         },
     ]
     return (
@@ -52,11 +53,11 @@ const HabitPicker: FC<IProps> = ({ habit, setHabit, height, fontSize }) => {
                     fontWeight: '300',
                 }}
             >
-                运动习惯
+                健康目标
             </Text>
             <View className="flex-row items-center">
                 <Text style={{ fontSize: 15, fontWeight: '300' }}>
-                    {selected.current ? selected.current : habit ? habit : ''}
+                    {selected.current ? selected.current : target ? target : ''}
                 </Text>
                 <Icon
                     type={'antdesign'}
@@ -70,15 +71,15 @@ const HabitPicker: FC<IProps> = ({ habit, setHabit, height, fontSize }) => {
                 ></Icon>
             </View>
             <Dialog isVisible={isShow}>
-                <Dialog.Title title={'运动习惯'}></Dialog.Title>
-                {BodyData.map((item) => {
+                <Dialog.Title title={'健康目标'}></Dialog.Title>
+                {BodyTargetData.map((item) => {
                     return (
                         <TouchableOpacity
                             key={item.key}
                             onPress={() => {
                                 setIsShow(false)
                                 selected.current = item.key
-                                setHabit(selected.current)
+                                setTarget(selected.current)
                             }}
                         >
                             <View>
@@ -88,7 +89,7 @@ const HabitPicker: FC<IProps> = ({ habit, setHabit, height, fontSize }) => {
                                         fontSize: 16,
                                     }}
                                 >
-                                    {item.habit}
+                                    {item.target}
                                 </AutoText>
                             </View>
                         </TouchableOpacity>
@@ -99,4 +100,4 @@ const HabitPicker: FC<IProps> = ({ habit, setHabit, height, fontSize }) => {
     )
 }
 
-export default memo(HabitPicker)
+export default memo(HealthTarget)

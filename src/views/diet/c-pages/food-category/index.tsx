@@ -16,17 +16,25 @@ import {
 } from '../../../../apis/types/food'
 import { Skeleton } from '@rneui/base'
 import { LinearGradient } from 'react-native-svg'
+import AutoText from '../../../../components/auto-text'
+import { useRoute } from '@react-navigation/native'
 
 interface IProps {
     children?: ReactNode
 }
 
 const FoodCategory: FC<IProps> = () => {
-    const [activeIndex, setActiveIndex] = useState(1)
+    const route = useRoute()
+    const [activeIndex, setActiveIndex] = useState(() =>
+        (route?.params as any)?.activeIndex
+            ? (route.params as any).activeIndex
+            : 1,
+    )
     const [FoodCategory, setFoodCategory] = useState<FoodCategoryType>(
         [] as FoodCategoryType,
     )
     const [FoodList, setFoodList] = useState([] as FoodListByCategoryType)
+    const [empty, setEmpty] = useState(false)
     //获取分类列表
     const getFoodCategory = () => {
         FoodCategoryApi().then((res) => {
@@ -35,6 +43,7 @@ const FoodCategory: FC<IProps> = () => {
     }
     //获取分类下的食物列表
     const getFoodList = () => {
+        setEmpty(false)
         FoodListByCategoryApi({ category_id: activeIndex }).then((res) => {
             setFoodList(res.data as FoodListByCategoryType)
         })
@@ -95,10 +104,26 @@ const FoodCategory: FC<IProps> = () => {
                     width: 250,
                 }}
             >
-                <SearchFilter type={''}></SearchFilter>
-                <View className="mt-[10] mb-[160]">
-                    <FoodContent FoodList={FoodList}></FoodContent>
-                </View>
+                <SearchFilter type={'category'} category_id={activeIndex}>
+                    {{
+                        setSearchFoodResult: setFoodList,
+                        setEmpty: setEmpty,
+                    }}
+                </SearchFilter>
+                {empty ? (
+                    <View
+                        className="h-[600] bg-white mt-[5] justify-center items-center"
+                        style={{
+                            borderRadius: 10,
+                        }}
+                    >
+                        <AutoText>没有找到相关食物</AutoText>
+                    </View>
+                ) : (
+                    <View className="mt-[10] mb-[160]">
+                        <FoodContent FoodList={FoodList}></FoodContent>
+                    </View>
+                )}
             </View>
         </View>
     )

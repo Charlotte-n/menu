@@ -17,15 +17,18 @@ import {
 const persistConfig = {
     key: 'userInfo',
     storage: AsyncStorage,
-    whitelist: [],
+}
+const persistHomeConfig = {
+    key: 'homeData',
+    storage: AsyncStorage,
 }
 const LoginStorePersist = persistReducer(persistConfig, LoginRegisterSlice)
-
+const HomeStorePersist = persistReducer(persistHomeConfig, HomeSlice)
 const store = configureStore({
     reducer: {
         LoginRegisterSlice: LoginStorePersist,
         DietSlice: DietSlice,
-        HomeSlice: HomeSlice,
+        HomeSlice: HomeStorePersist,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

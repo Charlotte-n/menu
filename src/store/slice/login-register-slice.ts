@@ -20,6 +20,7 @@ export const LoginRegisterSlice = createSlice({
     reducers: {
         changeUserInfoAction(state, { payload }) {
             state.userInfo = payload
+            console.log(state.userInfo)
         },
         changeTokenAction(state, { payload }) {
             state.token = payload

@@ -10,13 +10,14 @@ import {
 import { searchFoodCategory } from '../../../../data/diet'
 import theme from '../../../../styles/theme/color'
 import { useNavigation } from '@react-navigation/native'
+import { RandomFoodDataType } from '../../../../apis/types/diet'
 
 interface IProps {
     children?: ReactNode
+    data: RandomFoodDataType[]
 }
 
-const OverViewFood: FC<IProps> = () => {
-    const array: number[] = [0].fill(0, 0, 10)
+const OverViewFood: FC<IProps> = ({ data }) => {
     const navigation = useNavigation()
     return (
         <View style={{ flex: 1, justifyContent: 'center' }}>
@@ -46,26 +47,29 @@ const OverViewFood: FC<IProps> = () => {
                     width: Dimensions.get('window').width - 40,
                 }}
             >
-                {searchFoodCategory.map((item, index) => {
+                {data.map((item, index) => {
                     return (
                         <TouchableOpacity
-                            key={item.name}
+                            key={item.id}
                             onPress={() => {
                                 //@ts-ignore
-                                navigation.navigate('food-nutrients')
+                                navigation.navigate('food-nutrients', {
+                                    id: item.id,
+                                })
                             }}
                         >
                             <Text
+                                numberOfLines={1}
                                 className="mr-[10] mb-[10] pl-[8] pr-[8] pt-[5] pb-[5] bg-[#E1E1E1]"
                                 style={{
-                                    ...(index ===
-                                        searchFoodCategory.length - 1 && {
+                                    ...(index === data.length - 1 && {
                                         marginRight: 0,
                                     }),
                                     borderRadius: 32,
+                                    maxWidth: 200,
                                 }}
                             >
-                                {item.name}
+                                {item.title}
                             </Text>
                         </TouchableOpacity>
                     )
