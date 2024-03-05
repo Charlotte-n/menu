@@ -13,6 +13,7 @@ import { FoodCategoryApi, FoodListByCategoryApi } from '../../../../apis/food'
 import {
     FoodCategoryType,
     FoodListByCategoryType,
+    SingleFoodListType,
 } from '../../../../apis/types/food'
 import { Skeleton } from '@rneui/base'
 import { LinearGradient } from 'react-native-svg'
@@ -33,7 +34,7 @@ const FoodCategory: FC<IProps> = () => {
     const [FoodCategory, setFoodCategory] = useState<FoodCategoryType>(
         [] as FoodCategoryType,
     )
-    const [FoodList, setFoodList] = useState([] as FoodListByCategoryType)
+    const [FoodList, setFoodList] = useState([] as SingleFoodListType[])
     const [empty, setEmpty] = useState(false)
     //获取分类列表
     const getFoodCategory = () => {
@@ -45,7 +46,7 @@ const FoodCategory: FC<IProps> = () => {
     const getFoodList = () => {
         setEmpty(false)
         FoodListByCategoryApi({ category_id: activeIndex }).then((res) => {
-            setFoodList(res.data as FoodListByCategoryType)
+            setFoodList((res.data as FoodListByCategoryType).foods)
         })
     }
 
@@ -67,7 +68,7 @@ const FoodCategory: FC<IProps> = () => {
                 }}
             >
                 {FoodCategory.length !== 0
-                    ? FoodCategory.map((item, index) => {
+                    ? FoodCategory.map((item) => {
                           return (
                               <TouchableOpacity
                                   key={item.id}

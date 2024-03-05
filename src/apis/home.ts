@@ -4,7 +4,7 @@ import { GetDailyIntakeData, ResponseDailyIntake } from './types/home'
 
 enum URL {
     GET_INTAKE_DAILY = '/api/food/intake',
-    GET_DAILY_INTAKE = '/api/user/getcalorie',
+    GET_DAILY_INTAKE = '/api/food/getrecommend',
 }
 
 /**

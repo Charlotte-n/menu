@@ -14,7 +14,10 @@ export interface Daum {
 }
 
 //食物列表
-export type FoodListByCategoryType = SingleFoodListType[]
+export interface FoodListByCategoryType {
+    num: number
+    foods: SingleFoodListType[]
+}
 export interface SingleFoodListType {
     id: number
     categoryId: number

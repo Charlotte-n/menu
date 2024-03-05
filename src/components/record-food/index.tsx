@@ -1,6 +1,7 @@
-import React, { memo, useEffect, useState } from 'react'
+import React, { memo, useEffect, useRef, useState } from 'react'
 import type { FC } from 'react'
 import {
+    Alert,
     Dimensions,
     Image,
     Text,
@@ -49,7 +50,7 @@ const RecordFood: FC<IProps> = ({ isVisible, children, id }) => {
     }
     const getFoodDetail = () => {
         FoodListByCategoryApi({ id }).then((res) => {
-            setFoodDetail((res.data as FoodListByCategoryType)[0])
+            setFoodDetail((res.data as FoodListByCategoryType).foods[0])
         })
     }
     useEffect(() => {
@@ -60,22 +61,27 @@ const RecordFood: FC<IProps> = ({ isVisible, children, id }) => {
         getFoodDetail()
     }, [visible])
     //添加饮食
+    const [g, setG] = useState(100)
     const addFood = () => {
         const data: CaloriesBodyData = {
-            fat: 0,
-            calories: 0,
-            carbohydrate: 0,
-            cellulose: 0,
-            type: 0,
-            protein: 0,
-            id: userInfo.id,
+            fat: (Number(FoodDetail.fat) / 100) * g, //脂肪
+            calories: (Number(FoodDetail.calories) / 100) * g, //热量
+            carbohydrate: (Number(FoodDetail.carbohydrate) / 100) * g, //碳水化合物
+            cellulose: (Number(FoodDetail.cellulose) / 100) * g, //纤维素
+            type: 0, //时间
+            protein: (Number(FoodDetail.protein) / 100) * g, //蛋白质
+            id: userInfo.id, //用户id
+            foodId: FoodDetail.id, //食物id
+            g: g, //克数
         }
         addCaloriesApi(data).then((res) => {
             if (res.code === 1) {
                 //TODO:可以添加一个弹窗
+                Alert.alert('添加信息', '添加成功')
                 disShow()
             }
         })
+        setG(100)
     }
     return (
         <BottomSheet isVisible={isVisible} containerStyle={{}}>
@@ -201,8 +207,9 @@ const RecordFood: FC<IProps> = ({ isVisible, children, id }) => {
                             color: theme.colors.deep01Primary,
                             borderColor: theme.colors.deep01Primary,
                         }}
+                        onChangeText={(value) => setG(Number(value))}
                     >
-                        100.00
+                        {g}
                     </TextInput>
                     <Text
                         className="mt-[5] text-center"

@@ -6,7 +6,10 @@ import { ScrollView } from 'nativewind/dist/preflight'
 import OverViewFood from './components/show-food'
 import HotRecommend from '../../../components/hot-recommend'
 import SearchResult from './components/search-result'
-import { FoodListByCategoryType } from '../../../apis/types/food'
+import {
+    FoodListByCategoryType,
+    SingleFoodListType,
+} from '../../../apis/types/food'
 import Empty from './components/empty'
 import { FoodListByCategoryApi } from '../../../apis/food'
 import { randomFood } from '../../../apis/diet'
@@ -19,14 +22,14 @@ interface IProps {
 const Search: FC<IProps> = () => {
     const [showRecommendFood, setRecommendShowFood] = useState(true)
     const [searchFoodResult, setSearchFoodResult] = useState(
-        [] as FoodListByCategoryType,
+        [] as SingleFoodListType[],
     )
     const [empty, setEmpty] = useState(false)
     //获取热门菜谱食物
-    const [RecipeFood, setRecipeFood] = useState([] as FoodListByCategoryType)
+    const [RecipeFood, setRecipeFood] = useState([] as SingleFoodListType[])
     const getRecipeData = () => {
         FoodListByCategoryApi({ category_id: 8 }).then((res) => {
-            setRecipeFood(res.data as FoodListByCategoryType)
+            setRecipeFood((res.data as FoodListByCategoryType).foods)
         })
     }
     //获取随机食物

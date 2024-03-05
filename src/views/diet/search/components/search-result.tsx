@@ -3,14 +3,17 @@ import type { FC, ReactNode } from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 import theme from '../../../../styles/theme/color'
 import { Icon } from '@rneui/themed'
-import { FoodListByCategoryType } from '../../../../apis/types/food'
+import {
+    FoodListByCategoryType,
+    SingleFoodListType,
+} from '../../../../apis/types/food'
 import AutoText from '../../../../components/auto-text'
 import RecordFood from '../../../../components/record-food'
 import { useNavigation } from '@react-navigation/native'
 
 interface IProps {
     children?: ReactNode
-    FoodData: FoodListByCategoryType
+    FoodData: SingleFoodListType[]
 }
 
 const SearchResult: FC<IProps> = ({ FoodData }) => {

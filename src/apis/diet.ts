@@ -10,7 +10,7 @@ import axios from 'axios'
 enum URL {
     RECOGNIZE_FOOD_URL = '/api/dish/parse',
     RANDOM_FOOD_URL = '/api/food/recommend',
-    ADD_CALORIES = '/api/user/setcalorie',
+    ADD_CALORIES = '/api/food/setcalorie',
 }
 interface recognizeFoodParamType {
     image: string

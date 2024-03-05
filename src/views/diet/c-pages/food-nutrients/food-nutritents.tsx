@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useRef, useState } from 'react'
-import type { FC, ReactNode } from 'react'
+import type { FC } from 'react'
 import { Dimensions, ScrollView, Text, View } from 'react-native'
 import theme from '../../../../styles/theme/color'
 import { Button } from '@rneui/themed'
@@ -32,15 +32,16 @@ const FoodNutrients: FC = () => {
     }
 
     const getFoodDetail = (id: number) => {
-        FoodListByCategoryApi({ id }).then((res) => {
+        FoodListByCategoryApi({ id: id }).then((res) => {
             setFoodDetail(
-                (res.data as FoodListByCategoryType)[0] as SingleFoodListType,
+                (res?.data as FoodListByCategoryType)
+                    .foods[0] as SingleFoodListType,
             )
         })
     }
     useEffect(() => {
         //获取食物详情
-        getFoodDetail((route.params as { id: number }).id)
+        getFoodDetail((route.params as any).id)
         capturePic()
         dispatch(changeUrl(url))
     }, [url])
@@ -109,7 +110,7 @@ const FoodNutrients: FC = () => {
                             <AutoText fontSize={5}>热量解析</AutoText>
                         </View>
                         <View className="pl-[10]">
-                            {FoodNutritionData.map((item, index) => {
+                            {FoodNutritionData.map((item) => {
                                 return (
                                     <View
                                         key={item}

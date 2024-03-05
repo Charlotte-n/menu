@@ -36,6 +36,7 @@ const RecipeCategory: FC<IProps> = () => {
         <View className="flex-row">
             <FlatList
                 data={FoodCategory}
+                showsHorizontalScrollIndicator={false}
                 renderItem={({ item }) => (
                     <Item image={item.icon} name={item.name} index={item.id} />
                 )}

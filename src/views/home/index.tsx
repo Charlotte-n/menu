@@ -15,7 +15,10 @@ import DrawerContent from './components/drawer-content'
 import { Dialog } from '@rneui/themed'
 import DialogContent from './components/dialog-content'
 import { FoodListByCategoryApi } from '../../apis/food'
-import { FoodListByCategoryType } from '../../apis/types/food'
+import {
+    FoodListByCategoryType,
+    SingleFoodListType,
+} from '../../apis/types/food'
 import { DailyIntakeApi } from '../../apis/home'
 interface IProps {
     children?: ReactNode
@@ -57,10 +60,10 @@ const Home: FC<IProps> = () => {
     }, [])
 
     //获取每日推荐食谱
-    const [RecipeFood, setRecipeFood] = useState([] as FoodListByCategoryType)
+    const [RecipeFood, setRecipeFood] = useState([] as SingleFoodListType[])
     const getRecipeData = () => {
         FoodListByCategoryApi({ category_id: 9 }).then((res) => {
-            setRecipeFood(res.data as FoodListByCategoryType)
+            setRecipeFood((res.data as FoodListByCategoryType).foods)
         })
     }
     useEffect(() => {

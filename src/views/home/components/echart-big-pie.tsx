@@ -39,7 +39,7 @@ const EchartBingPie: FC<IProps> = () => {
                             textAlign: 'center',
                         }}
                     >
-                        {dailyIntake.calories?.toFixed(0)}
+                        {dailyIntake?.calories?.toFixed(0)}
                     </Text>
                     <Text
                         style={{

@@ -5,6 +5,7 @@ import theme from '../../../../../styles/theme/color'
 import {
     FoodListByCategoryData,
     FoodListByCategoryType,
+    SingleFoodListType,
 } from '../../../../../apis/types/food'
 import AutoText from '../../../../../components/auto-text'
 import { useNavigation } from '@react-navigation/native'
@@ -14,14 +15,14 @@ import { Skeleton } from '@rneui/base'
 
 interface IProps {
     children?: ReactNode
-    FoodList: FoodListByCategoryType
+    FoodList: SingleFoodListType[]
 }
 
 const FoodContent: FC<IProps> = ({ FoodList }) => {
     const navigation = useNavigation()
     const gotoFoodDetail = (id: number) => {
         //@ts-ignore
-        navigation.navigate('food-nutrients', { id })
+        navigation.navigate('food-nutrients', { id: id })
     }
     const Item = ({
         hot,

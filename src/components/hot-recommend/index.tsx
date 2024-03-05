@@ -1,24 +1,27 @@
-import React, { memo, useEffect } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import type { FC, ReactNode } from 'react'
 import { Dimensions, Text, TouchableOpacity, View } from 'react-native'
 import theme from '../../styles/theme/color'
 import HotRecommendItem from './hot-recommend-item'
 import { Icon } from '@rneui/themed'
 import { useNavigation } from '@react-navigation/native'
-import { FoodListByCategoryType } from '../../apis/types/food'
+import {
+    FoodListByCategoryType,
+    SingleFoodListType,
+} from '../../apis/types/food'
+import { Skeleton } from '@rneui/base'
+import { LinearGradient } from 'react-native-svg'
 
 interface IProps {
     children?: ReactNode
     title: string
-    data: FoodListByCategoryType
+    data: SingleFoodListType[]
 }
 
 const Index: FC<IProps> = ({ title, data }) => {
     const navigation = useNavigation()
-    useEffect(() => {
-        console.log(data)
-    }, [])
     data = data.slice(5, 8)
+
     return (
         <View>
             <View className="flex-row items-center mb-[10]">

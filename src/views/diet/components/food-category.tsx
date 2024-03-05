@@ -1,4 +1,4 @@
-import React, { memo, useRef, useState } from 'react'
+import React, { memo, useEffect, useRef, useState } from 'react'
 import type { FC, ReactNode } from 'react'
 import { Image, ScrollView, TouchableOpacity, View } from 'react-native'
 import { Icon, Tab, TabView, Text } from '@rneui/themed'
@@ -7,11 +7,18 @@ import { RefreshControl } from 'react-native-gesture-handler'
 import { ActivityIndicator } from 'nativewind/dist/preflight'
 import { onMomentumScrollEnd } from '../../../utils/load-more'
 import RecordFood from '../../../components/record-food'
+import { FoodListByCategoryApi } from '../../../apis/food'
+import {
+    FoodListByCategoryType,
+    SingleFoodListType,
+} from '../../../apis/types/food'
+import AutoText from '../../../components/auto-text'
+import FoodTab from './food-tab'
 interface IProps {
     children?: ReactNode
 }
 
-const Item = () => {
+export const Item = ({ data }: { data: SingleFoodListType }) => {
     const [isVisible, setIsVisible] = useState(false)
     return (
         <View
@@ -19,18 +26,31 @@ const Item = () => {
             style={{ borderColor: theme.colors.primary }}
         >
             <View className="flex-1 flex-row items-center">
-                <Image
-                    source={require('../../../../assets/images/bg_login_header.png')}
-                    style={{
-                        width: 75,
-                        height: 70,
-                        borderRadius: 20,
-                        marginRight: 10,
-                    }}
-                ></Image>
+                {/*TODO:进行更改默认图片*/}
+                {data?.image ? (
+                    <Image
+                        source={{ uri: data.image }}
+                        style={{
+                            width: 75,
+                            height: 70,
+                            borderRadius: 20,
+                            marginRight: 10,
+                        }}
+                    ></Image>
+                ) : (
+                    <Text>loadings</Text>
+                )}
                 <View>
-                    <Text>米饭</Text>
-                    <Text style={{ fontSize: 12 }}>116.00Kcal/100g</Text>
+                    <AutoText
+                        numberOfLines={1}
+                        className="w-[50]"
+                        style={{
+                            width: 120,
+                        }}
+                    >
+                        {data?.title}
+                    </AutoText>
+                    <Text style={{ fontSize: 12 }}>123Kcal/100g</Text>
                 </View>
             </View>
             <View className="flex-row items-center ">
@@ -67,37 +87,90 @@ const FoodCategoryByTime: FC<IProps> = () => {
     const [index, setIndex] = React.useState(0)
     const [refresh, setRefresh] = useState(false)
     const pageLoading = useRef(false)
-    const pageLoadingFull = useRef(false)
-    const Data = [
-        {
-            title: 'Main dishes',
-            data: ['Pizza', 'Burger', 'Risotto'],
-        },
-        {
-            title: 'Sides',
-            data: ['French Fries', 'Onion Rings', 'Fried Shrimps'],
-        },
-        {
-            title: 'Drinks',
-            data: ['Water', 'Coke', 'Beer'],
-        },
-        {
-            title: 'Desserts',
-            data: ['Cheese Cake', 'Ice Cream'],
-        },
-    ]
+    const [pageLoadingFull, setPageLoadingFull] = useState(false)
+    const pageNum = useRef(0)
+    const [FoodList, setFoodList] = useState([] as SingleFoodListType[])
+    const [FoodNum, setFoodNum] = useState(0)
+    const num = useRef(10)
     //上拉加载
     const loadMore = () => {
+        if (num.current >= FoodNum) {
+            setPageLoadingFull(true)
+            return
+        }
+        //计算有多少个食物
+        num.current += 10
+        //当这个食物大于总的食物的时候，就返回
         pageLoading.current = true
-        console.log(123)
-        pageLoadingFull.current = true
+        pageNum.current += 1
+        getFoodList()
         pageLoading.current = false
     }
+    //获取食物列表
+    const [activeId, setActiveId] = useState(1)
+    const activeIds = [
+        {
+            key: '0',
+            id: 1,
+        },
+        {
+            key: '1',
+            id: 2,
+        },
+        {
+            key: '2',
+            id: 4,
+        },
+        {
+            key: '3',
+            id: 5,
+        },
+        {
+            key: '4',
+            id: 4,
+        },
+        {
+            key: '5',
+            id: 10,
+        },
+    ]
+    const getFoodList = () => {
+        const param = {
+            pageNum: pageNum.current,
+            pageSize: 10,
+            category_id: activeId,
+        }
+        FoodListByCategoryApi(param).then((res) => {
+            setFoodNum((res.data as FoodListByCategoryType).num)
+            if (FoodList.length === 0) {
+                setFoodList((res.data as FoodListByCategoryType).foods)
+            } else {
+                setFoodList((prevList) => [
+                    ...prevList,
+                    ...(res.data as FoodListByCategoryType).foods,
+                ])
+            }
+        })
+    }
+    useEffect(() => {
+        getFoodList()
+    }, [])
+    useEffect(() => {
+        //恢复默认设置
+        num.current = 10
+        setPageLoadingFull(false)
+        pageNum.current = 0
+        setFoodList([])
+        getFoodList()
+    }, [activeId])
     return (
         <>
             <Tab
                 value={index}
-                onChange={(e) => setIndex(e)}
+                onChange={(e) => {
+                    setIndex(e)
+                    setActiveId(activeIds[e].id)
+                }}
                 indicatorStyle={{
                     backgroundColor: theme.colors.deep01Primary,
                     width: 20,
@@ -140,110 +213,95 @@ const FoodCategoryByTime: FC<IProps> = () => {
                         width: '100%',
                     }}
                 >
-                    <View>
-                        <ScrollView
-                            showsVerticalScrollIndicator={false}
-                            refreshControl={
-                                <RefreshControl
-                                    tintColor={theme.colors.deep01Primary}
-                                    colors={[theme.colors.deep01Primary]} //ios
-                                    refreshing={refresh}
-                                    onRefresh={() => {
-                                        setRefresh(true)
-                                        console.log(123)
-                                        setRefresh(false)
-                                    }}
-                                />
-                            }
-                        >
-                            {[1, 2, 3, 4].map((item) => (
-                                <Item key={item}></Item>
-                            ))}
-                        </ScrollView>
-                    </View>
+                    {/*早餐:奶类*/}
+                    <FoodTab
+                        refresh={refresh}
+                        setRefresh={setRefresh}
+                        FoodList={FoodList}
+                        pageLoadingFull={pageLoadingFull}
+                        pageLoading={pageLoading}
+                    >
+                        {{
+                            getFoodList: getFoodList,
+                            loadMore: loadMore,
+                        }}
+                    </FoodTab>
                 </TabView.Item>
+                {/*午餐*/}
                 <TabView.Item
                     style={{
                         width: '100%',
                         overflow: 'hidden',
                     }}
                 >
-                    <View>
-                        <ScrollView
-                            refreshControl={
-                                <RefreshControl
-                                    tintColor={theme.colors.deep01Primary}
-                                    colors={[theme.colors.deep01Primary]} //ios
-                                    refreshing={refresh}
-                                    onRefresh={() => {
-                                        setRefresh(true)
-                                        console.log(123)
-                                        setRefresh(false)
-                                    }}
-                                />
-                            }
-                            onScrollEndDrag={(event) => {
-                                onMomentumScrollEnd(
-                                    event,
-                                    {
-                                        pageLoading: pageLoading.current,
-                                        pageLoadingFull:
-                                            pageLoadingFull.current,
-                                    },
-                                    loadMore,
-                                )
-                            }}
-                        >
-                            {[1, 2, 3, 4].map((item) => (
-                                <Item key={item}></Item>
-                            ))}
-                            <View
-                                style={{
-                                    height: 40,
-                                    zIndex: 10,
-                                    justifyContent: 'center',
-                                }}
-                            >
-                                {pageLoadingFull.current ? (
-                                    <Text style={{ textAlign: 'center' }}>
-                                        没有更多了
-                                    </Text>
-                                ) : pageLoading.current ? (
-                                    <ActivityIndicator size="large" />
-                                ) : (
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            loadMore()
-                                        }}
-                                    >
-                                        <Text style={{ textAlign: 'center' }}>
-                                            更多...
-                                        </Text>
-                                    </TouchableOpacity>
-                                )}
-                            </View>
-                        </ScrollView>
-                    </View>
+                    <FoodTab
+                        refresh={refresh}
+                        setRefresh={setRefresh}
+                        FoodList={FoodList}
+                        pageLoadingFull={pageLoadingFull}
+                        pageLoading={pageLoading}
+                    >
+                        {{
+                            getFoodList: getFoodList,
+                            loadMore: loadMore,
+                        }}
+                    </FoodTab>
                 </TabView.Item>
-                <TabView.Item
-                    style={{ backgroundColor: 'green', width: '100%' }}
-                >
-                    <Text h1>Cart</Text>
+                <TabView.Item style={{ width: '100%' }}>
+                    <FoodTab
+                        refresh={refresh}
+                        setRefresh={setRefresh}
+                        FoodList={FoodList}
+                        pageLoadingFull={pageLoadingFull}
+                        pageLoading={pageLoading}
+                    >
+                        {{
+                            getFoodList: getFoodList,
+                            loadMore: loadMore,
+                        }}
+                    </FoodTab>
                 </TabView.Item>
-                <TabView.Item
-                    style={{ backgroundColor: 'green', width: '100%' }}
-                >
-                    <Text h1>Cart</Text>
+                <TabView.Item style={{ width: '100%' }}>
+                    <FoodTab
+                        refresh={refresh}
+                        setRefresh={setRefresh}
+                        FoodList={FoodList}
+                        pageLoadingFull={pageLoadingFull}
+                        pageLoading={pageLoading}
+                    >
+                        {{
+                            getFoodList: getFoodList,
+                            loadMore: loadMore,
+                        }}
+                    </FoodTab>
                 </TabView.Item>
-                <TabView.Item
-                    style={{ backgroundColor: 'green', width: '100%' }}
-                >
-                    <Text h1>Cart</Text>
+                <TabView.Item style={{ width: '100%' }}>
+                    <FoodTab
+                        refresh={refresh}
+                        setRefresh={setRefresh}
+                        FoodList={FoodList}
+                        pageLoadingFull={pageLoadingFull}
+                        pageLoading={pageLoading}
+                    >
+                        {{
+                            getFoodList: getFoodList,
+                            loadMore: loadMore,
+                        }}
+                    </FoodTab>
                 </TabView.Item>
-                <TabView.Item
-                    style={{ backgroundColor: 'green', width: '100%' }}
-                >
-                    <Text h1>Cart</Text>
+                <TabView.Item style={{ width: '100%' }}>
+                    <FoodTab
+                        refresh={refresh}
+                        setRefresh={setRefresh}
+                        FoodList={FoodList}
+                        pageLoadingFull={pageLoadingFull}
+                        pageLoading={pageLoading}
+                    >
+                        {{
+                            getFoodList: getFoodList,
+                            loadMore: loadMore,
+                        }}
+                    </FoodTab>
                 </TabView.Item>
             </TabView>
         </>

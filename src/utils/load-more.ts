@@ -9,9 +9,9 @@ export const onMomentumScrollEnd = (
     console.log(`offSetY${offSetY}`)
     console.log(`oriageScrollHeight${oriageScrollHeight}`)
     console.log(`contentSizeHeight${contentSizeHeight}`)
-    if (offSetY + oriageScrollHeight >= contentSizeHeight - 1) {
+    if (offSetY + oriageScrollHeight >= contentSizeHeight - 40) {
+        fn()
         if (!pageLoading && !pageLoadingFull) {
-            fn()
         }
     }
 }

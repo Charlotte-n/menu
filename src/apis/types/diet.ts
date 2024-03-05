@@ -37,6 +37,8 @@ export interface CaloriesBodyData {
     id: number
     protein: number
     type: number
+    foodId: number
+    g: number
 }
 
 //endregion
