@@ -15,6 +15,7 @@ import { Button } from '@rneui/themed'
 import theme from '../../../styles/theme/color'
 import { log } from 'expo/build/devtools/logger'
 import moment from 'moment'
+import { updateUserProfile } from '../../../apis/mine'
 
 interface IProps {
     children?: any
@@ -47,9 +48,19 @@ const DialogContent: FC<IProps> = ({ children }) => {
             gym: '0',
             exercise: habit,
         }
+        const updateUserInfoParam = {
+            id: userInfo.id,
+            sex: Number(sex),
+            birth,
+            height,
+            weight,
+            habit: habit,
+        }
         console.log(param)
         try {
             const res = await getIntakeDailyApi(param)
+            //更新用户的信息
+            await updateUserProfile(updateUserInfoParam)
             if (res.code === 1) {
                 dispatch(changeDailyIntake(res.data))
                 cancel()

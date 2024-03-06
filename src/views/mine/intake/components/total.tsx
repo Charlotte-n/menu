@@ -6,9 +6,10 @@ import theme from '../../../../styles/theme/color'
 
 interface IProps {
     children?: ReactNode
+    data: number[]
 }
 
-const Total: FC<IProps> = () => {
+const Total: FC<IProps> = ({ data }) => {
     const [isVisible, setIsVisible] = useState(false)
     return (
         <View>
@@ -18,7 +19,7 @@ const Total: FC<IProps> = () => {
                     className="ml-[10]"
                     style={{ fontSize: 18, color: theme.colors.deep01Primary }}
                 >
-                    455kcal
+                    {data[4]?.toFixed(2)}kcal
                 </Text>
             </View>
             <TouchableOpacity
@@ -34,9 +35,11 @@ const Total: FC<IProps> = () => {
             </TouchableOpacity>
             {isVisible && (
                 <View className="mt-[13]">
-                    <Text>碳水化合物: 3.00g</Text>
-                    <Text>脂肪: 3.00g</Text>
-                    <Text>蛋白质: 3.00g</Text>
+                    <Text>蛋白质: {data[0]?.toFixed(2)}kcal</Text>
+
+                    <Text>碳水化合物: {data[1]?.toFixed(2)}kcal</Text>
+                    <Text>脂肪: {data[2]?.toFixed(2)}kcal</Text>
+                    <Text>纤维素:{data[3]?.toFixed(2)}kcal</Text>
                 </View>
             )}
         </View>

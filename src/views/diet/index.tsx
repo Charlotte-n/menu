@@ -12,8 +12,9 @@ import {
     SingleFoodListType,
 } from '../../apis/types/food'
 import { Skeleton } from '@rneui/base'
-import { LinearGradient } from 'react-native-svg'
 import theme from '../../styles/theme/color'
+import { ActivityIndicator } from 'nativewind/dist/preflight'
+import { Item } from './components/food-tab'
 interface IProps {
     children?: ReactNode
 }

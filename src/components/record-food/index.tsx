@@ -20,10 +20,11 @@ import {
     SingleFoodListType,
 } from '../../apis/types/food'
 import { FoodListByCategoryApi } from '../../apis/food'
-import { addCaloriesApi } from '../../apis/diet'
+import { addCaloriesApi, getDailyIntakeApi } from '../../apis/diet'
 import { CaloriesBodyData } from '../../apis/types/diet'
-import { useAppSelector } from '../../store'
-import { shallowEqual } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../../store'
+import { shallowEqual, useDispatch } from 'react-redux'
+import { changeDailyIntaked } from '../../store/slice/home'
 interface IProps {
     children: {
         cancel: () => void
@@ -40,11 +41,13 @@ const RecordFood: FC<IProps> = ({ isVisible, children, id }) => {
     const [FoodDetail, setFoodDetail] = useState<SingleFoodListType>(
         {} as SingleFoodListType,
     )
-    const { userInfo } = useAppSelector((state) => {
+    const { userInfo, intaked } = useAppSelector((state) => {
         return {
             userInfo: state.LoginRegisterSlice.userInfo,
+            intaked: state.HomeSlice.dailyIntaked,
         }
     }, shallowEqual)
+    const dispatch = useAppDispatch()
     const disShow = () => {
         setVisible(false)
     }
@@ -62,16 +65,36 @@ const RecordFood: FC<IProps> = ({ isVisible, children, id }) => {
     }, [visible])
     //添加饮食
     const [g, setG] = useState(100)
+    const danwei = (value: string | number) => {
+        return Number(((Number(value) / 100) * g).toFixed(2))
+    }
+    //更新摄入量
+    const GetDailyIntake = () => {
+        getDailyIntakeApi(userInfo.id).then((res) => {
+            const dailyIntaked = {
+                fat: res.data.calories[2],
+                calories: res.data.calories[4],
+                carbohydrate: res.data.calories[1],
+                protein: res.data.calories[0],
+                cellulose: res.data.calories[3],
+            }
+            console.log(dailyIntaked)
+            dispatch(changeDailyIntaked(dailyIntaked))
+            console.log(intaked, '今天的摄入')
+        })
+    }
+
     const addFood = () => {
         const data: CaloriesBodyData = {
-            fat: (Number(FoodDetail.fat) / 100) * g, //脂肪
-            calories: (Number(FoodDetail.calories) / 100) * g, //热量
-            carbohydrate: (Number(FoodDetail.carbohydrate) / 100) * g, //碳水化合物
-            cellulose: (Number(FoodDetail.cellulose) / 100) * g, //纤维素
-            type: 0, //时间
-            protein: (Number(FoodDetail.protein) / 100) * g, //蛋白质
+            fat: danwei(FoodDetail.fat as number), //脂肪
+            calories: danwei(FoodDetail.calories as number), //热量
+            carbohydrate: danwei(FoodDetail.carbohydrate as number), //碳水化合物
+            cellulose: danwei(FoodDetail.cellulose as number), //纤维素
+            type: selectedIndex, //时间
+            protein: danwei(FoodDetail.protein as number), //蛋白质
             id: userInfo.id, //用户id
-            foodId: FoodDetail.id, //食物id
+            foodId: FoodDetail.id as number, //食物id
+            operator: 1,
             g: g, //克数
         }
         addCaloriesApi(data).then((res) => {
@@ -79,6 +102,7 @@ const RecordFood: FC<IProps> = ({ isVisible, children, id }) => {
                 //TODO:可以添加一个弹窗
                 Alert.alert('添加信息', '添加成功')
                 disShow()
+                GetDailyIntake()
             }
         })
         setG(100)

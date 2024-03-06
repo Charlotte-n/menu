@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import type { FC, ReactNode } from 'react'
 import { Text, View } from 'nativewind/dist/preflight'
 import { Dimensions } from 'react-native'
@@ -6,13 +6,78 @@ import Svg from 'react-native-svg'
 import { VictoryPie } from 'victory-native'
 import theme from '../../../styles/theme/color'
 import AutoText from '../../../components/auto-text'
+import { useAppSelector } from '../../../store'
+import { shallowEqual } from 'react-redux'
 
 interface IProps {
     children?: ReactNode
 }
 
 const EchartSmallPie: FC<IProps> = () => {
-    const sampleData = [{ y: 100 }]
+    const { dailyIntake, dailyIntaked } = useAppSelector((state) => {
+        return {
+            dailyIntake: state.HomeSlice.dailyIntake,
+            dailyIntaked: state.HomeSlice.dailyIntaked,
+        }
+    }, shallowEqual)
+    const sampleData = [
+        [
+            {
+                y:
+                    100 -
+                    Math.floor(
+                        (dailyIntaked.carbohydrate / dailyIntake.carbohydrate) *
+                            100,
+                    ),
+            },
+            {
+                m: 0,
+                y: Math.floor(
+                    (dailyIntaked.carbohydrate / dailyIntake.carbohydrate) *
+                        100,
+                ),
+            },
+        ],
+        [
+            {
+                y:
+                    100 -
+                    Math.floor(
+                        (dailyIntaked.protein / dailyIntake.protein) * 100,
+                    ),
+            },
+            {
+                m: 1,
+                y: Math.floor(
+                    (dailyIntaked.protein / dailyIntake.protein) * 100,
+                ),
+            },
+        ],
+        [
+            {
+                y: 100 - Math.floor((dailyIntaked.fat / dailyIntake.fat) * 100),
+            },
+            {
+                m: 2,
+                y: Math.floor((dailyIntaked.fat / dailyIntake.fat) * 100),
+            },
+        ],
+        [
+            {
+                y:
+                    100 -
+                    Math.floor(
+                        (dailyIntaked.cellulose / dailyIntake.cellulose) * 100,
+                    ),
+            },
+            {
+                m: 3,
+                y: Math.floor(
+                    (dailyIntaked.cellulose / dailyIntake.cellulose) * 100,
+                ),
+            },
+        ],
+    ]
     //以后这是一个动态的数据
     const data = [
         {
@@ -32,6 +97,7 @@ const EchartSmallPie: FC<IProps> = () => {
             name: '纤维素',
         },
     ]
+    const yuansu = ['carbohydrate', 'protein', 'fat', 'cellulose']
     return (
         <View className="flex-row">
             {data.map((item, index) => {
@@ -45,7 +111,6 @@ const EchartSmallPie: FC<IProps> = () => {
                     >
                         <Svg
                             width={Dimensions.get('screen').width / 4 - 10}
-                            style={{}}
                             height={90}
                             className="m-auto"
                         >
@@ -59,7 +124,9 @@ const EchartSmallPie: FC<IProps> = () => {
                                         width: 30,
                                     }}
                                 >
-                                    0
+                                    {(dailyIntaked as any)[
+                                        yuansu[index]
+                                    ].toFixed(0)}
                                 </Text>
                                 <Text
                                     style={{
@@ -76,12 +143,12 @@ const EchartSmallPie: FC<IProps> = () => {
                                 height={100}
                                 innerRadius={25}
                                 radius={30}
-                                data={sampleData}
+                                data={sampleData[index]}
                                 labels={() => null}
                                 style={{
                                     data: {
                                         fill: ({ datum }) =>
-                                            datum.y === 3
+                                            datum.m === index
                                                 ? theme.colors.deep01Primary
                                                 : '#f2f2f2',
                                     },

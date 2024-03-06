@@ -1,91 +1,22 @@
 import React, { memo, useEffect, useRef, useState } from 'react'
 import type { FC, ReactNode } from 'react'
-import { Image, ScrollView, TouchableOpacity, View } from 'react-native'
-import { Icon, Tab, TabView, Text } from '@rneui/themed'
+import { Tab, TabView } from '@rneui/themed'
 import theme from '../../../styles/theme/color'
-import { RefreshControl } from 'react-native-gesture-handler'
-import { ActivityIndicator } from 'nativewind/dist/preflight'
-import { onMomentumScrollEnd } from '../../../utils/load-more'
-import RecordFood from '../../../components/record-food'
 import { FoodListByCategoryApi } from '../../../apis/food'
 import {
     FoodListByCategoryType,
     SingleFoodListType,
 } from '../../../apis/types/food'
-import AutoText from '../../../components/auto-text'
 import FoodTab from './food-tab'
+import { ActivityIndicator } from 'nativewind/dist/preflight'
+import { View } from 'react-native'
 interface IProps {
     children?: ReactNode
 }
 
-export const Item = ({ data }: { data: SingleFoodListType }) => {
-    const [isVisible, setIsVisible] = useState(false)
-    return (
-        <View
-            className="flex-row  items-end border rounded mt-[15] pt-[10] pb-[10] pl-[5] pr-[5]"
-            style={{ borderColor: theme.colors.primary }}
-        >
-            <View className="flex-1 flex-row items-center">
-                {/*TODO:进行更改默认图片*/}
-                {data?.image ? (
-                    <Image
-                        source={{ uri: data.image }}
-                        style={{
-                            width: 75,
-                            height: 70,
-                            borderRadius: 20,
-                            marginRight: 10,
-                        }}
-                    ></Image>
-                ) : (
-                    <Text>loadings</Text>
-                )}
-                <View>
-                    <AutoText
-                        numberOfLines={1}
-                        className="w-[50]"
-                        style={{
-                            width: 120,
-                        }}
-                    >
-                        {data?.title}
-                    </AutoText>
-                    <Text style={{ fontSize: 12 }}>123Kcal/100g</Text>
-                </View>
-            </View>
-            <View className="flex-row items-center ">
-                <Text className="">100g</Text>
-                <TouchableOpacity
-                    onPress={() => {
-                        setIsVisible(true)
-                    }}
-                >
-                    <Icon
-                        type={'antdesign'}
-                        name={'pluscircle'}
-                        size={15}
-                        color={theme.colors.deep01Primary}
-                        style={{
-                            marginLeft: 5,
-                        }}
-                    ></Icon>
-                </TouchableOpacity>
-            </View>
-            {isVisible ? (
-                <RecordFood isVisible={isVisible} id={414}>
-                    {{
-                        cancel: () => {
-                            setIsVisible(false)
-                        },
-                    }}
-                </RecordFood>
-            ) : null}
-        </View>
-    )
-}
 const FoodCategoryByTime: FC<IProps> = () => {
     const [index, setIndex] = React.useState(0)
-    const [refresh, setRefresh] = useState(false)
+    const [refresh, setRefresh] = useState(true)
     const pageLoading = useRef(false)
     const [pageLoadingFull, setPageLoadingFull] = useState(false)
     const pageNum = useRef(0)
@@ -140,6 +71,7 @@ const FoodCategoryByTime: FC<IProps> = () => {
             pageSize: 10,
             category_id: activeId,
         }
+        setRefresh(true)
         FoodListByCategoryApi(param).then((res) => {
             setFoodNum((res.data as FoodListByCategoryType).num)
             if (FoodList.length === 0) {
@@ -151,6 +83,7 @@ const FoodCategoryByTime: FC<IProps> = () => {
                 ])
             }
         })
+        setRefresh(false)
     }
     useEffect(() => {
         getFoodList()
@@ -211,27 +144,56 @@ const FoodCategoryByTime: FC<IProps> = () => {
                 <TabView.Item
                     style={{
                         width: '100%',
+                        margin: 'auto',
                     }}
                 >
                     {/*早餐:奶类*/}
-                    <FoodTab
-                        refresh={refresh}
-                        setRefresh={setRefresh}
-                        FoodList={FoodList}
-                        pageLoadingFull={pageLoadingFull}
-                        pageLoading={pageLoading}
-                    >
-                        {{
-                            getFoodList: getFoodList,
-                            loadMore: loadMore,
-                        }}
-                    </FoodTab>
+                    {FoodList.length ? (
+                        <FoodTab
+                            refresh={refresh}
+                            setRefresh={setRefresh}
+                            FoodList={FoodList}
+                            pageLoadingFull={pageLoadingFull}
+                            pageLoading={pageLoading}
+                        >
+                            {{
+                                getFoodList: getFoodList,
+                                loadMore: loadMore,
+                            }}
+                        </FoodTab>
+                    ) : (
+                        <View className="h-[300] justify-center items-center">
+                            <ActivityIndicator
+                                size="large"
+                                color={theme.colors.deep01Primary}
+                            />
+                        </View>
+                    )}
                 </TabView.Item>
                 {/*午餐*/}
                 <TabView.Item
                     style={{
                         width: '100%',
-                        overflow: 'hidden',
+                        margin: 'auto',
+                    }}
+                >
+                    <FoodTab
+                        refresh={refresh}
+                        setRefresh={setRefresh}
+                        FoodList={FoodList}
+                        pageLoadingFull={pageLoadingFull}
+                        pageLoading={pageLoading}
+                    >
+                        {{
+                            getFoodList: getFoodList,
+                            loadMore: loadMore,
+                        }}
+                    </FoodTab>
+                </TabView.Item>
+                <TabView.Item
+                    style={{
+                        width: '100%',
+                        margin: 'auto',
                     }}
                 >
                     <FoodTab
@@ -261,7 +223,12 @@ const FoodCategoryByTime: FC<IProps> = () => {
                         }}
                     </FoodTab>
                 </TabView.Item>
-                <TabView.Item style={{ width: '100%' }}>
+                <TabView.Item
+                    style={{
+                        width: '100%',
+                        margin: 'auto',
+                    }}
+                >
                     <FoodTab
                         refresh={refresh}
                         setRefresh={setRefresh}
@@ -275,21 +242,12 @@ const FoodCategoryByTime: FC<IProps> = () => {
                         }}
                     </FoodTab>
                 </TabView.Item>
-                <TabView.Item style={{ width: '100%' }}>
-                    <FoodTab
-                        refresh={refresh}
-                        setRefresh={setRefresh}
-                        FoodList={FoodList}
-                        pageLoadingFull={pageLoadingFull}
-                        pageLoading={pageLoading}
-                    >
-                        {{
-                            getFoodList: getFoodList,
-                            loadMore: loadMore,
-                        }}
-                    </FoodTab>
-                </TabView.Item>
-                <TabView.Item style={{ width: '100%' }}>
+                <TabView.Item
+                    style={{
+                        width: '100%',
+                        margin: 'auto',
+                    }}
+                >
                     <FoodTab
                         refresh={refresh}
                         setRefresh={setRefresh}

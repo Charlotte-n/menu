@@ -1,12 +1,11 @@
-import React, { memo, useRef, useState } from 'react'
+import React, { memo, useEffect, useRef, useState } from 'react'
 import type { FC, ReactNode } from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 import { Dialog, Icon } from '@rneui/themed'
-import { foodTime } from '../../../../../data/diet'
 interface IProps {
     children?: ReactNode
     sex: number
-    setSex: (value: string) => void
+    setSex: (value: any) => void
     height?: number
     fontSize?: number
 }
@@ -15,6 +14,9 @@ const SexPicker: FC<IProps> = ({ sex, setSex, height, fontSize }) => {
     const [isShow, setIsShow] = useState(false)
     //进行联动
     const selected = useRef(String(sex))
+    useEffect(() => {
+        console.log(sex)
+    }, [])
     return (
         <TouchableOpacity
             className="flex-row items-center border-[#F1F3F4] border-b"

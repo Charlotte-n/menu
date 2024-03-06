@@ -3,10 +3,12 @@ import { ResponseDailyIntake } from '../../apis/types/home'
 interface initialState {
     open: boolean
     dailyIntake: ResponseDailyIntake
+    dailyIntaked: ResponseDailyIntake
 }
 const initialState: initialState = {
     open: false,
     dailyIntake: {} as ResponseDailyIntake,
+    dailyIntaked: {} as ResponseDailyIntake,
 }
 const HomeSlice = createSlice({
     name: 'HomeSlice',
@@ -18,9 +20,13 @@ const HomeSlice = createSlice({
         changeDailyIntake(state, { payload }) {
             state.dailyIntake = payload
         },
+        changeDailyIntaked(state, { payload }) {
+            state.dailyIntaked = payload
+        },
     },
 })
 
-export const { changeOpenAction, changeDailyIntake } = HomeSlice.actions
+export const { changeOpenAction, changeDailyIntake, changeDailyIntaked } =
+    HomeSlice.actions
 
 export default HomeSlice.reducer

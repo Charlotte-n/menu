@@ -19,14 +19,14 @@ export interface FoodListByCategoryType {
     foods: SingleFoodListType[]
 }
 export interface SingleFoodListType {
-    id: number
-    categoryId: number
-    title: string
-    image: string
+    id?: number
+    categoryId?: number
+    title?: string
+    image?: string
     cellulose?: number
-    field: string
-    calories: number
-    fat: number
-    carbohydrate: number
-    protein: number
+    field?: string
+    calories?: number
+    fat?: number
+    carbohydrate?: number
+    protein?: number
 }

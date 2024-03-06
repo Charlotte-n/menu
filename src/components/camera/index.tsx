@@ -20,6 +20,10 @@ import {
 } from 'react-native-vision-camera'
 import MyImagePicker from '../image-picker'
 import { getSearchImage } from '../../utils/uploadImg'
+import { useAppSelector } from '../../store'
+import { FoodListByCategoryApi } from '../../apis/food'
+import { FoodListByCategoryType } from '../../apis/types/food'
+import { shallowEqual } from 'react-redux'
 interface IProps {
     children?: any
 }
@@ -32,6 +36,11 @@ const MyCamera: FC<IProps> = ({ children }) => {
     const { hasPermission, requestPermission } = useCameraPermission()
     const [sizeImage, setSizeImage] = useState('')
     const camera = useRef<any>()
+    const { RecognizeFoodInfo } = useAppSelector((state) => {
+        return {
+            RecognizeFoodInfo: state.DietSlice.RecognizeFoodInfo,
+        }
+    }, shallowEqual)
     const device: any = useCameraDevice('back')
     if (device == null) return <Text>123</Text>
     useEffect(() => {
@@ -49,7 +58,6 @@ const MyCamera: FC<IProps> = ({ children }) => {
             setSelectedImage(photo.path)
             setIsEdit(true)
             //获得了图片进行用户编辑
-            console.log(selectedImage)
         }
     }
     const upload = async (res: string) => {
@@ -74,6 +82,17 @@ const MyCamera: FC<IProps> = ({ children }) => {
     useEffect(() => {
         if (sizeImage) {
             getSearchImage(sizeImage).then()
+            //判断是否有名字
+            console.log(RecognizeFoodInfo)
+            // FoodListByCategoryApi({ title: RecognizeFoodInfo[0].name }).then(
+            //     (res) => {
+            //         console.log(res)
+            //         //@ts-ignore
+            //         navigation.navigate('food-nutrients', {
+            //             id: (res.data as FoodListByCategoryType).foods[0]?.id,
+            //         })
+            //     },
+            // )
         }
     }, [sizeImage])
 

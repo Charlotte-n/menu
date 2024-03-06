@@ -1,13 +1,16 @@
 import React, { memo, useEffect, useRef, useState } from 'react'
 import type { FC, ReactNode } from 'react'
-import { Dimensions} from 'react-native'
+import { Dimensions } from 'react-native'
 import { ScrollView } from 'nativewind/dist/preflight'
 import { Button } from '@rneui/themed'
 import theme from '../../../styles/theme/color'
 import BodyContent from './component/content'
 import { getUserInfo } from '../../../apis/mine'
 import { useAppDispatch, useAppSelector } from '../../../store'
-import { changeUserProfileAction } from '../../../store/slice/login-register-slice'
+import {
+    changeUserInfoAction,
+    changeUserProfileAction,
+} from '../../../store/slice/login-register-slice'
 import { shallowEqual } from 'react-redux'
 
 interface IProps {
@@ -26,10 +29,11 @@ const Body: FC<IProps> = () => {
     const childrenRef = useRef<any>()
     const getUserInfoApi = async () => {
         const res = await getUserInfo(id)
-        dispatch(changeUserProfileAction(res.data))
+        dispatch(changeUserInfoAction(res.data.user))
     }
     //触发更新用户资料
     const updateUserProfile = () => {
+        console.log(123)
         childrenRef.current.updateProfile()
     }
     useEffect(() => {

@@ -7,7 +7,7 @@ import { ScrollView } from 'nativewind/dist/preflight'
 import { useAppDispatch, useAppSelector } from '../../../store'
 import { shallowEqual } from 'react-redux'
 import { getUserInfo } from '../../../apis/mine'
-import { changeUserProfileAction } from '../../../store/slice/login-register-slice'
+import { changeUserInfoAction } from '../../../store/slice/login-register-slice'
 import MyBottomSheet from '../../../components/bottom-sheet'
 import getImage from '../../../utils/uploadImg'
 interface IProps {
@@ -17,14 +17,12 @@ const Profile: FC<IProps> = () => {
     const [Id, setId] = useState('')
     const height = Dimensions.get('screen').height
     const [isVisible, setIsVisible] = useState(true)
-    const { userInfo, profile } = useAppSelector((state) => {
+    const { userInfo } = useAppSelector((state) => {
         return {
             userInfo: state.LoginRegisterSlice.userInfo,
-            profile: state.LoginRegisterSlice.profile,
         }
     }, shallowEqual)
-    const { id } = userInfo
-    const { avatar } = profile
+    const { id, avatar } = userInfo
     //#region渲染不同的ui
     const feedBack = (id: string) => {
         switch (id) {
@@ -57,20 +55,6 @@ const Profile: FC<IProps> = () => {
                         }}
                     </MyBottomSheet>
                 )
-            case '2':
-                return (
-                    <MyBottomSheet
-                        id={id}
-                        isVisible={isVisible}
-                        contentValue={'3495314473@qq.com'}
-                    >
-                        {{
-                            content: '绑定邮箱',
-                            cancel: () => setIsVisible(false),
-                            placeholderContent: '请填写邮箱',
-                        }}
-                    </MyBottomSheet>
-                )
         }
     }
     //endregion
@@ -83,7 +67,7 @@ const Profile: FC<IProps> = () => {
     useEffect(() => {
         //获取用户的信息
         getUserInfo(id).then((res) => {
-            dispatch(changeUserProfileAction(res.data))
+            dispatch(changeUserInfoAction(res.data.user))
         })
     }, [])
     return (

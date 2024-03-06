@@ -20,7 +20,7 @@ const DrawerContent: FC<IProps> = () => {
         {
             id: '0',
             title: '性别',
-            content: profile.sex ? (profile.sex === 0 ? '男' : '女') : '女',
+            content: profile.sex === 0 ? '男' : '女',
         },
         {
             id: '1',

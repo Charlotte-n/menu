@@ -19,7 +19,6 @@ const SearchFilter: FC<IProps> = ({ type, children, category_id }) => {
     const setEmpty = children?.setEmpty
     const [search, setSearch] = useState('')
     const navigation = useNavigation()
-    const [searchFood, setSearchFood] = useState<FoodListByCategoryType>()
     const clearAll = () => {
         setSearch('')
     }
@@ -33,12 +32,12 @@ const SearchFilter: FC<IProps> = ({ type, children, category_id }) => {
         FoodListByCategoryApi({ title: search }).then((res: any) => {
             setRecommendShowFood(false)
             //什么也没有搜索到
-            if (res.data.length === 0) {
+            if (res.data.foods.length === 0) {
                 setEmpty(true)
             } else {
                 setEmpty(false)
             }
-            setSearchFoodResult(res.data as FoodListByCategoryType)
+            setSearchFoodResult((res.data as FoodListByCategoryType).foods)
         })
     }
     //种类 + 文字搜索食物
@@ -46,18 +45,18 @@ const SearchFilter: FC<IProps> = ({ type, children, category_id }) => {
         FoodListByCategoryApi({ title: search, category_id: category }).then(
             (res: any) => {
                 setEmpty(false)
-                if (res.data.length === 0) {
+                if (res.data.foods.length === 0) {
                     //搜索为空的时候
                     setEmpty(true)
                 }
-                setSearchFoodResult(res.data as FoodListByCategoryType)
+                setSearchFoodResult((res.data as FoodListByCategoryType).foods)
             },
         )
     }
     const searchFoodByCategory = (category: number) => {
         FoodListByCategoryApi({ category_id: category }).then((res) => {
             setEmpty(false)
-            setSearchFoodResult(res.data)
+            setSearchFoodResult((res.data as FoodListByCategoryType).foods)
         })
     }
 

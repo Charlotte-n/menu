@@ -11,6 +11,7 @@ enum URL {
     RECOGNIZE_FOOD_URL = '/api/dish/parse',
     RANDOM_FOOD_URL = '/api/food/recommend',
     ADD_CALORIES = '/api/food/setcalorie',
+    GET_DAILYINTAKE = '/api/food/getcalorie',
 }
 interface recognizeFoodParamType {
     image: string
@@ -61,5 +62,15 @@ export const addCaloriesApi = (data: CaloriesBodyData) => {
     return hyRequest.post<CommonResponseType<any>>({
         url: URL.ADD_CALORIES,
         data,
+    })
+}
+
+/**
+ * 获取今日摄入的列表
+ * @param id
+ */
+export const getDailyIntakeApi = (id: number) => {
+    return hyRequest.get({
+        url: URL.GET_DAILYINTAKE + '/' + id,
     })
 }

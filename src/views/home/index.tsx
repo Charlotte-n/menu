@@ -10,7 +10,11 @@ import { transformAdaption } from '../../utils/adaptation'
 import { useAppDispatch, useAppSelector } from '../../store'
 import { shallowEqual } from 'react-redux'
 import { Drawer } from 'react-native-drawer-layout'
-import { changeDailyIntake, changeOpenAction } from '../../store/slice/home'
+import {
+    changeDailyIntake,
+    changeDailyIntaked,
+    changeOpenAction,
+} from '../../store/slice/home'
 import DrawerContent from './components/drawer-content'
 import { Dialog } from '@rneui/themed'
 import DialogContent from './components/dialog-content'
@@ -20,6 +24,7 @@ import {
     SingleFoodListType,
 } from '../../apis/types/food'
 import { DailyIntakeApi } from '../../apis/home'
+import { getDailyIntakeApi } from '../../apis/diet'
 interface IProps {
     children?: ReactNode
 }
@@ -118,6 +123,23 @@ const Home: FC<IProps> = () => {
             recommend: '347~489',
         },
     ]
+    //获取摄入列表
+    const GetDailyIntake = () => {
+        getDailyIntakeApi(userInfo.id).then((res) => {
+            const dailyIntaked = {
+                fat: res.data.calories[2],
+                calories: res.data.calories[4],
+                carbohydrate: res.data.calories[1],
+                protein: res.data.calories[0],
+                cellulose: res.data.calories[3],
+            }
+            dispatch(changeDailyIntaked(dailyIntaked))
+        })
+    }
+    useEffect(() => {
+        GetDailyIntake()
+    }, [dailyIntake])
+
     return (
         <Drawer
             open={open}

@@ -35,7 +35,6 @@ const Home: FC<IProps> = ({ navigation }) => {
         }
     }, shallowEqual)
     const { id } = userInfo
-    const { username, avatar } = profile
 
     const Item = (props: any) => {
         const { title, path } = props
@@ -92,13 +91,13 @@ const Home: FC<IProps> = ({ navigation }) => {
         >
             <View className="flex-row items-center mb-[40] justify-between">
                 {/*封装的获取图片组件*/}
-                {avatar ? (
+                {userInfo.avatar ? (
                     <MyImagePicker getImage={getImage}>
                         {{
                             content: (
                                 <Image
                                     className="rounded-full"
-                                    source={{ uri: avatar }}
+                                    source={{ uri: userInfo.avatar }}
                                     style={{ width: 100, height: 100 }}
                                 />
                             ),
@@ -131,7 +130,7 @@ const Home: FC<IProps> = ({ navigation }) => {
                         ellipsizeMode={'tail'}
                         numberOfLines={1}
                     >
-                        {username}
+                        {userInfo.username}
                     </Text>
                     <Icon
                         name={'right'}

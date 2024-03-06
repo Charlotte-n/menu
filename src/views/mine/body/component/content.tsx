@@ -1,5 +1,4 @@
 import React, { forwardRef, useImperativeHandle, useState } from 'react'
-import type { ReactNode } from 'react'
 import { Alert, View } from 'react-native'
 import SexPicker from './sex-picker'
 import DatePicker from './date-picker'
@@ -7,41 +6,45 @@ import HighPicker from './high-picker'
 import { useAppDispatch, useAppSelector } from '../../../../store'
 import { shallowEqual } from 'react-redux'
 import HabitPicker from './habit-picker'
-import { getUserInfo, updateUserProfile } from '../../../../apis/mine'
-import { changeUserProfileAction } from '../../../../store/slice/login-register-slice'
+import { getUserInfo } from '../../../../apis/mine'
+import { changeUserInfoAction } from '../../../../store/slice/login-register-slice'
+import { getIntakeDailyApi } from '../../../../apis/home'
+import { GetDailyIntakeData } from '../../../../apis/types/home'
 
 const BodyContent = (props: any, ref: any) => {
-    const { profile, userInfo } = useAppSelector((state) => {
+    const { userInfo } = useAppSelector((state) => {
         return {
-            profile: state.LoginRegisterSlice.profile,
             userInfo: state.LoginRegisterSlice.userInfo,
         }
     }, shallowEqual)
     const { id } = userInfo
     const dispatch = useAppDispatch()
-    const { height, weight, birth, sex, habit } = profile
-    const [Sex, setSex] = useState('')
+    const { height, weight, birth, sex, habit } = userInfo
+    const [Sex, setSex] = useState(() => userInfo.sex)
     const [Birth, setBirth] = useState('')
-    const [Height, setHeight] = useState('')
-    const [Weight, setWeight] = useState('')
-    const [Habit, setHabit] = useState('')
+    const [Height, setHeight] = useState(() => userInfo.height)
+    const [Weight, setWeight] = useState(() => userInfo.weight)
+    const [Habit, setHabit] = useState(() => userInfo.habit)
     //获取到填写的数据
     const updateProfile = async () => {
-        const param = {
-            sex: Number(Sex),
+        const param: GetDailyIntakeData = {
+            sex: String(Sex),
             birth: Birth,
             height: Height,
             weight: Weight,
-            habit: Habit,
-            id,
+            userid: id,
+            target: Habit,
+            gym: '0',
+            exercise: '0',
         }
-        const res = await updateUserProfile(param)
+        const res = await getIntakeDailyApi(param)
+        console.log(res)
         if (res.code === 1) {
             Alert.alert('更新成功')
             //获取用户信息
             const userInfo = await getUserInfo(id)
             //放到profile中
-            dispatch(changeUserProfileAction(userInfo.data))
+            dispatch(changeUserInfoAction(userInfo.data))
         }
     }
     //传递给父组件的方法

@@ -1,15 +1,10 @@
 import React, { memo } from 'react'
 import type { FC, ReactNode } from 'react'
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import { ScrollView, TouchableOpacity, View } from 'react-native'
 import theme from '../../../../../styles/theme/color'
-import {
-    FoodListByCategoryData,
-    FoodListByCategoryType,
-    SingleFoodListType,
-} from '../../../../../apis/types/food'
+import { SingleFoodListType } from '../../../../../apis/types/food'
 import AutoText from '../../../../../components/auto-text'
 import { useNavigation } from '@react-navigation/native'
-import { Selection } from 'victory-native'
 import { LinearGradient } from 'react-native-svg'
 import { Skeleton } from '@rneui/base'
 
@@ -27,7 +22,6 @@ const FoodContent: FC<IProps> = ({ FoodList }) => {
     const Item = ({
         hot,
         title,
-        id,
     }: {
         hot: number
         title: string
@@ -62,7 +56,7 @@ const FoodContent: FC<IProps> = ({ FoodList }) => {
             }}
         >
             <ScrollView scroll-y showsVerticalScrollIndicator={false}>
-                {FoodList.length !== 0
+                {FoodList && FoodList.length !== 0
                     ? FoodList.map((item, index) => (
                           <TouchableOpacity
                               key={item.id}

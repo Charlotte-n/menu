@@ -1,6 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { TouchableOpacity, View } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
+import { useNavigation } from '@react-navigation/native'
+import { FoodListByCategoryApi } from '../../apis/food'
+import { FoodListByCategoryType } from '../../apis/types/food'
+import { useAppSelector } from '../../store'
+import { shallowEqual } from 'react-redux'
 
 const MyImagePicker = ({
     children,
@@ -10,6 +15,12 @@ const MyImagePicker = ({
     getImage: any
 }) => {
     const { content } = children
+    const navigation = useNavigation()
+    const { RecognizeFoodInfo } = useAppSelector((state) => {
+        return {
+            RecognizeFoodInfo: state.DietSlice.RecognizeFoodInfo,
+        }
+    }, shallowEqual)
     //获取相机权限
     useEffect(() => {
         ;(async () => {
@@ -33,7 +44,6 @@ const MyImagePicker = ({
             quality: 1,
         })
         result.current = res
-        console.log(result.current)
         if (!result.current.canceled) {
             setImage((prevState: any) => {
                 return result.current.assets[0].uri as string
@@ -44,6 +54,17 @@ const MyImagePicker = ({
     useEffect(() => {
         if (image) {
             getImage(image)
+            //进行识别食物
+            if (RecognizeFoodInfo[0]?.name) {
+                FoodListByCategoryApi({
+                    title: RecognizeFoodInfo[0].name,
+                }).then((res) => {
+                    //@ts-ignore
+                    navigation.navigate('food-nutrients', {
+                        id: (res.data as FoodListByCategoryType).foods[0]?.id,
+                    })
+                })
+            }
         }
     }, [image])
 

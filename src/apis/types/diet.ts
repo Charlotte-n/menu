@@ -39,6 +39,7 @@ export interface CaloriesBodyData {
     type: number
     foodId: number
     g: number
+    operator: number
 }
 
 //endregion

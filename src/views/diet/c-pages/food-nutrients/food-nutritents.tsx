@@ -41,7 +41,11 @@ const FoodNutrients: FC = () => {
     }
     useEffect(() => {
         //获取食物详情
-        getFoodDetail((route.params as any).id)
+        if (route.params as any) {
+            getFoodDetail((route.params as any).id)
+        } else {
+            setFoodDetail({})
+        }
         capturePic()
         dispatch(changeUrl(url))
     }, [url])
@@ -56,114 +60,131 @@ const FoodNutrients: FC = () => {
                     result: 'base64',
                 }}
             >
-                <View className="pl-[30] pr-[30]">
-                    <View
-                        className=" justify-center"
-                        style={{
-                            height: Dimensions.get('screen').height / 2.5,
-                        }}
-                    >
-                        <View>
-                            <Text
-                                className="z-20 "
+                {FoodDetail?.id ? (
+                    <View>
+                        <View className="pl-[30] pr-[30]">
+                            <View
+                                className=" justify-center"
                                 style={{
-                                    fontSize: 18,
+                                    height:
+                                        Dimensions.get('screen').height / 2.5,
                                 }}
-                                numberOfLines={1}
                             >
-                                {FoodDetail.title}
-                            </Text>
-                            <Text
-                                className="absolute top-[15] left-0"
-                                style={{
-                                    width: 54,
-                                    height: 10,
-                                    backgroundColor: theme.colors.deep01Primary,
-                                    borderRadius: 20,
-                                }}
-                            ></Text>
-                        </View>
-                        <AutoText
-                            style={{
-                                marginTop: 10,
-                                fontSize: 13,
-                            }}
-                        >
-                            {FoodDetail.calories?.toFixed(2)}Kcal/100g
-                        </AutoText>
-                    </View>
-                    <View
-                        style={{
-                            height: Dimensions.get('screen').height / 2.5,
-                        }}
-                    >
-                        <View className="flex-row items-center">
+                                <View>
+                                    <Text
+                                        className="z-20 "
+                                        style={{
+                                            fontSize: 18,
+                                        }}
+                                        numberOfLines={1}
+                                    >
+                                        {FoodDetail.title}
+                                    </Text>
+                                    <Text
+                                        className="absolute top-[15] left-0"
+                                        style={{
+                                            width: 54,
+                                            height: 10,
+                                            backgroundColor:
+                                                theme.colors.deep01Primary,
+                                            borderRadius: 20,
+                                        }}
+                                    ></Text>
+                                </View>
+                                <AutoText
+                                    style={{
+                                        marginTop: 10,
+                                        fontSize: 13,
+                                    }}
+                                >
+                                    {FoodDetail.calories?.toFixed(2)}Kcal/100g
+                                </AutoText>
+                            </View>
                             <View
                                 style={{
-                                    width: 5,
-                                    height: 5,
-                                    borderRadius: 100,
-                                    marginRight: 5,
-                                    backgroundColor: theme.colors.deep01Primary,
+                                    height:
+                                        Dimensions.get('screen').height / 2.5,
                                 }}
-                            ></View>
-                            <AutoText fontSize={5}>热量解析</AutoText>
-                        </View>
-                        <View className="pl-[10]">
-                            {FoodNutritionData.map((item) => {
-                                return (
+                            >
+                                <View className="flex-row items-center">
                                     <View
-                                        key={item}
-                                        className="flex-row border-b  pb-[15] pt-[15]"
                                         style={{
-                                            borderColor: theme.colors.secondary,
+                                            width: 5,
+                                            height: 5,
+                                            borderRadius: 100,
+                                            marginRight: 5,
+                                            backgroundColor:
+                                                theme.colors.deep01Primary,
                                         }}
-                                    >
-                                        <Text className="flex-1">
-                                            {(FoodNutrition as any)[item]}
-                                        </Text>
-                                        <Text
-                                            style={{
-                                                color: '#888',
-                                            }}
-                                        >
-                                            {(FoodDetail as any)[item]
-                                                ? (FoodDetail as any)[
-                                                      item
-                                                  ]?.toFixed(2)
-                                                : 0}
-                                            kcal
-                                        </Text>
-                                    </View>
-                                )
-                            })}
+                                    ></View>
+                                    <AutoText fontSize={5}>热量解析</AutoText>
+                                </View>
+                                <View className="pl-[10]">
+                                    {FoodNutritionData.map((item) => {
+                                        return (
+                                            <View
+                                                key={item}
+                                                className="flex-row border-b  pb-[15] pt-[15]"
+                                                style={{
+                                                    borderColor:
+                                                        theme.colors.secondary,
+                                                }}
+                                            >
+                                                <Text className="flex-1">
+                                                    {
+                                                        (FoodNutrition as any)[
+                                                            item
+                                                        ]
+                                                    }
+                                                </Text>
+                                                <Text
+                                                    style={{
+                                                        color: '#888',
+                                                    }}
+                                                >
+                                                    {(FoodDetail as any)[item]
+                                                        ? (FoodDetail as any)[
+                                                              item
+                                                          ]?.toFixed(2)
+                                                        : 0}
+                                                    kcal
+                                                </Text>
+                                            </View>
+                                        )
+                                    })}
+                                </View>
+                            </View>
                         </View>
+                        <View className="m-auto">
+                            <Button
+                                onPress={() => {
+                                    setIsVisible(true)
+                                }}
+                                title="记录饮食"
+                                buttonStyle={{
+                                    backgroundColor: theme.colors.deep01Primary,
+                                    borderRadius: 20,
+                                    width: Dimensions.get('screen').width / 2,
+                                }}
+                            ></Button>
+                        </View>
+                        <RecordFood
+                            isVisible={isVisible}
+                            id={(route.params as { id: number }).id}
+                        >
+                            {{
+                                cancel: () => {
+                                    setIsVisible(false)
+                                },
+                            }}
+                        </RecordFood>
                     </View>
-                </View>
+                ) : (
+                    <View className="m-auto">
+                        <AutoText>什么也没有</AutoText>
+                    </View>
+                )}
             </ViewShot>
-            <View className="m-auto">
-                <Button
-                    onPress={() => {
-                        setIsVisible(true)
-                    }}
-                    title="记录饮食"
-                    buttonStyle={{
-                        backgroundColor: theme.colors.deep01Primary,
-                        borderRadius: 20,
-                        width: Dimensions.get('screen').width / 2,
-                    }}
-                ></Button>
-            </View>
-            <RecordFood
-                isVisible={isVisible}
-                id={(route.params as { id: number }).id}
-            >
-                {{
-                    cancel: () => {
-                        setIsVisible(false)
-                    },
-                }}
-            </RecordFood>
         </ScrollView>
     )
 }

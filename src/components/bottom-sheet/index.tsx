@@ -38,7 +38,8 @@ const MyBottomSheet: FC<IProps> = ({
                     try {
                         const res = await getUserInfo(userId)
                         if (res.code === 1) {
-                            dispatch(changeUserInfoAction(res.data))
+                            //重新获取用户信息
+                            dispatch(changeUserInfoAction(res.data.user))
                             cancel()
                         }
                     } catch (e) {
