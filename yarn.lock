@@ -2377,6 +2377,14 @@
   resolved "https://r.cnpmjs.org/@react-navigation/elements/-/elements-1.3.21.tgz#debac6becc6b6692da09ec30e705e476a780dfe1"
   integrity sha512-eyS2C6McNR8ihUoYfc166O1D8VYVh9KIl0UQPI8/ZJVsStlfSTgeEEh+WXge6+7SFPnZ4ewzEJdSAHH+jzcEfg==
 
+"@react-navigation/material-top-tabs@^6.6.10":
+  version "6.6.10"
+  resolved "https://r.cnpmjs.org/@react-navigation/material-top-tabs/-/material-top-tabs-6.6.10.tgz#f812c1533e6e3fab04db1b13ad104ce6b14fb31d"
+  integrity sha512-OlwgIXFaVJrifmiVfAadZnBJ7wbW8h/bQfWYYU3oK14h3L5Kk7Pix2taXfb3+s7ys2ljIx5RIdPHwVlsT4JGNg==
+  dependencies:
+    color "^4.2.3"
+    warn-once "^0.1.0"
+
 "@react-navigation/native@^6.1.9":
   version "6.1.9"
   resolved "https://r.cnpmjs.org/@react-navigation/native/-/native-6.1.9.tgz#8ef87095cd9c2ed094308c726157c7f6fc28796e"
@@ -7457,6 +7465,13 @@ react-native-swipe-list-view@^3.2.9:
   version "3.2.9"
   resolved "https://r2.cnpmjs.org/react-native-swipe-list-view/-/react-native-swipe-list-view-3.2.9.tgz#d725c7cdf481dd5df12a00dbfe0120013b5f2e59"
   integrity sha512-SjAEuHc/D6ovp+RjDUhfNmw6NYOntdT7+GFhfMGfP/BSLMuMWynpzJy9GKQeyB8sI78T6Lzip21TVbongOg1Mw==
+
+react-native-tab-view@^3.5.2:
+  version "3.5.2"
+  resolved "https://r.cnpmjs.org/react-native-tab-view/-/react-native-tab-view-3.5.2.tgz#2789b8af6148b16835869566bf13dc3b0e6c1b46"
+  integrity sha512-nE5WqjbeEPsWQx4mtz81QGVvgHRhujTNIIZiMCx3Bj6CBFDafbk7XZp9ocmtzXUQaZ4bhtVS43R4FIiR4LboJw==
+  dependencies:
+    use-latest-callback "^0.1.5"
 
 react-native-vector-icons@^10.0.3:
   version "10.0.3"

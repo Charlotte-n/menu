@@ -10,6 +10,9 @@ import {
 import FoodTab from './food-tab'
 import { ActivityIndicator } from 'nativewind/dist/preflight'
 import { View } from 'react-native'
+import { useAppDispatch, useAppSelector } from '../../../store'
+import { changeFoodList } from '../../../store/slice/diet'
+import { shallowEqual } from 'react-redux'
 interface IProps {
     children?: ReactNode
 }
@@ -19,22 +22,22 @@ const FoodCategoryByTime: FC<IProps> = () => {
     const [refresh, setRefresh] = useState(true)
     const pageLoading = useRef(false)
     const [pageLoadingFull, setPageLoadingFull] = useState(false)
-    const pageNum = useRef(0)
-    const [FoodList, setFoodList] = useState([] as SingleFoodListType[])
+    const pageNum = useRef(1)
     const [FoodNum, setFoodNum] = useState(0)
     const num = useRef(10)
     //上拉加载
     const loadMore = () => {
+        //当这个食物大于总的食物的时候，就返回
+        console.log(num.current, FoodNum)
         if (num.current >= FoodNum) {
             setPageLoadingFull(true)
             return
         }
         //计算有多少个食物
         num.current += 10
-        //当这个食物大于总的食物的时候，就返回
         pageLoading.current = true
         pageNum.current += 1
-        getFoodList()
+        getFoodList(activeId)
         pageLoading.current = false
     }
     //获取食物列表
@@ -61,36 +64,90 @@ const FoodCategoryByTime: FC<IProps> = () => {
             id: 10,
         },
     ]
-    const getFoodList = () => {
+
+    //进行缓存
+    const {
+        breakFastFoodList,
+        lunchFoodList,
+        dinnerFoodList,
+        fruitFoodList,
+        otherFoodList,
+    } = useAppSelector((state) => {
+        return {
+            breakFastFoodList: state.DietSlice.breakFastFoodList,
+            lunchFoodList: state.DietSlice.lunchFastFoodList,
+            dinnerFoodList: state.DietSlice.dinnerFastFoodList,
+            fruitFoodList: state.DietSlice.fruitFoodList,
+            otherFoodList: state.DietSlice.otherFoodList,
+        }
+    }, shallowEqual)
+    const dispatch = useAppDispatch()
+    const getFoodList = (index: number) => {
         const param = {
             pageNum: pageNum.current,
             pageSize: 10,
-            category_id: activeId,
+            category_id: index,
+        }
+        let fooList: SingleFoodListType[]
+        switch (index) {
+            case 1:
+                fooList = breakFastFoodList
+                break
+            case 2:
+                fooList = lunchFoodList
+                break
+            case 4:
+                fooList = dinnerFoodList
+                break
+            case 5:
+                fooList = fruitFoodList
+                break
+            case 10:
+                fooList = otherFoodList
+                break
         }
         setRefresh(true)
         FoodListByCategoryApi(param).then((res) => {
             setFoodNum((res.data as FoodListByCategoryType).num)
-            if (FoodList.length === 0) {
-                setFoodList((res.data as FoodListByCategoryType).foods)
+            if (fooList.length === 0) {
+                dispatch(
+                    changeFoodList({
+                        index,
+                        foods: (res.data as FoodListByCategoryType).foods,
+                    }),
+                )
             } else {
-                setFoodList((prevList) => [
-                    ...prevList,
-                    ...(res.data as FoodListByCategoryType).foods,
-                ])
+                dispatch(
+                    changeFoodList({
+                        index,
+                        foods: [
+                            ...new Set([
+                                ...new Set([...fooList]),
+                                ...(res.data as FoodListByCategoryType).foods,
+                            ]),
+                        ],
+                    }),
+                )
             }
         })
         setRefresh(false)
+        return 123
     }
     useEffect(() => {
-        getFoodList()
+        Promise.all([
+            getFoodList(1),
+            getFoodList(2),
+            getFoodList(4),
+            getFoodList(5),
+            getFoodList(10),
+        ])
     }, [])
     useEffect(() => {
+        console.log(pageNum.current)
         //恢复默认设置
         num.current = 10
         setPageLoadingFull(false)
-        pageNum.current = 0
-        setFoodList([])
-        getFoodList()
+        pageNum.current = 1
     }, [activeId])
     return (
         <>
@@ -105,7 +162,7 @@ const FoodCategoryByTime: FC<IProps> = () => {
                     width: 20,
                     height: 5,
                     borderRadius: 20,
-                    marginHorizontal: 30,
+                    marginHorizontal: 35,
                 }}
                 scrollable={true}
                 containerStyle={{
@@ -127,8 +184,10 @@ const FoodCategoryByTime: FC<IProps> = () => {
 
             <TabView
                 value={index}
-                onChange={setIndex}
-                animationType="spring"
+                onChange={(e) => {
+                    setIndex(e)
+                    setActiveId(activeIds[e].id)
+                }}
                 containerStyle={{
                     marginTop: 10,
                 }}
@@ -142,11 +201,12 @@ const FoodCategoryByTime: FC<IProps> = () => {
                     }}
                 >
                     {/*早餐:奶类*/}
-                    {FoodList.length ? (
+                    {breakFastFoodList.length ? (
                         <FoodTab
+                            index={1}
                             refresh={refresh}
                             setRefresh={setRefresh}
-                            FoodList={FoodList}
+                            FoodList={breakFastFoodList}
                             pageLoadingFull={pageLoadingFull}
                             pageLoading={pageLoading}
                         >
@@ -172,9 +232,10 @@ const FoodCategoryByTime: FC<IProps> = () => {
                     }}
                 >
                     <FoodTab
+                        index={2}
                         refresh={refresh}
                         setRefresh={setRefresh}
-                        FoodList={FoodList}
+                        FoodList={lunchFoodList}
                         pageLoadingFull={pageLoadingFull}
                         pageLoading={pageLoading}
                     >
@@ -191,9 +252,10 @@ const FoodCategoryByTime: FC<IProps> = () => {
                     }}
                 >
                     <FoodTab
+                        index={4}
                         refresh={refresh}
                         setRefresh={setRefresh}
-                        FoodList={FoodList}
+                        FoodList={dinnerFoodList}
                         pageLoadingFull={pageLoadingFull}
                         pageLoading={pageLoading}
                     >
@@ -211,9 +273,10 @@ const FoodCategoryByTime: FC<IProps> = () => {
                     }}
                 >
                     <FoodTab
+                        index={5}
                         refresh={refresh}
                         setRefresh={setRefresh}
-                        FoodList={FoodList}
+                        FoodList={fruitFoodList}
                         pageLoadingFull={pageLoadingFull}
                         pageLoading={pageLoading}
                     >
@@ -230,9 +293,10 @@ const FoodCategoryByTime: FC<IProps> = () => {
                     }}
                 >
                     <FoodTab
+                        index={10}
                         refresh={refresh}
                         setRefresh={setRefresh}
-                        FoodList={FoodList}
+                        FoodList={otherFoodList}
                         pageLoadingFull={pageLoadingFull}
                         pageLoading={pageLoading}
                     >

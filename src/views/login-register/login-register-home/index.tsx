@@ -1,25 +1,40 @@
-import React, { memo } from 'react'
+import React, { memo, useEffect } from 'react'
 import type { FC, ReactNode } from 'react'
 import { Image, View, ScrollView } from 'nativewind/dist/preflight'
 import theme from '../../../styles/theme/color'
 import { Button, ThemeProvider } from '@rneui/themed'
 import { MainTheme } from '../../../styles/theme/ui-theme'
-import { StackActions } from '@react-navigation/native'
+import { StackActions, useNavigation } from '@react-navigation/native'
 import { Dimensions, StatusBar } from 'react-native'
+import { useAppSelector } from '../../../store'
+import { shallowEqual } from 'react-redux'
 
 interface IProps {
     children?: ReactNode
-    navigation: any
 }
 
-const LoginHome: FC<IProps> = ({ navigation }) => {
-
+const LoginHome: FC<IProps> = () => {
+    //判断是否有token，有token的话就重新登录
+    const { token } = useAppSelector((state) => {
+        return {
+            userInfo: state.LoginRegisterSlice.userInfo,
+            token: state.LoginRegisterSlice.token,
+        }
+    }, shallowEqual)
+    const navigation = useNavigation()
+    useEffect(() => {
+        //有token的话就跳转到tabs
+        if (token) {
+            //@ts-ignore
+            navigation.navigate('tabs')
+        }
+    }, [])
     return (
         <ScrollView
             className="flex-1"
             style={{ backgroundColor: theme.colors.primary }}
         >
-            <StatusBar backgroundColor={theme.colors.primary}></StatusBar>
+            {/*<StatusBar backgroundColor={theme.colors.primary}></StatusBar>*/}
             <View
                 style={{
                     width: '100%',

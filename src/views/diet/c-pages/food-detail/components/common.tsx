@@ -4,6 +4,8 @@ import { Image, TextInput, TouchableOpacity, View, Text } from 'react-native'
 import AutoText from '../../../../../components/auto-text'
 import { useAppSelector } from '../../../../../store'
 import { shallowEqual } from 'react-redux'
+import theme from '../../../../../styles/theme/color'
+import { useNavigation } from '@react-navigation/native'
 
 interface IProps {
     children?: any
@@ -11,6 +13,7 @@ interface IProps {
 
 const common: FC<IProps> = ({ children }) => {
     const show = children.show
+    const navigation = useNavigation()
     const [comment, setComment] = useState('')
     //获取comments
     const { comments } = useAppSelector((state) => {
@@ -18,6 +21,11 @@ const common: FC<IProps> = ({ children }) => {
             comments: state.FoodSlice.comment,
         }
     }, shallowEqual)
+    //去往回复详情页面
+    const GoCommentComply = () => {
+        //@ts-ignore
+        navigation.navigate('commentsComply')
+    }
     return (
         <View>
             {/*标题*/}
@@ -71,18 +79,61 @@ const common: FC<IProps> = ({ children }) => {
                             borderRadius: 100,
                         }}
                     ></Image>
-
                     <View className="ml-[10]">
-                        <AutoText
-                            fontSize={5.5}
-                            style={{
-                                color: '#cccccc',
-                                marginBottom: 10,
-                            }}
-                        >
-                            下厨房用户
-                        </AutoText>
-                        <AutoText>可以放陶瓷盘子吗</AutoText>
+                        {/*自己的展示*/}
+                        <View className="w-[200]">
+                            <AutoText
+                                numberOfLines={1}
+                                fontSize={5.5}
+                                style={{
+                                    color: '#cccccc',
+                                    marginBottom: 10,
+                                }}
+                            >
+                                下厨房用户
+                            </AutoText>
+                            <AutoText fontSize={4.8}>可以放陶瓷盘子吗</AutoText>
+                        </View>
+                        {/*    回复的展示*/}
+                        <View className="mt-[10] flex-row">
+                            <Image
+                                source={require('../../../../../../assets/images/bg_login_header.png')}
+                                style={{
+                                    width: 25,
+                                    height: 25,
+                                    borderRadius: 100,
+                                }}
+                            ></Image>
+                            <View className="relative top-1 ml-[5]">
+                                <AutoText
+                                    numberOfLines={1}
+                                    fontSize={4.3}
+                                    style={{
+                                        color: '#cccccc',
+                                        marginBottom: 5,
+                                    }}
+                                >
+                                    下厨房用户
+                                </AutoText>
+                                <AutoText fontSize={4.3}>
+                                    可以放陶瓷盘子吗
+                                </AutoText>
+                                {/*    TODO:根据条件显示*/}
+                                <TouchableOpacity
+                                    className="mt-[5]"
+                                    onPress={() => GoCommentComply()}
+                                >
+                                    <AutoText
+                                        fontSize={4.3}
+                                        style={{
+                                            color: theme.colors.deep01Primary,
+                                        }}
+                                    >
+                                        查看全部 (4)
+                                    </AutoText>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
                     </View>
                 </View>
             ))}

@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import type { FC } from 'react'
 import { Image, ScrollView, TouchableOpacity, View } from 'react-native'
 import { RefreshControl } from 'react-native-gesture-handler'
@@ -18,11 +18,13 @@ interface IProps {
     FoodList: SingleFoodListType[]
     pageLoadingFull: boolean
     pageLoading: any
+    index: number
 }
 
 export const Item = ({ data }: { data: SingleFoodListType }) => {
     const [isVisible, setIsVisible] = useState(false)
     const navigation = useNavigation()
+
     return (
         <TouchableOpacity
             onPress={() => {
@@ -37,7 +39,6 @@ export const Item = ({ data }: { data: SingleFoodListType }) => {
                 style={{ borderColor: theme.colors.primary }}
             >
                 <View className="flex-1 flex-row items-center">
-                    {/*TODO:进行更改默认图片*/}
                     {data?.image ? (
                         <Image
                             source={{ uri: data.image }}
@@ -103,9 +104,13 @@ const FoodTab: FC<IProps> = ({
     pageLoadingFull,
     pageLoading,
     children,
+    index,
 }) => {
     const { getFoodList } = children
     const { loadMore } = children
+    useEffect(() => {
+        console.log('我的食谱为', FoodList)
+    }, [])
     return (
         <View>
             <ScrollView
@@ -117,7 +122,7 @@ const FoodTab: FC<IProps> = ({
                         colors={[theme.colors.deep01Primary]} //ios
                         refreshing={refresh}
                         onRefresh={() => {
-                            getFoodList()
+                            getFoodList(index)
                         }}
                     />
                 }

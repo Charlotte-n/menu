@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import TabBar from './src/route/tab-bar'
 import LoginRegisterHomeScreen from './src/route/login'
 import { Icon } from '@rneui/themed'
 import { MineOtherScreen } from './src/data/app-path'
-import { Provider, shallowEqual } from 'react-redux'
-import store, { persistor, useAppSelector } from './src/store'
+import { Provider } from 'react-redux'
+import store, { persistor } from './src/store'
 import { PersistGate } from 'redux-persist/es/integration/react'
 import UserAgree from './src/views/mine/profile/c-pages/user-agree'
 import Search from './src/views/diet/search'
@@ -17,6 +17,7 @@ import { Image } from 'react-native'
 import MyShare from './src/components/share'
 import FoodNutrients from './src/views/diet/c-pages/food-nutrients/food-nutritents'
 import FoodCategory from './src/views/diet/c-pages/food-category'
+import CommentsComply from './src/views/diet/c-pages/food-detail/c-pages/commentsComply'
 export default function App() {
     const Stack = createStackNavigator()
     return (
@@ -153,6 +154,25 @@ export default function App() {
                                         </MyShare>
                                     )
                                 },
+                            }}
+                        ></Stack.Screen>
+                        {/*    评论回复*/}
+                        <Stack.Screen
+                            name={'commentsComply'}
+                            component={CommentsComply}
+                            options={{
+                                headerTitle: '',
+                                headerStyle: {
+                                    height: 40,
+                                },
+
+                                headerBackImage: () => (
+                                    <Icon
+                                        name={'left'}
+                                        type={'antdesign'}
+                                        size={25}
+                                    ></Icon>
+                                ),
                             }}
                         ></Stack.Screen>
                         <Stack.Screen

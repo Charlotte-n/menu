@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState } from 'react'
 import type { FC, ReactNode } from 'react'
 import { View } from 'nativewind/dist/preflight'
-import { Dimensions, Image, ScrollView } from 'react-native'
+import { Dimensions, Image, ScrollView, StatusBar } from 'react-native'
 import HotRecommend from '../../components/hot-recommend'
 import EchartBigPie from './components/echart-big-pie'
 import EchartSmallPie from './components/echart-small-pie'

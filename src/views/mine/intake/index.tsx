@@ -31,6 +31,7 @@ const Intake: FC<IProps> = () => {
     const GetDailyIntake = () => {
         getDailyIntakeApi(userInfo.id).then((res) => {
             let result = [res.data.breakfast, res.data.lunch, res.data.dinner]
+            //获取热量
             const dailyIntaked = {
                 fat: res.data.calories[2],
                 calories: res.data.calories[4],

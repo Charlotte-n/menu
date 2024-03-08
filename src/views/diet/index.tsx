@@ -69,6 +69,7 @@ const Diet: FC<IProps> = () => {
                                 热门菜品
                             </Text>
                         </View>
+                        {/*骨架屏*/}
                         <View className="flex flex-row justify-around">
                             {[1, 2, 3].map((item) => (
                                 <Skeleton

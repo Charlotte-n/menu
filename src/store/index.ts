@@ -27,9 +27,15 @@ const persistFoodConfig = {
     key: 'foodData',
     storage: AsyncStorage,
 }
+const persistDietConfig = {
+    key: 'DietData',
+    storage: AsyncStorage,
+}
+
 const LoginStorePersist = persistReducer(persistConfig, LoginRegisterSlice)
 const HomeStorePersist = persistReducer(persistHomeConfig, HomeSlice)
 const FoodStorePersist = persistReducer(persistFoodConfig, FoodSlice)
+// const DietStorePersist = persistReducer(persistDietConfig, DietSlice)
 const store = configureStore({
     reducer: {
         LoginRegisterSlice: LoginStorePersist,

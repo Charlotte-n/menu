@@ -54,6 +54,7 @@ const RecordFood: FC<IProps> = ({ isVisible, children, id, type }) => {
     }
     const getFoodDetail = () => {
         FoodListByCategoryApi({ id }).then((res) => {
+            console.log(res)
             setFoodDetail((res.data as FoodListByCategoryType).foods[0])
         })
     }
@@ -80,7 +81,6 @@ const RecordFood: FC<IProps> = ({ isVisible, children, id, type }) => {
                 cellulose: res.data.calories[3],
             }
             dispatch(changeDailyIntaked(dailyIntaked))
-            console.log(intaked, '今天的摄入')
         })
     }
 

@@ -1,7 +1,5 @@
 import React, { memo } from 'react'
 import type { FC, ReactNode } from 'react'
-import { Text } from 'nativewind/dist/preflight'
-import { Tab, TabView } from '@rneui/themed'
 import { createStackNavigator } from '@react-navigation/stack'
 import HealthMeal from '../views/health-meal'
 
