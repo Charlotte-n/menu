@@ -13,8 +13,7 @@ import {
 } from '../../apis/types/food'
 import { Skeleton } from '@rneui/base'
 import theme from '../../styles/theme/color'
-import { ActivityIndicator } from 'nativewind/dist/preflight'
-import { Item } from './components/food-tab'
+
 interface IProps {
     children?: ReactNode
 }

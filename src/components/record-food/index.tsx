@@ -31,12 +31,13 @@ interface IProps {
     }
     isVisible: boolean
     id: number
+    type?: number
 }
 
-const RecordFood: FC<IProps> = ({ isVisible, children, id }) => {
+const RecordFood: FC<IProps> = ({ isVisible, children, id, type }) => {
     const { cancel } = children
     const navigation = useNavigation()
-    const [selectedIndex, setSelectedIndex] = useState(0)
+    const [selectedIndex, setSelectedIndex] = useState(() => (type ? type : 0))
     const [visible, setVisible] = useState(false)
     const [FoodDetail, setFoodDetail] = useState<SingleFoodListType>(
         {} as SingleFoodListType,
@@ -78,7 +79,6 @@ const RecordFood: FC<IProps> = ({ isVisible, children, id }) => {
                 protein: res.data.calories[0],
                 cellulose: res.data.calories[3],
             }
-            console.log(dailyIntaked)
             dispatch(changeDailyIntaked(dailyIntaked))
             console.log(intaked, '今天的摄入')
         })

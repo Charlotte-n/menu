@@ -174,6 +174,7 @@ const Home: FC<IProps> = () => {
                                 key={item.id}
                                 baseData={item}
                                 image={item.icon}
+                                type={index}
                             ></FoodByTime>
                         )
                     })}

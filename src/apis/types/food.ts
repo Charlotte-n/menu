@@ -30,3 +30,11 @@ export interface SingleFoodListType {
     carbohydrate?: number
     protein?: number
 }
+
+//食谱评价
+export interface PostFoodCommentData {
+    content: string
+    dishId: number
+    parentId: number
+    userId: number
+}

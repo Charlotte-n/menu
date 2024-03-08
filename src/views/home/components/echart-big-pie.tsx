@@ -23,22 +23,24 @@ const EchartBingPie: FC<IProps> = () => {
         {
             y:
                 100 -
-                Math.floor(
-                    (dailyIntaked.calories / dailyIntake.calories) * 100,
-                ),
+                    Math.floor(
+                        (dailyIntaked?.calories / dailyIntake?.calories) * 100,
+                    ) || 100,
         },
         {
             m: 0,
-            y: Math.floor((dailyIntaked.calories / dailyIntake.calories) * 100),
+            y:
+                Math.floor(
+                    (dailyIntaked?.calories / dailyIntake?.calories) * 100,
+                ) || 0,
         },
     ]
-
     return (
         <View className="m-auto">
             <Svg width={180} height={180}>
                 {/*摄入总量*/}
                 <View className="absolute top-[58] left-[53] m-auto">
-                    {((dailyIntake?.calories - dailyIntaked?.calories).toFixed(
+                    {((dailyIntake?.calories - dailyIntaked?.calories)?.toFixed(
                         0,
                     ) as unknown as number) >= 0 ? (
                         <View>
@@ -59,7 +61,7 @@ const EchartBingPie: FC<IProps> = () => {
                                 {(
                                     dailyIntake?.calories -
                                     dailyIntaked?.calories
-                                ).toFixed(0)}
+                                )?.toFixed(0)}
                             </Text>
                             <Text
                                 style={{
@@ -70,7 +72,9 @@ const EchartBingPie: FC<IProps> = () => {
                                 千卡
                             </Text>
                         </View>
-                    ) : (
+                    ) : !(isNaN(
+                          dailyIntake?.calories - dailyIntaked?.calories,
+                      ) as unknown as number) ? (
                         <View>
                             <Text
                                 style={{
@@ -91,6 +95,33 @@ const EchartBingPie: FC<IProps> = () => {
                                         dailyIntaked?.calories) *
                                     -1
                                 ).toFixed(0)}
+                            </Text>
+                            <Text
+                                style={{
+                                    fontSize: 13,
+                                    textAlign: 'center',
+                                }}
+                            >
+                                千卡
+                            </Text>
+                        </View>
+                    ) : (
+                        <View>
+                            <Text
+                                style={{
+                                    fontSize: 12,
+                                    textAlign: 'center',
+                                }}
+                            >
+                                今日需要摄入
+                            </Text>
+                            <Text
+                                style={{
+                                    fontSize: 30,
+                                    textAlign: 'center',
+                                }}
+                            >
+                                {dailyIntake?.calories?.toFixed(0)}
                             </Text>
                             <Text
                                 style={{

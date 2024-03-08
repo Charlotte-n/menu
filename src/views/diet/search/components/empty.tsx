@@ -1,6 +1,6 @@
 import React, { memo } from 'react'
 import type { FC, ReactNode } from 'react'
-import { View } from 'react-native'
+import { Image, View } from 'react-native'
 import AutoText from '../../../../components/auto-text'
 
 interface IProps {
@@ -16,7 +16,20 @@ const Empty: FC<IProps> = () => {
                 justifyContent: 'center',
             }}
         >
-            <AutoText>没有搜索到该食物</AutoText>
+            <Image
+                style={{
+                    width: 100,
+                    height: 100,
+                }}
+                source={require('../../../../../assets/images/search.png')}
+            ></Image>
+            <AutoText
+                style={{
+                    marginTop: 20,
+                }}
+            >
+                没有搜索到该食物
+            </AutoText>
         </View>
     )
 }

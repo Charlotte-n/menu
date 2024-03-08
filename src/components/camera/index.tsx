@@ -83,16 +83,17 @@ const MyCamera: FC<IProps> = ({ children }) => {
         if (sizeImage) {
             getSearchImage(sizeImage).then()
             //判断是否有名字
-            console.log(RecognizeFoodInfo)
-            // FoodListByCategoryApi({ title: RecognizeFoodInfo[0].name }).then(
-            //     (res) => {
-            //         console.log(res)
-            //         //@ts-ignore
-            //         navigation.navigate('food-nutrients', {
-            //             id: (res.data as FoodListByCategoryType).foods[0]?.id,
-            //         })
-            //     },
-            // )
+            FoodListByCategoryApi({ title: RecognizeFoodInfo[0].name }).then(
+                (res) => {
+                    console.log(res)
+                    //@ts-ignore
+                    navigation.navigate('food-nutrients', {
+                        id:
+                            (res.data as FoodListByCategoryType).foods[0]?.id ||
+                            0,
+                    })
+                },
+            )
         }
     }, [sizeImage])
 

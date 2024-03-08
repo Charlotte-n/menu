@@ -1,6 +1,5 @@
 import React, { memo } from 'react'
 import type { FC, ReactNode } from 'react'
-import { ScrollView, View } from 'react-native'
 import Collect from '../mine/collect'
 
 interface IProps {

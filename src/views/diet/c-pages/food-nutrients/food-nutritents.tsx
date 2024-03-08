@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useRef, useState } from 'react'
 import type { FC } from 'react'
-import { Dimensions, ScrollView, Text, View } from 'react-native'
+import { Dimensions, Image, ScrollView, Text, View } from 'react-native'
 import theme from '../../../../styles/theme/color'
 import { Button } from '@rneui/themed'
 import ViewShot from 'react-native-view-shot'
@@ -40,6 +40,9 @@ const FoodNutrients: FC = () => {
         })
     }
     useEffect(() => {
+        console.log(FoodDetail)
+    }, [FoodDetail])
+    useEffect(() => {
         //获取食物详情
         if (route.params as any) {
             getFoodDetail((route.params as any).id)
@@ -50,7 +53,7 @@ const FoodNutrients: FC = () => {
         dispatch(changeUrl(url))
     }, [url])
     return (
-        <ScrollView className="flex-1 bg-white ">
+        <ScrollView className="flex-1 bg-white">
             <ViewShot
                 ref={view}
                 options={{
@@ -60,7 +63,7 @@ const FoodNutrients: FC = () => {
                     result: 'base64',
                 }}
             >
-                {FoodDetail?.id ? (
+                {(route.params as { id: number }).id !== 0 ? (
                     <View>
                         <View className="pl-[30] pr-[30]">
                             <View
@@ -169,6 +172,7 @@ const FoodNutrients: FC = () => {
                             ></Button>
                         </View>
                         <RecordFood
+                            type={(route.params as { type: number }).type}
                             isVisible={isVisible}
                             id={(route.params as { id: number }).id}
                         >
@@ -180,8 +184,22 @@ const FoodNutrients: FC = () => {
                         </RecordFood>
                     </View>
                 ) : (
-                    <View className="m-auto">
-                        <AutoText>什么也没有</AutoText>
+                    <View
+                        className="items-center justify-center"
+                        style={{
+                            height: Dimensions.get('window').height - 200,
+                        }}
+                    >
+                        <Image
+                            style={{
+                                width: 200,
+                                height: 200,
+                            }}
+                            source={require('../../../../../assets/images/search.png')}
+                        ></Image>
+                        <AutoText fontSize={6} style={{ marginTop: 20 }}>
+                            不能识别到该食物
+                        </AutoText>
                     </View>
                 )}
             </ViewShot>

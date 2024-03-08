@@ -16,7 +16,10 @@ import { useAppDispatch } from '../../../../store'
 import { changeUrl } from '../../../../store/slice/diet'
 import ViewShot from 'react-native-view-shot'
 import { ingredients } from '../../../../data/diet'
-import RecordFood from '../../../../components/record-food'
+import Comment from './components/common'
+import CommentModal from './components/comment-modal'
+import { getCommentsApi } from '../../../../apis/food'
+import { changeCommentAction } from '../../../../store/slice/food'
 
 interface IProps {
     children?: ReactNode
@@ -27,8 +30,14 @@ const FoodDetail: FC<IProps> = () => {
     const view = useRef<any>()
     const [isCollect, setIsCollect] = useState(false)
     const [isWrite, setIsWrite] = useState(false)
-    const dispatch = useAppDispatch()
     const [isVisible, setIsVisible] = useState(false)
+    const dispatch = useAppDispatch()
+    const disShow = () => {
+        setIsVisible(false)
+    }
+    const show = () => {
+        setIsVisible(true)
+    }
     //进行
     const capturePic = () => {
         view.current.capture().then((uri: string) => {
@@ -39,6 +48,19 @@ const FoodDetail: FC<IProps> = () => {
         capturePic()
         dispatch(changeUrl(url))
     }, [url])
+
+    //获取评论
+    const getComments = (id: number) => {
+        //食物id
+        getCommentsApi(id).then((res) => {
+            dispatch(changeCommentAction(res.data))
+        })
+    }
+
+    //评论的显示
+    const disShowEdit = () => {
+        setIsWrite(false)
+    }
 
     return (
         <SafeAreaView
@@ -63,6 +85,7 @@ const FoodDetail: FC<IProps> = () => {
                         paddingHorizontal: 15,
                         paddingVertical: 0,
                         marginHorizontal: 0,
+                        flex: 1,
                     }}
                 >
                     {/*创建BFC*/}
@@ -104,11 +127,7 @@ const FoodDetail: FC<IProps> = () => {
                         }}
                     >
                         {/*  营养元素*/}
-
-                        <View
-                            className="flex-row justify-between mt-[20]"
-                            style={{}}
-                        >
+                        <View className="flex-row justify-between mt-[20]">
                             {[1, 2, 3].map((item) => {
                                 return (
                                     <View
@@ -138,7 +157,6 @@ const FoodDetail: FC<IProps> = () => {
                                 )
                             })}
                         </View>
-
                         {/*    成分*/}
                         <View className="mt-[20]">
                             <Text
@@ -176,7 +194,6 @@ const FoodDetail: FC<IProps> = () => {
                                 })}
                             </View>
                         </View>
-
                         <View className="mt-[20]">
                             <Text
                                 style={{
@@ -220,8 +237,15 @@ const FoodDetail: FC<IProps> = () => {
                             })}
                         </View>
                     </ViewShot>
-
-                    <View className="h-[20]"></View>
+                    {/*评论区域*/}
+                    <View className="mt-[20]">
+                        <Comment>
+                            {{
+                                show: show,
+                            }}
+                        </Comment>
+                    </View>
+                    <View className="h-[50]"></View>
                 </Card>
             </ScrollView>
             {/*    底部固定*/}
@@ -272,7 +296,7 @@ const FoodDetail: FC<IProps> = () => {
                     <TouchableOpacity
                         onPress={() => {
                             setIsWrite(!isWrite)
-                            setIsVisible(true)
+                            show()
                         }}
                     >
                         <Image
@@ -286,14 +310,16 @@ const FoodDetail: FC<IProps> = () => {
                     </TouchableOpacity>
                 )}
             </View>
-            {/*<RecordFood isVisible={isVisible}>*/}
-            {/*    {{*/}
-            {/*        cancel: () => {*/}
-            {/*            setIsVisible(false)*/}
-            {/*            setIsWrite(false)*/}
-            {/*        },*/}
-            {/*    }}*/}
-            {/*</RecordFood>*/}
+
+            {/*    评论弹窗*/}
+            {isVisible ? (
+                <CommentModal>
+                    {{
+                        disShow: disShow,
+                        disShowEdit: disShowEdit,
+                    }}
+                </CommentModal>
+            ) : null}
         </SafeAreaView>
     )
 }

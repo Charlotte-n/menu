@@ -5,10 +5,11 @@ import { ScrollView } from 'nativewind/dist/preflight'
 import IntakeItem from './components/intake-item'
 import Total from './components/total'
 import AutoText from '../../../components/auto-text'
-import { useAppSelector } from '../../../store'
+import { useAppDispatch, useAppSelector } from '../../../store'
 import { getDailyIntakeApi } from '../../../apis/diet'
 import { shallowEqual } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
+import { changeDailyIntaked } from '../../../store/slice/home'
 
 interface IProps {
     children?: ReactNode
@@ -22,6 +23,7 @@ const Intake: FC<IProps> = () => {
             dailyIntake: state.HomeSlice.dailyIntake,
         }
     }, shallowEqual)
+    const dispatch = useAppDispatch()
     //获取今日摄入的列表
     const [IntakeFoodList, setIntakeFoodList] = useState<any>()
     const [total, setTotal] = useState<number[]>([] as number[])
@@ -29,6 +31,15 @@ const Intake: FC<IProps> = () => {
     const GetDailyIntake = () => {
         getDailyIntakeApi(userInfo.id).then((res) => {
             let result = [res.data.breakfast, res.data.lunch, res.data.dinner]
+            const dailyIntaked = {
+                fat: res.data.calories[2],
+                calories: res.data.calories[4],
+                carbohydrate: res.data.calories[1],
+                protein: res.data.calories[0],
+                cellulose: res.data.calories[3],
+            }
+            dispatch(changeDailyIntaked(dailyIntaked))
+            console.log(result)
             setIntakeFoodList(result)
             setTotal(res.data.calories)
         })
@@ -73,10 +84,10 @@ const Intake: FC<IProps> = () => {
                                       ) : null}
                                       {list
                                           ? list.map(
-                                                (item: any, index: number) => {
+                                                (item: any, index1: number) => {
                                                     return (
                                                         <TouchableOpacity
-                                                            key={index}
+                                                            key={index1}
                                                             className="mb-[10]"
                                                             onPress={() => {
                                                                 navigation.navigate(
@@ -89,8 +100,14 @@ const Intake: FC<IProps> = () => {
                                                             }}
                                                         >
                                                             <IntakeItem
+                                                                time={index}
                                                                 data={item}
-                                                            ></IntakeItem>
+                                                            >
+                                                                {{
+                                                                    GetDailyIntake:
+                                                                        GetDailyIntake,
+                                                                }}
+                                                            </IntakeItem>
                                                         </TouchableOpacity>
                                                     )
                                                 },
@@ -102,7 +119,7 @@ const Intake: FC<IProps> = () => {
                         : null}
 
                     <View style={{ alignItems: 'flex-end', marginBottom: 10 }}>
-                        {((dailyIntake.calories - total[4])?.toFixed(
+                        {((dailyIntake?.calories - total[4])?.toFixed(
                             0,
                         ) as unknown as number) >= 0 ? (
                             <AutoText>
@@ -110,13 +127,19 @@ const Intake: FC<IProps> = () => {
                                 {(dailyIntake.calories - total[4])?.toFixed(0)}
                                 千卡
                             </AutoText>
-                        ) : (
+                        ) : !isNaN((dailyIntake?.calories - total[4]) * -1) ? (
                             <AutoText>
                                 今日摄入已经超过
                                 {(
-                                    (dailyIntake.calories - total[4]) *
+                                    (dailyIntake?.calories - total[4]) *
                                     -1
                                 )?.toFixed(0)}
+                                千卡
+                            </AutoText>
+                        ) : (
+                            <AutoText>
+                                今天还需要摄入
+                                {dailyIntake?.calories?.toFixed(0)}
                                 千卡
                             </AutoText>
                         )}

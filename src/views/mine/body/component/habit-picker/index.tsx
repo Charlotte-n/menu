@@ -3,6 +3,8 @@ import type { FC, ReactNode } from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 import { Dialog, Icon } from '@rneui/themed'
 import AutoText from '../../../../../components/auto-text'
+import WheelPicker from 'react-native-wheely'
+import { foodTime } from '../../../../../data/diet'
 interface IProps {
     children?: ReactNode
     habit: any
@@ -16,26 +18,11 @@ const HabitPicker: FC<IProps> = ({ habit, setHabit, height, fontSize }) => {
     //进行联动
     const selected = useRef(habit)
     const BodyData = [
-        {
-            key: '0',
-            habit: '久坐不动',
-        },
-        {
-            key: '1',
-            habit: '轻度活动',
-        },
-        {
-            key: '2',
-            habit: '中度活动',
-        },
-        {
-            key: '3',
-            habit: '重度活动',
-        },
-        {
-            key: '4',
-            habit: '非常重度活动',
-        },
+        '久坐不动',
+        '轻度活动',
+        '中度活动',
+        '重度活动',
+        '非常重度活动',
     ]
     return (
         <TouchableOpacity
@@ -56,7 +43,11 @@ const HabitPicker: FC<IProps> = ({ habit, setHabit, height, fontSize }) => {
             </Text>
             <View className="flex-row items-center">
                 <Text style={{ fontSize: 15, fontWeight: '300' }}>
-                    {selected.current ? selected.current : habit ? habit : ''}
+                    {selected.current
+                        ? BodyData[selected.current]
+                        : habit >= 0
+                          ? BodyData[selected.current]
+                          : ''}
                 </Text>
                 <Icon
                     type={'antdesign'}
@@ -70,30 +61,24 @@ const HabitPicker: FC<IProps> = ({ habit, setHabit, height, fontSize }) => {
                 ></Icon>
             </View>
             <Dialog isVisible={isShow}>
-                <Dialog.Title title={'运动习惯'}></Dialog.Title>
-                {BodyData.map((item) => {
-                    return (
-                        <TouchableOpacity
-                            key={item.key}
-                            onPress={() => {
-                                setIsShow(false)
-                                selected.current = item.key
-                                setHabit(selected.current)
-                            }}
-                        >
-                            <View>
-                                <AutoText
-                                    style={{
-                                        height: 40,
-                                        fontSize: 16,
-                                    }}
-                                >
-                                    {item.habit}
-                                </AutoText>
-                            </View>
-                        </TouchableOpacity>
-                    )
-                })}
+                <View className="flex-row justify-between">
+                    <Dialog.Title title={'运动习惯'}></Dialog.Title>
+                    <TouchableOpacity
+                        onPress={() => {
+                            setIsShow(false)
+                        }}
+                    >
+                        <Icon type="antdesign" name={'close'}></Icon>
+                    </TouchableOpacity>
+                </View>
+
+                <WheelPicker
+                    selectedIndex={selected.current}
+                    options={BodyData}
+                    onChange={(index) => {
+                        selected.current = index
+                    }}
+                />
             </Dialog>
         </TouchableOpacity>
     )

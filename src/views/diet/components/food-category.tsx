@@ -58,10 +58,6 @@ const FoodCategoryByTime: FC<IProps> = () => {
         },
         {
             key: '4',
-            id: 4,
-        },
-        {
-            key: '5',
             id: 10,
         },
     ]
@@ -109,7 +105,7 @@ const FoodCategoryByTime: FC<IProps> = () => {
                     width: 20,
                     height: 5,
                     borderRadius: 20,
-                    marginHorizontal: 15,
+                    marginHorizontal: 30,
                 }}
                 scrollable={true}
                 containerStyle={{
@@ -118,14 +114,13 @@ const FoodCategoryByTime: FC<IProps> = () => {
                 titleStyle={{
                     fontSize: 14,
                     color: 'black',
-                    paddingHorizontal: 0,
+                    paddingLeft: 20,
                     paddingRight: 20,
                 }}
             >
                 <Tab.Item title="早餐" />
                 <Tab.Item title="午餐" />
                 <Tab.Item title="晚餐" />
-                <Tab.Item title="小清新" />
                 <Tab.Item title="蔬菜" />
                 <Tab.Item title="其他" />
             </Tab>
@@ -144,7 +139,6 @@ const FoodCategoryByTime: FC<IProps> = () => {
                 <TabView.Item
                     style={{
                         width: '100%',
-                        margin: 'auto',
                     }}
                 >
                     {/*早餐:奶类*/}
@@ -162,7 +156,7 @@ const FoodCategoryByTime: FC<IProps> = () => {
                             }}
                         </FoodTab>
                     ) : (
-                        <View className="h-[300] justify-center items-center">
+                        <View className="h-[300] justify-center items-center text-center m-auto w-[100%]">
                             <ActivityIndicator
                                 size="large"
                                 color={theme.colors.deep01Primary}
@@ -209,20 +203,7 @@ const FoodCategoryByTime: FC<IProps> = () => {
                         }}
                     </FoodTab>
                 </TabView.Item>
-                <TabView.Item style={{ width: '100%' }}>
-                    <FoodTab
-                        refresh={refresh}
-                        setRefresh={setRefresh}
-                        FoodList={FoodList}
-                        pageLoadingFull={pageLoadingFull}
-                        pageLoading={pageLoading}
-                    >
-                        {{
-                            getFoodList: getFoodList,
-                            loadMore: loadMore,
-                        }}
-                    </FoodTab>
-                </TabView.Item>
+
                 <TabView.Item
                     style={{
                         width: '100%',

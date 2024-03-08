@@ -9,17 +9,27 @@ import {
     FoodListByCategoryType,
     SingleFoodListType,
 } from '../../../../apis/types/food'
+import { addCaloriesApi } from '../../../../apis/diet'
+import { CaloriesBodyData } from '../../../../apis/types/diet'
+import { useAppSelector } from '../../../../store'
+import { shallowEqual } from 'react-redux'
 interface IProps {
-    children?: ReactNode
+    children?: any
     data: any
+    time: number
 }
 
-const IntakeItem: FC<IProps> = ({ data }) => {
-    const [foodDetail, setFoodDetail] = useState<any>()
+const IntakeItem: FC<IProps> = ({ data, time, children }) => {
+    const GetDailyIntake = children.GetDailyIntake
+    const [foodDetail, setFoodDetail] = useState<SingleFoodListType>()
+    const { userInfo } = useAppSelector((state) => {
+        return {
+            userInfo: state.LoginRegisterSlice.userInfo,
+        }
+    }, shallowEqual)
     //查询食物
     const getFoodDetail = () => {
         FoodListByCategoryApi({ id: data.id }).then((res) => {
-            console.log(res, '打印一下')
             setFoodDetail((res.data as FoodListByCategoryType).foods[0])
         })
     }
@@ -27,6 +37,40 @@ const IntakeItem: FC<IProps> = ({ data }) => {
     useEffect(() => {
         getFoodDetail()
     }, [])
+    //减少食物
+    const changeFood: CaloriesBodyData = {
+        calories: foodDetail?.calories || (0 as number),
+        foodId: foodDetail?.id as number,
+        id: userInfo.id,
+        cellulose: foodDetail?.cellulose || (0 as number),
+        protein: foodDetail?.protein || (0 as number),
+        fat: foodDetail?.fat || (0 as number),
+        carbohydrate: foodDetail?.carbohydrate || (0 as number),
+        operator: 0,
+        type: time,
+        g: 100,
+    }
+    const decline = async (operator: number) => {
+        //修改食物
+        console.log(changeFood, '上传的内容')
+        changeFood.operator = operator
+        await addCaloriesApi(changeFood).then((res) => {
+            console.log(res)
+        })
+        //更新食物
+        await GetDailyIntake()
+    }
+    //增加食物
+    const decrease = async (operator: number) => {
+        //修改食物
+        changeFood.operator = operator
+        await addCaloriesApi(changeFood).then((res) => {
+            console.log(res)
+        })
+        //更新食物
+        await GetDailyIntake()
+    }
+
     return (
         <View
             className="flex-row justify-between items-center border rounded pt-[10] pb-[10] pl-[5] pr-[5]"
@@ -54,7 +98,11 @@ const IntakeItem: FC<IProps> = ({ data }) => {
                 </AutoText>
             </View>
             <View className="flex-row items-center">
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => {
+                        decline(0)
+                    }}
+                >
                     <Icon
                         type={'antdesign'}
                         name={'minuscircle'}
@@ -64,7 +112,11 @@ const IntakeItem: FC<IProps> = ({ data }) => {
                 </TouchableOpacity>
 
                 <Text className="pl-[10] pr-[10]">{data?.g}g</Text>
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => {
+                        decrease(1)
+                    }}
+                >
                     <Icon
                         type={'antdesign'}
                         name={'pluscircle'}

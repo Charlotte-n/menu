@@ -109,7 +109,7 @@ const FoodTab: FC<IProps> = ({
     return (
         <View>
             <ScrollView
-                className="h-[290] overflow-hidden"
+                className="h-[300] overflow-hidden"
                 showsVerticalScrollIndicator={false}
                 refreshControl={
                     <RefreshControl
@@ -143,33 +143,37 @@ const FoodTab: FC<IProps> = ({
                         color={theme.colors.deep01Primary}
                     />
                 )}
-                <View
-                    style={{
-                        height: 40,
-                        zIndex: 10,
-                        paddingTop: 10,
-                    }}
-                >
-                    {pageLoadingFull ? (
-                        <Text
-                            style={{
-                                textAlign: 'center',
-                            }}
-                        >
-                            没有更多了
-                        </Text>
-                    ) : pageLoading.current ? (
-                        <ActivityIndicator size="large" />
-                    ) : (
-                        <TouchableOpacity
-                            onPress={() => {
-                                loadMore()
-                            }}
-                        >
-                            <Text style={{ textAlign: 'center' }}>更多...</Text>
-                        </TouchableOpacity>
-                    )}
-                </View>
+                {FoodList.length ? (
+                    <View
+                        style={{
+                            height: 40,
+                            zIndex: 10,
+                            paddingTop: 10,
+                        }}
+                    >
+                        {pageLoadingFull ? (
+                            <Text
+                                style={{
+                                    textAlign: 'center',
+                                }}
+                            >
+                                没有更多了
+                            </Text>
+                        ) : pageLoading.current ? (
+                            <ActivityIndicator size="large" />
+                        ) : (
+                            <TouchableOpacity
+                                onPress={() => {
+                                    loadMore()
+                                }}
+                            >
+                                <Text style={{ textAlign: 'center' }}>
+                                    更多...
+                                </Text>
+                            </TouchableOpacity>
+                        )}
+                    </View>
+                ) : null}
             </ScrollView>
         </View>
     )

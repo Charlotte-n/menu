@@ -7,10 +7,7 @@ import theme from '../../../styles/theme/color'
 import BodyContent from './component/content'
 import { getUserInfo } from '../../../apis/mine'
 import { useAppDispatch, useAppSelector } from '../../../store'
-import {
-    changeUserInfoAction,
-    changeUserProfileAction,
-} from '../../../store/slice/login-register-slice'
+import { changeUserInfoAction } from '../../../store/slice/login-register-slice'
 import { shallowEqual } from 'react-redux'
 
 interface IProps {

@@ -4,7 +4,7 @@ import { ScrollView, TouchableOpacity, View } from 'react-native'
 import theme from '../../../../../styles/theme/color'
 import { SingleFoodListType } from '../../../../../apis/types/food'
 import AutoText from '../../../../../components/auto-text'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { LinearGradient } from 'react-native-svg'
 import { Skeleton } from '@rneui/base'
 
@@ -15,9 +15,13 @@ interface IProps {
 
 const FoodContent: FC<IProps> = ({ FoodList }) => {
     const navigation = useNavigation()
+    const route = useRoute()
     const gotoFoodDetail = (id: number) => {
         //@ts-ignore
-        navigation.navigate('food-nutrients', { id: id })
+        navigation.navigate('food-nutrients', {
+            id: id,
+            type: (route.params as { type: string }).type,
+        })
     }
     const Item = ({
         hot,
@@ -60,12 +64,12 @@ const FoodContent: FC<IProps> = ({ FoodList }) => {
                     ? FoodList.map((item, index) => (
                           <TouchableOpacity
                               key={item.id}
-                              onPress={() => gotoFoodDetail(item.id)}
+                              onPress={() => gotoFoodDetail(item.id as number)}
                           >
                               <Item
-                                  title={item.title}
-                                  hot={item.calories}
-                                  id={item.id}
+                                  title={item.title as string}
+                                  hot={item.calories as number}
+                                  id={item.id as number}
                               ></Item>
                           </TouchableOpacity>
                       ))

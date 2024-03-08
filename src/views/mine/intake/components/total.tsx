@@ -19,7 +19,7 @@ const Total: FC<IProps> = ({ data }) => {
                     className="ml-[10]"
                     style={{ fontSize: 18, color: theme.colors.deep01Primary }}
                 >
-                    {data[4]?.toFixed(2)}kcal
+                    {data[4]?.toFixed(2) || 0}kcal
                 </Text>
             </View>
             <TouchableOpacity
@@ -35,11 +35,11 @@ const Total: FC<IProps> = ({ data }) => {
             </TouchableOpacity>
             {isVisible && (
                 <View className="mt-[13]">
-                    <Text>蛋白质: {data[0]?.toFixed(2)}kcal</Text>
+                    <Text>蛋白质: {data[0]?.toFixed(2) || 0}kcal</Text>
 
-                    <Text>碳水化合物: {data[1]?.toFixed(2)}kcal</Text>
-                    <Text>脂肪: {data[2]?.toFixed(2)}kcal</Text>
-                    <Text>纤维素:{data[3]?.toFixed(2)}kcal</Text>
+                    <Text>碳水化合物: {data[1]?.toFixed(2) || 0}kcal</Text>
+                    <Text>脂肪: {data[2]?.toFixed(2) || 0}kcal</Text>
+                    <Text>纤维素:{data[3]?.toFixed(2) || 0}kcal</Text>
                 </View>
             )}
         </View>

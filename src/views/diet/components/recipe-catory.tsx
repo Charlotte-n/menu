@@ -24,7 +24,10 @@ const RecipeCategory: FC<IProps> = () => {
                 className="flex-col justify-center"
                 onPress={() => {
                     //@ts-ignore
-                    navigation.navigate('category', { activeIndex: index })
+                    navigation.navigate('category', {
+                        activeIndex: index,
+                        type: 0,
+                    })
                 }}
             >
                 {image}

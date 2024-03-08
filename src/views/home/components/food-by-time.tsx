@@ -11,14 +11,15 @@ interface IProps {
     children?: ReactNode
     baseData: any
     image: ReactNode
+    type?: number
 }
 
-const FoodByTime: FC<IProps> = ({ baseData, image }) => {
+const FoodByTime: FC<IProps> = ({ baseData, image, type }) => {
     const { name, recommend } = baseData
     const navigation = useNavigation()
     const gotoFoodCategory = () => {
         //@ts-ignore
-        navigation.navigate('category')
+        navigation.navigate('category', { type })
     }
     return (
         <View

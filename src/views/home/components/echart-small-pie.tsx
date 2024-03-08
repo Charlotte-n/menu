@@ -25,56 +25,70 @@ const EchartSmallPie: FC<IProps> = () => {
             {
                 y:
                     100 -
-                    Math.floor(
-                        (dailyIntaked.carbohydrate / dailyIntake.carbohydrate) *
-                            100,
-                    ),
+                        Math.floor(
+                            (dailyIntaked?.carbohydrate /
+                                dailyIntake?.carbohydrate) *
+                                100,
+                        ) || 100,
             },
             {
                 m: 0,
-                y: Math.floor(
-                    (dailyIntaked.carbohydrate / dailyIntake.carbohydrate) *
-                        100,
-                ),
+                y:
+                    Math.floor(
+                        (dailyIntaked?.carbohydrate /
+                            dailyIntake?.carbohydrate) *
+                            100,
+                    ) || 0,
             },
         ],
         [
             {
                 y:
                     100 -
-                    Math.floor(
-                        (dailyIntaked.protein / dailyIntake.protein) * 100,
-                    ),
+                        Math.floor(
+                            (dailyIntaked?.protein / dailyIntake?.protein) *
+                                100,
+                        ) || 100,
             },
             {
                 m: 1,
-                y: Math.floor(
-                    (dailyIntaked.protein / dailyIntake.protein) * 100,
-                ),
-            },
-        ],
-        [
-            {
-                y: 100 - Math.floor((dailyIntaked.fat / dailyIntake.fat) * 100),
-            },
-            {
-                m: 2,
-                y: Math.floor((dailyIntaked.fat / dailyIntake.fat) * 100),
+                y:
+                    Math.floor(
+                        (dailyIntaked?.protein / dailyIntake?.protein) * 100,
+                    ) || 0,
             },
         ],
         [
             {
                 y:
                     100 -
-                    Math.floor(
-                        (dailyIntaked.cellulose / dailyIntake.cellulose) * 100,
-                    ),
+                        Math.floor(
+                            (dailyIntaked?.fat / dailyIntake?.fat) * 100,
+                        ) || 100,
+            },
+            {
+                m: 2,
+                y:
+                    Math.floor((dailyIntaked?.fat / dailyIntake?.fat) * 100) ||
+                    0,
+            },
+        ],
+        [
+            {
+                y:
+                    100 -
+                        Math.floor(
+                            (dailyIntaked?.cellulose / dailyIntake?.cellulose) *
+                                100,
+                        ) || 100,
             },
             {
                 m: 3,
-                y: Math.floor(
-                    (dailyIntaked.cellulose / dailyIntake.cellulose) * 100,
-                ),
+                y:
+                    Math.floor(
+                        (dailyIntaked?.cellulose / dailyIntake?.cellulose) *
+                            100,
+                    ) | 0,
             },
         ],
     ]
@@ -115,19 +129,20 @@ const EchartSmallPie: FC<IProps> = () => {
                             className="m-auto"
                         >
                             <View className="absolute bottom-[30]">
-                                <Text
+                                <AutoText
+                                    fontSize={4.5}
                                     style={{
                                         fontSize: 18,
-                                        margin: 'auto',
                                         textAlign: 'center',
                                         left: 25,
                                         width: 30,
+                                        top: -5,
                                     }}
                                 >
                                     {(dailyIntaked as any)[
                                         yuansu[index]
-                                    ].toFixed(0)}
-                                </Text>
+                                    ]?.toFixed(0) || 0}
+                                </AutoText>
                                 <Text
                                     style={{
                                         fontSize: 9,

@@ -6,6 +6,7 @@ import {
     Dimensions,
     TouchableOpacity,
     StyleSheet,
+    Image,
 } from 'react-native'
 import SearchFilter from '../../components/search'
 import FoodContent from './components/food-content'
@@ -100,7 +101,7 @@ const FoodCategory: FC<IProps> = () => {
                       ))}
             </View>
             <View
-                className="ml-[10] mt-[5]"
+                className="flex-1 ml-[10] mt-[5] mr-[15]"
                 style={{
                     width: 250,
                 }}
@@ -118,7 +119,20 @@ const FoodCategory: FC<IProps> = () => {
                             borderRadius: 10,
                         }}
                     >
-                        <AutoText>没有找到相关食物</AutoText>
+                        <Image
+                            style={{
+                                width: 100,
+                                height: 100,
+                            }}
+                            source={require('../../../../../assets/images/search.png')}
+                        ></Image>
+                        <AutoText
+                            style={{
+                                marginTop: 20,
+                            }}
+                        >
+                            没有找到相关食物
+                        </AutoText>
                     </View>
                 ) : (
                     <View className="mt-[10] mb-[160]">
