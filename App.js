@@ -161,11 +161,8 @@ export default function App() {
                             name={'commentsComply'}
                             component={CommentsComply}
                             options={{
-                                headerTitle: '',
-                                headerStyle: {
-                                    height: 40,
-                                },
-
+                                headerTitle: '评论详情',
+                                headerTitleAlign: 'center',
                                 headerBackImage: () => (
                                     <Icon
                                         name={'left'}

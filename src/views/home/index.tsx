@@ -18,13 +18,14 @@ import {
 import DrawerContent from './components/drawer-content'
 import { Dialog } from '@rneui/themed'
 import DialogContent from './components/dialog-content'
-import { FoodListByCategoryApi } from '../../apis/food'
+import { FoodListByCategoryApi, getRandomRecipeApi } from '../../apis/food'
 import {
     FoodListByCategoryType,
     SingleFoodListType,
 } from '../../apis/types/food'
 import { DailyIntakeApi } from '../../apis/home'
 import { getDailyIntakeApi } from '../../apis/diet'
+import { getUserInfo } from '../../apis/mine'
 interface IProps {
     children?: ReactNode
 }
@@ -54,7 +55,7 @@ const Home: FC<IProps> = () => {
             setDialogVisible(false)
             return
         }
-        setDialogVisible(true)
+        setDialogVisible(false)
     }
     const cancel = () => {
         setDialogVisible(false)
@@ -62,13 +63,14 @@ const Home: FC<IProps> = () => {
 
     useEffect(() => {
         toggleDialog()
+        GetDailyIntake()
     }, [])
 
     //获取每日推荐食谱
     const [RecipeFood, setRecipeFood] = useState([] as SingleFoodListType[])
     const getRecipeData = () => {
-        FoodListByCategoryApi({ category_id: 9 }).then((res) => {
-            setRecipeFood((res.data as FoodListByCategoryType).foods)
+        getRandomRecipeApi().then((res) => {
+            setRecipeFood(res.data)
         })
     }
     useEffect(() => {

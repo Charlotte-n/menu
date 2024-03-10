@@ -122,7 +122,7 @@ const FoodTab: FC<IProps> = ({
                         colors={[theme.colors.deep01Primary]} //ios
                         refreshing={refresh}
                         onRefresh={() => {
-                            getFoodList(index)
+                            getFoodList(index, 'refresh')
                         }}
                     />
                 }

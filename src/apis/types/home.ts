@@ -1,6 +1,6 @@
 export interface GetDailyIntakeData {
     birth: string
-    exercise: string
+    exercise: string | number
     fat?: number
     gym: string
     height: string

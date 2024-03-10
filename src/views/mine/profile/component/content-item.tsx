@@ -28,11 +28,12 @@ const ProfileFlatList: FC<IProps> = ({ getId, children }) => {
             left: '用户名',
             right: username,
         },
-        {
-            id: '1',
-            left: '绑定手机',
-            right: '13383024736',
-        },
+        //TODO:有时间就去弄
+        // {
+        //     id: '1',
+        //     left: '绑定手机',
+        //     right: '13383024736',
+        // },
         {
             id: '2',
             left: '绑定邮箱',

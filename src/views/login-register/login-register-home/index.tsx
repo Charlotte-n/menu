@@ -5,7 +5,7 @@ import theme from '../../../styles/theme/color'
 import { Button, ThemeProvider } from '@rneui/themed'
 import { MainTheme } from '../../../styles/theme/ui-theme'
 import { StackActions, useNavigation } from '@react-navigation/native'
-import { Dimensions, StatusBar } from 'react-native'
+import { Dimensions } from 'react-native'
 import { useAppSelector } from '../../../store'
 import { shallowEqual } from 'react-redux'
 
@@ -26,7 +26,7 @@ const LoginHome: FC<IProps> = () => {
         //有token的话就跳转到tabs
         if (token) {
             //@ts-ignore
-            navigation.navigate('tabs')
+            // navigation.navigate('tabs')
         }
     }, [])
     return (

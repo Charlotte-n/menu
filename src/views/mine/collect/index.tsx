@@ -1,20 +1,23 @@
-import React, { memo } from 'react'
+import React, { memo, useEffect, useRef, useState } from 'react'
 import type { FC, ReactNode } from 'react'
-import FoodCard from '../../../components/food-card'
-import { ScrollView } from 'nativewind/dist/preflight'
+import { View } from 'react-native'
+import AutoText from '../../../components/auto-text'
 
 interface IProps {
-    children?: ReactNode
+    children?: any
 }
 
 const Collect: FC<IProps> = () => {
-    const res = [1, 2, 3, 4]
     return (
-        <ScrollView showsVerticalScrollIndicator={false}>
-            {res.map((item, index) => {
-                return <FoodCard key={index}></FoodCard>
-            })}
-        </ScrollView>
+        <View className="bg-white flex-1">
+            {/*    食物和食谱的分类*/}
+            <View>
+                <AutoText>食物收藏</AutoText>
+            </View>
+            <View>
+                <AutoText>食谱收藏</AutoText>
+            </View>
+        </View>
     )
 }
 

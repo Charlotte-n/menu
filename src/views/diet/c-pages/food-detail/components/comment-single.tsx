@@ -2,22 +2,31 @@ import React, { memo } from 'react'
 import type { FC, ReactNode } from 'react'
 import { Image, View } from 'react-native'
 import AutoText from '../../../../../components/auto-text'
+import {
+    FoodCommentChildren,
+    FoodCommentSingleData,
+} from '../../../../../apis/types/food'
 
 interface IProps {
     children?: ReactNode
+    data: FoodCommentSingleData | FoodCommentChildren
+    width: number
 }
 
-const CommentSingle: FC<IProps> = () => {
+const CommentSingle: FC<IProps> = ({ data, width }) => {
     return (
         <View className="flex-row">
-            <Image
-                style={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: 100,
-                }}
-                source={require('../../../../../../assets/images/bg_login_header.png')}
-            ></Image>
+            {data.avatar ? (
+                <Image
+                    style={{
+                        width: width,
+                        height: width,
+                        borderRadius: 100,
+                    }}
+                    source={{ uri: data.avatar }}
+                ></Image>
+            ) : null}
+
             <View className="ml-[10]">
                 <AutoText
                     numberOfLines={1}
@@ -27,9 +36,9 @@ const CommentSingle: FC<IProps> = () => {
                         marginBottom: 10,
                     }}
                 >
-                    下厨房用户
+                    {data.username}
                 </AutoText>
-                <AutoText fontSize={4.8}>可以放陶瓷盘子吗</AutoText>
+                <AutoText fontSize={4.8}>{data.content}</AutoText>
             </View>
         </View>
     )

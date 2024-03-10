@@ -30,4 +30,36 @@ const DATA = [
 
 //个人资料
 
-export { DATA }
+const BodyData = [
+    '久坐不动',
+    '轻度活动',
+    '中度活动',
+    '重度活动',
+    '非常重度活动',
+]
+
+const BodyTargetData = [
+    {
+        key: '0',
+        target: '减脂',
+    },
+    {
+        key: '1',
+        target: '温和减脂',
+    },
+    {
+        key: '2',
+        target: '保持体型',
+    },
+    {
+        key: '3',
+        target: '温和增肌',
+    },
+    {
+        key: '4',
+        target: '增肌',
+    },
+]
+const targetData = ['减脂', '温和减脂', '保持体型', '温和增肌', '增肌']
+
+export { DATA, BodyData, BodyTargetData, targetData }

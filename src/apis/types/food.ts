@@ -38,3 +38,48 @@ export interface PostFoodCommentData {
     parentId: number
     userId: number
 }
+
+export type FoodCommentListData = FoodCommentSingleData[]
+export interface FoodCommentSingleData {
+    id: number
+    userid: number
+    username: string
+    avatar?: string
+    content: string
+    date: Array<number>
+    children: FoodCommentChildren[]
+}
+
+export interface FoodCommentChildren {
+    id: number
+    parentId: number
+    userid: number
+    username: string
+    avatar?: string
+    content: string
+    date: Array<number>
+}
+
+//食谱列表
+export interface RecipeListBody {
+    id?: number
+    pageNum?: number
+    pageSize?: number
+}
+
+export interface RecipeListData {
+    dishes: SingleDish[]
+    num: number
+}
+
+export interface SingleDish {
+    amount: string | string[]
+    id: number
+    image: string | string[]
+    key: string
+    materials: string | string[]
+    name: string
+    score: number
+    step: string | string[]
+    stepImg: string | string[]
+}

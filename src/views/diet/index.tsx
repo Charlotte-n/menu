@@ -6,7 +6,7 @@ import HotRecommend from '../../components/hot-recommend'
 import RecipeCategory from './components/recipe-catory'
 import FoodCategoryByTime from './components/food-category'
 import { ScrollView } from 'react-native'
-import { FoodListByCategoryApi } from '../../apis/food'
+import { FoodListByCategoryApi, getRandomRecipeApi } from '../../apis/food'
 import {
     FoodListByCategoryType,
     SingleFoodListType,
@@ -24,10 +24,11 @@ const Diet: FC<IProps> = () => {
     const [loading, setLoading] = useState(true)
     const getRecipeData = async () => {
         setLoading(true)
-        const res = await FoodListByCategoryApi({ category_id: 8 })
-        setRecipeFood((res.data as FoodListByCategoryType).foods)
+        const res = await getRandomRecipeApi()
+        setRecipeFood(res.data as any)
         setLoading(false)
     }
+
     useEffect(() => {
         getRecipeData().then(() => {
             console.log('得到了菜谱数据')

@@ -28,7 +28,6 @@ const FoodCategoryByTime: FC<IProps> = () => {
     //上拉加载
     const loadMore = () => {
         //当这个食物大于总的食物的时候，就返回
-        console.log(num.current, FoodNum)
         if (num.current >= FoodNum) {
             setPageLoadingFull(true)
             return
@@ -82,7 +81,7 @@ const FoodCategoryByTime: FC<IProps> = () => {
         }
     }, shallowEqual)
     const dispatch = useAppDispatch()
-    const getFoodList = (index: number) => {
+    const getFoodList = (index: number, type?: string) => {
         const param = {
             pageNum: pageNum.current,
             pageSize: 10,
@@ -109,6 +108,21 @@ const FoodCategoryByTime: FC<IProps> = () => {
         setRefresh(true)
         FoodListByCategoryApi(param).then((res) => {
             setFoodNum((res.data as FoodListByCategoryType).num)
+            //判断是不是下拉
+            if (type) {
+                dispatch(
+                    changeFoodList({
+                        index,
+                        foods: (res.data as FoodListByCategoryType).foods,
+                    }),
+                )
+                //恢复默认设置
+                num.current = 10
+                setPageLoadingFull(false)
+                pageNum.current = 1
+                setRefresh(false)
+                return
+            }
             if (fooList.length === 0) {
                 dispatch(
                     changeFoodList({
@@ -143,7 +157,6 @@ const FoodCategoryByTime: FC<IProps> = () => {
         ])
     }, [])
     useEffect(() => {
-        console.log(pageNum.current)
         //恢复默认设置
         num.current = 10
         setPageLoadingFull(false)
@@ -216,7 +229,7 @@ const FoodCategoryByTime: FC<IProps> = () => {
                             }}
                         </FoodTab>
                     ) : (
-                        <View className="h-[300] justify-center items-center text-center m-auto w-[100%]">
+                        <View className="h-[300] justify-center items-center w-[300]">
                             <ActivityIndicator
                                 size="large"
                                 color={theme.colors.deep01Primary}

@@ -20,8 +20,6 @@ interface IProps {
 
 const Index: FC<IProps> = ({ title, data }) => {
     const navigation = useNavigation()
-    data = data.slice(5, 8)
-
     return (
         <View>
             <View className="flex-row items-center mb-[10]">

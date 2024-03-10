@@ -5,6 +5,7 @@ import { Dialog, Icon } from '@rneui/themed'
 import AutoText from '../../../../../components/auto-text'
 import WheelPicker from 'react-native-wheely'
 import { foodTime } from '../../../../../data/diet'
+import { BodyData } from '../../../../../data/mine'
 interface IProps {
     children?: ReactNode
     habit: any
@@ -17,13 +18,7 @@ const HabitPicker: FC<IProps> = ({ habit, setHabit, height, fontSize }) => {
     const [isShow, setIsShow] = useState(false)
     //进行联动
     const selected = useRef(habit)
-    const BodyData = [
-        '久坐不动',
-        '轻度活动',
-        '中度活动',
-        '重度活动',
-        '非常重度活动',
-    ]
+
     return (
         <TouchableOpacity
             className="flex-row items-center border-[#F1F3F4] border-b"
@@ -77,6 +72,7 @@ const HabitPicker: FC<IProps> = ({ habit, setHabit, height, fontSize }) => {
                     options={BodyData}
                     onChange={(index) => {
                         selected.current = index
+                        setHabit(index)
                     }}
                 />
             </Dialog>

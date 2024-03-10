@@ -5,17 +5,20 @@ import AutoText from '../../../components/auto-text'
 import theme from '../../../styles/theme/color'
 import { useAppSelector } from '../../../store'
 import { shallowEqual } from 'react-redux'
+import { BodyData, targetData } from '../../../data/mine'
 
 interface IProps {
     children?: ReactNode
 }
 
 const DrawerContent: FC<IProps> = () => {
-    const { profile } = useAppSelector((state) => {
+    const { profile, healthTarget } = useAppSelector((state) => {
         return {
             profile: state.LoginRegisterSlice.userInfo,
+            healthTarget: state.LoginRegisterSlice.healthTarget,
         }
     }, shallowEqual)
+
     const profileData = [
         {
             id: '0',
@@ -25,12 +28,12 @@ const DrawerContent: FC<IProps> = () => {
         {
             id: '1',
             title: '身高',
-            content: profile.height ? profile.height : '无',
+            content: profile.height ? profile.height + 'cm' : '无',
         },
         {
             id: '2',
             title: '体重',
-            content: profile.weight ? profile.weight : '无',
+            content: profile.weight ? profile.weight + 'kg' : '无',
         },
         {
             id: '3',
@@ -39,8 +42,13 @@ const DrawerContent: FC<IProps> = () => {
         },
         {
             id: '4',
-            title: '习惯',
-            content: profile.habit ? profile.habit : '无',
+            title: '运动习惯',
+            content: BodyData[Number(profile.habit)],
+        },
+        {
+            id: '5',
+            title: '健康目标',
+            content: targetData[Number(healthTarget)],
         },
     ]
     return (

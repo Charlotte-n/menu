@@ -8,14 +8,12 @@ import HabitPicker from '../../mine/body/component/habit-picker'
 import { useAppDispatch, useAppSelector } from '../../../store'
 import { shallowEqual } from 'react-redux'
 import HealthTarget from '../../mine/body/component/health-target'
-import { GetDailyIntakeData } from '../../../apis/types/home'
 import { getIntakeDailyApi } from '../../../apis/home'
 import { changeDailyIntake } from '../../../store/slice/home'
 import { Button } from '@rneui/themed'
 import theme from '../../../styles/theme/color'
-import { log } from 'expo/build/devtools/logger'
-import moment from 'moment'
 import { updateUserProfile } from '../../../apis/mine'
+import { changeHealthTargetAction } from '../../../store/slice/login-register-slice'
 
 interface IProps {
     children?: any
@@ -36,7 +34,6 @@ const DialogContent: FC<IProps> = ({ children }) => {
     const [habit, setHabit] = useState('')
     const [target, setTarget] = useState('')
     //收集信息就可以了
-
     const getDailyIntake = async () => {
         const param = {
             userid: userInfo.id,
@@ -63,6 +60,7 @@ const DialogContent: FC<IProps> = ({ children }) => {
             await updateUserProfile(updateUserInfoParam)
             if (res.code === 1) {
                 dispatch(changeDailyIntake(res.data))
+                dispatch(changeHealthTargetAction(target))
                 cancel()
             } else {
                 //填写

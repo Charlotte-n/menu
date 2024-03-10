@@ -1,10 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { FoodCommentListData } from '../../apis/types/food'
 
 interface initialStateType {
-    comment: []
+    comment: FoodCommentListData
+    parentId: number
 }
 const initialState: initialStateType = {
-    comment: [],
+    comment: [] as FoodCommentListData,
+    parentId: 0,
 }
 const FoodSlice = createSlice({
     name: 'FoodSlice',
@@ -13,9 +16,12 @@ const FoodSlice = createSlice({
         changeCommentAction(state, { payload }) {
             state.comment = payload
         },
+        changeParentIdAction(state, { payload }) {
+            state.parentId = payload
+        },
     },
 })
 
-export const { changeCommentAction } = FoodSlice.actions
+export const { changeCommentAction, changeParentIdAction } = FoodSlice.actions
 
 export default FoodSlice.reducer

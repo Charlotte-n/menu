@@ -40,21 +40,21 @@ const Profile: FC<IProps> = () => {
                         }}
                     </MyBottomSheet>
                 )
-            case '1':
-                return (
-                    // 增加判断是否要解除绑定手机号
-                    <MyBottomSheet
-                        id={id}
-                        isVisible={isVisible}
-                        contentValue={'13383024736'}
-                    >
-                        {{
-                            content: '绑定手机号',
-                            cancel: () => setIsVisible(false),
-                            placeholderContent: '请填写手机号',
-                        }}
-                    </MyBottomSheet>
-                )
+            // case '1':
+            //     return (
+            //         // 增加判断是否要解除绑定手机号
+            //         <MyBottomSheet
+            //             id={id}
+            //             isVisible={isVisible}
+            //             contentValue={'13383024736'}
+            //         >
+            //             {{
+            //                 content: '绑定手机号',
+            //                 cancel: () => setIsVisible(false),
+            //                 placeholderContent: '请填写手机号',
+            //             }}
+            //         </MyBottomSheet>
+            //     )
         }
     }
     //endregion

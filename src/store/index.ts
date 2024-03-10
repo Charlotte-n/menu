@@ -3,6 +3,7 @@ import LoginRegisterSlice from './slice/login-register-slice'
 import DietSlice from './slice/diet'
 import HomeSlice from './slice/home'
 import FoodSlice from './slice/food'
+import MealSlice from './slice/meal'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import { persistReducer, persistStore } from 'redux-persist'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -31,17 +32,23 @@ const persistDietConfig = {
     key: 'DietData',
     storage: AsyncStorage,
 }
+const persistMealConfig = {
+    key: 'MealData',
+    storage: AsyncStorage,
+}
 
 const LoginStorePersist = persistReducer(persistConfig, LoginRegisterSlice)
 const HomeStorePersist = persistReducer(persistHomeConfig, HomeSlice)
 const FoodStorePersist = persistReducer(persistFoodConfig, FoodSlice)
-// const DietStorePersist = persistReducer(persistDietConfig, DietSlice)
+const DietStorePersist = persistReducer(persistDietConfig, DietSlice)
+// const MealStorePersist = persistReducer(persistMealConfig, MealSlice)
 const store = configureStore({
     reducer: {
         LoginRegisterSlice: LoginStorePersist,
         DietSlice: DietSlice,
         HomeSlice: HomeStorePersist,
         FoodSlice: FoodStorePersist,
+        MealSlice: MealSlice,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

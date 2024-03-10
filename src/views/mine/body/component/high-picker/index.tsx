@@ -27,9 +27,6 @@ const HighPicker: FC<IProps> = ({
     const [isShow, setIsShow] = useState(false)
     const [contentValue, setContentValue] = useState('')
     const selected = useRef(content)
-    useEffect(() => {
-        // console.log(content)
-    }, [])
     const feedBack = () => {
         switch (title) {
             case '身高':
@@ -40,7 +37,9 @@ const HighPicker: FC<IProps> = ({
                             fontWeight: '300',
                         }}
                     >
-                        {selected.current ? selected.current : content}
+                        {selected.current
+                            ? selected.current + 'cm'
+                            : content + 'cm'}
                     </Text>
                 )
             case '体重':
@@ -51,7 +50,9 @@ const HighPicker: FC<IProps> = ({
                             fontWeight: '300',
                         }}
                     >
-                        {selected.current ? selected.current : content}
+                        {selected.current
+                            ? selected.current + 'kg'
+                            : content + 'kg'}
                     </Text>
                 )
             case '运动习惯':

@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, useEffect } from 'react'
 import type { FC, ReactNode } from 'react'
 import { Image, Text, View } from 'react-native'
 import { SingleFoodListType } from '../../../apis/types/food'
@@ -6,7 +6,7 @@ import AutoText from '../../auto-text'
 
 interface IProps {
     children?: ReactNode
-    data: SingleFoodListType
+    data: any
 }
 
 const HotRecommendItem: FC<IProps> = ({ data }) => {
@@ -24,19 +24,11 @@ const HotRecommendItem: FC<IProps> = ({ data }) => {
             ></Image>
             <Text
                 style={{
-                    fontSize: 14,
-                    marginTop: 3,
-                }}
-                numberOfLines={1}
-            >
-                {data.title}
-            </Text>
-            <Text
-                style={{
                     fontSize: 11,
+                    marginTop: 5,
                 }}
             >
-                {data.calories}kcal
+                {data.name?.trim()}
             </Text>
         </View>
     )
