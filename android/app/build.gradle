@@ -157,7 +157,10 @@ dependencies {
     //location
     implementation "com.google.android.gms:play-services-location:21.0.1"
     //分享
-  implementation project(':react-native-share')
+    implementation project(':react-native-share')
+    //启动屏幕
+    implementation project(':react-native-splash-screen')
+
 
 
 

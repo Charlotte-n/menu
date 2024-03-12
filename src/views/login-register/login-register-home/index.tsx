@@ -8,6 +8,7 @@ import { StackActions, useNavigation } from '@react-navigation/native'
 import { Dimensions } from 'react-native'
 import { useAppSelector } from '../../../store'
 import { shallowEqual } from 'react-redux'
+import SplashScreen from 'react-native-splash-screen'
 
 interface IProps {
     children?: ReactNode
@@ -23,6 +24,7 @@ const LoginHome: FC<IProps> = () => {
     }, shallowEqual)
     const navigation = useNavigation()
     useEffect(() => {
+        // SplashScreen.hide()
         //有token的话就跳转到tabs
         if (token) {
             //@ts-ignore

@@ -1,15 +1,11 @@
-import React, { useEffect, useRef } from 'react'
-import {
-    CommonActions,
-    NavigationContainer,
-    useNavigationContainerRef,
-} from '@react-navigation/native'
+import React from 'react'
+import { CommonActions, NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import TabBar from './src/route/tab-bar'
 import LoginRegisterHomeScreen from './src/route/login'
 import { Icon } from '@rneui/themed'
 import { MineOtherScreen } from './src/data/app-path'
-import { Provider, useDispatch } from 'react-redux'
+import { Provider } from 'react-redux'
 import store, { persistor } from './src/store'
 import { PersistGate } from 'redux-persist/es/integration/react'
 import UserAgree from './src/views/mine/profile/c-pages/user-agree'

@@ -1,5 +1,5 @@
 import React, { memo } from 'react'
-import type { FC, ReactNode } from 'react'
+import type { FC } from 'react'
 import { Dimensions, Image, TouchableOpacity, View } from 'react-native'
 import { BottomSheet, Card, Icon } from '@rneui/themed'
 import AutoText from '../../components/auto-text'
