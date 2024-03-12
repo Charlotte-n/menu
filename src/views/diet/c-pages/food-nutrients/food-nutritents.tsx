@@ -1,10 +1,18 @@
 import React, { memo, useEffect, useRef, useState } from 'react'
 import type { FC } from 'react'
-import { Dimensions, Image, ScrollView, Text, View } from 'react-native'
+import {
+    Dimensions,
+    Image,
+    ScrollView,
+    Text,
+    ToastAndroid,
+    TouchableOpacity,
+    View,
+} from 'react-native'
 import theme from '../../../../styles/theme/color'
 import { Button } from '@rneui/themed'
 import ViewShot from 'react-native-view-shot'
-import { useAppDispatch } from '../../../../store'
+import { useAppDispatch, useAppSelector } from '../../../../store'
 import { changeUrl } from '../../../../store/slice/diet'
 import RecordFood from '../../../../components/record-food'
 import { useRoute } from '@react-navigation/native'
@@ -15,6 +23,14 @@ import {
 } from '../../../../apis/types/food'
 import AutoText from '../../../../components/auto-text'
 import { FoodNutrition, FoodNutritionData } from '../../../../data/diet'
+import {
+    addCollectApi,
+    cancelCollectApi,
+    getCollectContentApi,
+    JudgeCollectApi,
+} from '../../../../apis/common'
+import { shallowEqual } from 'react-redux'
+import { ANDROID } from 'nativewind/dist/utils/selector'
 
 const FoodNutrients: FC = () => {
     const route = useRoute()
@@ -25,33 +41,67 @@ const FoodNutrients: FC = () => {
     )
     const [url, setUrl] = useState('')
     const [isVisible, setIsVisible] = useState(false)
+    const { userInfo } = useAppSelector((state) => {
+        return {
+            userInfo: state.LoginRegisterSlice.userInfo,
+        }
+    }, shallowEqual)
     const capturePic = () => {
         view.current.capture().then((url: string) => {
             setUrl(url)
         })
     }
-
     const getFoodDetail = (id: number) => {
-        FoodListByCategoryApi({ id: id }).then((res) => {
-            setFoodDetail(
-                (res?.data as FoodListByCategoryType)
-                    .foods[0] as SingleFoodListType,
-            )
+        FoodListByCategoryApi({ id }).then((res) => {
+            setFoodDetail((res?.data as FoodListByCategoryType).foods[0])
         })
     }
     useEffect(() => {
-        console.log(FoodDetail)
-    }, [FoodDetail])
-    useEffect(() => {
         //获取食物详情
-        if (route.params as any) {
-            getFoodDetail((route.params as any).id)
+        if ((route.params as { id: number }).id) {
+            getFoodDetail((route.params as { id: number }).id)
+            //获取食物信息
         } else {
-            setFoodDetail({})
+            setFoodDetail({} as any)
         }
         capturePic()
         dispatch(changeUrl(url))
     }, [url])
+    //收藏
+    const [isCollect, setIsCollect] = useState(false)
+    const cancelCollect = async () => {
+        await cancelCollectApi({
+            foodId: (route.params as { id: number }).id,
+            userid: userInfo.id,
+            type: 1,
+        })
+        await JudgeCollect()
+        ToastAndroid.show('取消收藏', ToastAndroid.SHORT)
+    }
+    const handleCollect = async () => {
+        await addCollectApi({
+            foodId: (route.params as { id: number }).id,
+            userid: userInfo.id,
+            type: 1,
+        })
+        await JudgeCollect()
+        ToastAndroid.show('收藏成功', ToastAndroid.SHORT)
+    }
+    const JudgeCollect = async () => {
+        const res = await JudgeCollectApi({
+            userid: userInfo.id,
+            foodId: (route.params as { id: number }).id,
+            type: 1,
+        })
+        setIsCollect(!res.data)
+    }
+    useEffect(() => {
+        JudgeCollect()
+            .then()
+            .catch((e) => {
+                console.log(e)
+            })
+    }, [])
     return (
         <ScrollView className="flex-1 bg-white">
             <ViewShot
@@ -158,18 +208,50 @@ const FoodNutrients: FC = () => {
                                 </View>
                             </View>
                         </View>
-                        <View className="m-auto">
-                            <Button
-                                onPress={() => {
-                                    setIsVisible(true)
-                                }}
-                                title="记录饮食"
-                                buttonStyle={{
-                                    backgroundColor: theme.colors.deep01Primary,
-                                    borderRadius: 20,
-                                    width: Dimensions.get('screen').width / 2,
-                                }}
-                            ></Button>
+                        <View className="flex-row items-center">
+                            {isCollect ? (
+                                <TouchableOpacity
+                                    className="ml-[20]"
+                                    onPress={() => cancelCollect()}
+                                >
+                                    <Image
+                                        source={require('../../../../../assets/icon/collect1.png')}
+                                        style={{
+                                            height: 25,
+                                            width: 25,
+                                        }}
+                                    ></Image>
+                                </TouchableOpacity>
+                            ) : (
+                                <TouchableOpacity
+                                    className="ml-[20]"
+                                    onPress={() => handleCollect()}
+                                >
+                                    <Image
+                                        source={require('../../../../../assets/icon/collect.png')}
+                                        style={{
+                                            height: 25,
+                                            width: 25,
+                                        }}
+                                    ></Image>
+                                </TouchableOpacity>
+                            )}
+                            <View className="flex-1 items-center">
+                                <Button
+                                    className="text-center"
+                                    onPress={() => {
+                                        setIsVisible(true)
+                                    }}
+                                    title="记录饮食"
+                                    buttonStyle={{
+                                        backgroundColor:
+                                            theme.colors.deep01Primary,
+                                        borderRadius: 20,
+                                        width:
+                                            Dimensions.get('screen').width / 2,
+                                    }}
+                                ></Button>
+                            </View>
                         </View>
                         <RecordFood
                             type={(route.params as { type: number }).type}

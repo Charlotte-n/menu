@@ -1,6 +1,6 @@
 import React, { memo, useEffect } from 'react'
 import type { FC, ReactNode } from 'react'
-import { Image, Text, View } from 'react-native'
+import { Dimensions, Image, Text, View } from 'react-native'
 import { SingleFoodListType } from '../../../apis/types/food'
 import AutoText from '../../auto-text'
 
@@ -22,14 +22,17 @@ const HotRecommendItem: FC<IProps> = ({ data }) => {
                     borderRadius: 10,
                 }}
             ></Image>
-            <Text
+            <AutoText
+                numberOfLines={2}
+                fontSize={4}
                 style={{
                     fontSize: 11,
                     marginTop: 5,
+                    width: Dimensions.get('window').width / 4,
                 }}
             >
                 {data.name?.trim()}
-            </Text>
+            </AutoText>
         </View>
     )
 }

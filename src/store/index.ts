@@ -4,6 +4,7 @@ import DietSlice from './slice/diet'
 import HomeSlice from './slice/home'
 import FoodSlice from './slice/food'
 import MealSlice from './slice/meal'
+import CommonSlice from './slice/common'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import { persistReducer, persistStore } from 'redux-persist'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -49,6 +50,7 @@ const store = configureStore({
         HomeSlice: HomeStorePersist,
         FoodSlice: FoodStorePersist,
         MealSlice: MealSlice,
+        CommonSlice: CommonSlice,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

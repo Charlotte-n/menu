@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, useState } from 'react'
 import type { FC, ReactNode } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import HomeScreen from './home'
@@ -7,14 +7,58 @@ import HealthMealScreen from './health-meal'
 import MineScreen from './mine'
 import { Icon } from '@rneui/themed'
 import theme from '../styles/theme/color'
-import { Image, TouchableOpacity } from 'react-native'
+import { Image, TouchableOpacity, View } from 'react-native'
 import { useAppDispatch, useAppSelector } from '../store'
 import { changeOpenAction } from '../store/slice/home'
 import { transformAdaption } from '../utils/adaptation'
 import { shallowEqual } from 'react-redux'
+import More from '../views/more'
 
 interface IProps {
     children?: ReactNode
+}
+//自定义一个tab栏
+const CustomButton = ({ children }: { children: any }) => {
+    const [showMore, setShowMore] = useState(false)
+    const Press = () => {
+        show()
+    }
+    //显示
+    const show = () => {
+        setShowMore(true)
+    }
+    const disShow = () => {
+        setShowMore(false)
+    }
+    return (
+        <TouchableOpacity
+            className="top-[-3] justify-center items-center w-[50] h-[45]"
+            onPress={Press}
+        >
+            <View
+                className="w-[60] h-[40]"
+                style={{
+                    borderRadius: 100,
+                    shadowColor: theme.colors.deep01Primary,
+                    shadowOpacity: 0.25,
+                    shadowRadius: 100,
+                    shadowOffset: {
+                        width: 0,
+                        height: 10,
+                    },
+                    elevation: 6,
+                }}
+            >
+                {children}
+            </View>
+            {/*    显示BottomSheet*/}
+            <More isVisible={showMore}>
+                {{
+                    disShow,
+                }}
+            </More>
+        </TouchableOpacity>
+    )
 }
 
 const TabBar: FC<IProps> = () => {
@@ -86,6 +130,36 @@ const TabBar: FC<IProps> = () => {
                         )
                     },
                     headerTitleAlign: 'center',
+                }}
+            ></Tab.Screen>
+            <Tab.Screen
+                name="more"
+                component={More as any}
+                options={{
+                    title: '',
+                    tabBarActiveTintColor: theme.colors.deep01Primary,
+                    tabBarIcon: ({ color, size, focused }) => {
+                        return focused ? (
+                            <Image
+                                source={require('../../assets/images/add2.png')}
+                                style={{
+                                    width: 60,
+                                    height: 60,
+                                }}
+                            ></Image>
+                        ) : (
+                            <Image
+                                source={require('../../assets/images/add2.png')}
+                                style={{
+                                    width: 60,
+                                    height: 60,
+                                }}
+                            ></Image>
+                        )
+                    },
+                    tabBarButton: (props) => {
+                        return <CustomButton {...props}></CustomButton>
+                    },
                 }}
             ></Tab.Screen>
             <Tab.Screen

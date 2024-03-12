@@ -11,9 +11,10 @@ interface IProps {
     children?: any
     type: string
     category_id?: number
+    isEdit?: boolean
 }
 
-const SearchFilter: FC<IProps> = ({ type, children, category_id }) => {
+const SearchFilter: FC<IProps> = ({ type, children, category_id, isEdit }) => {
     const setRecommendShowFood = children?.setRecommendShowFood
     const setSearchFoodResult = children?.setSearchFoodResult
     const setEmpty = children?.setEmpty
@@ -59,7 +60,9 @@ const SearchFilter: FC<IProps> = ({ type, children, category_id }) => {
             setSearchFoodResult((res.data as FoodListByCategoryType).foods)
         })
     }
-
+    useEffect(() => {
+        console.log(isEdit)
+    }, [])
     return (
         <View
             style={{
@@ -96,20 +99,33 @@ const SearchFilter: FC<IProps> = ({ type, children, category_id }) => {
                 ></Icon>
             </TouchableOpacity>
             {/*搜索栏*/}
-            <TextInput
-                placeholder={'搜索相关菜品食物的热量'}
-                style={{
-                    width: (Dimensions.get('screen').width - 40) / 1.4,
-                }}
-                onChangeText={(value) => setSearch(value)}
-                value={search}
-                onFocus={() => {
-                    if (type === 'home') {
+            {type === 'home' ? (
+                <TouchableOpacity
+                    onPress={() => {
                         //@ts-ignore
                         navigation.navigate('search')
-                    }
-                }}
-            ></TextInput>
+                    }}
+                >
+                    <TextInput
+                        editable={false}
+                        placeholder={'搜索相关菜品食物的热量'}
+                        style={{
+                            width: (Dimensions.get('screen').width - 40) / 1.4,
+                        }}
+                        onChangeText={(value) => setSearch(value)}
+                        value={search}
+                    ></TextInput>
+                </TouchableOpacity>
+            ) : (
+                <TextInput
+                    placeholder={'搜索相关菜品食物的热量'}
+                    style={{
+                        width: (Dimensions.get('screen').width - 40) / 1.4,
+                    }}
+                    onChangeText={(value) => setSearch(value)}
+                    value={search}
+                ></TextInput>
+            )}
             {search && (
                 <TouchableOpacity onPress={() => clearAll()}>
                     <Icon

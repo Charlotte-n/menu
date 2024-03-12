@@ -6,11 +6,8 @@ import HotRecommend from '../../components/hot-recommend'
 import RecipeCategory from './components/recipe-catory'
 import FoodCategoryByTime from './components/food-category'
 import { ScrollView } from 'react-native'
-import { FoodListByCategoryApi, getRandomRecipeApi } from '../../apis/food'
-import {
-    FoodListByCategoryType,
-    SingleFoodListType,
-} from '../../apis/types/food'
+import { getRandomRecipeApi } from '../../apis/food'
+import { SingleFoodListType } from '../../apis/types/food'
 import { Skeleton } from '@rneui/base'
 import theme from '../../styles/theme/color'
 
@@ -28,12 +25,6 @@ const Diet: FC<IProps> = () => {
         setRecipeFood(res.data as any)
         setLoading(false)
     }
-
-    useEffect(() => {
-        getRecipeData().then(() => {
-            console.log('得到了菜谱数据')
-        })
-    }, [])
     return (
         <ScrollView
             style={{ flex: 1, overflow: 'hidden' }}
@@ -42,7 +33,7 @@ const Diet: FC<IProps> = () => {
             showsVerticalScrollIndicator={false}
         >
             <View>
-                <SearchFilter type={'home'}></SearchFilter>
+                <SearchFilter type={'home'} isEdit={false}></SearchFilter>
             </View>
             <View className="mt-[20] mb-[20]">
                 <RecipeCategory></RecipeCategory>
@@ -93,7 +84,11 @@ const Diet: FC<IProps> = () => {
                 )}
             </View>
             <View style={{ minHeight: 400 }}>
-                <FoodCategoryByTime></FoodCategoryByTime>
+                <FoodCategoryByTime>
+                    {{
+                        getRecipeData: getRecipeData,
+                    }}
+                </FoodCategoryByTime>
             </View>
         </ScrollView>
     )

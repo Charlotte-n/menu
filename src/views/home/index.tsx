@@ -18,14 +18,10 @@ import {
 import DrawerContent from './components/drawer-content'
 import { Dialog } from '@rneui/themed'
 import DialogContent from './components/dialog-content'
-import { FoodListByCategoryApi, getRandomRecipeApi } from '../../apis/food'
-import {
-    FoodListByCategoryType,
-    SingleFoodListType,
-} from '../../apis/types/food'
+import { getRandomRecipeApi } from '../../apis/food'
+import { SingleFoodListType } from '../../apis/types/food'
 import { DailyIntakeApi } from '../../apis/home'
 import { getDailyIntakeApi } from '../../apis/diet'
-import { getUserInfo } from '../../apis/mine'
 interface IProps {
     children?: ReactNode
 }
@@ -92,7 +88,7 @@ const Home: FC<IProps> = () => {
                 ></Image>
             ),
             name: '早餐',
-            recommend: '347~489',
+            recommend: ((dailyIntake?.calories * 2) / 5).toFixed(0),
         },
         {
             id: '1',
@@ -107,7 +103,7 @@ const Home: FC<IProps> = () => {
                 ></Image>
             ),
             name: '午餐',
-            recommend: '486~635',
+            recommend: ((dailyIntake?.calories * 2) / 5).toFixed(0),
         },
         {
             id: '2',
@@ -122,7 +118,7 @@ const Home: FC<IProps> = () => {
                 ></Image>
             ),
             name: '晚餐',
-            recommend: '347~489',
+            recommend: (dailyIntake?.calories / 5).toFixed(0),
         },
     ]
     //获取摄入列表

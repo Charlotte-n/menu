@@ -44,7 +44,6 @@ const FoodDetail: FC<IProps> = () => {
     const [isVisible, setIsVisible] = useState(false)
     const dispatch = useAppDispatch()
     const route = useRoute()
-    const [RecipeId, setRecipeId] = useState(0)
     const [RecipeDetail, setRecipeDetail] = useState<SingleDish>(
         {} as SingleDish,
     )
@@ -85,7 +84,7 @@ const FoodDetail: FC<IProps> = () => {
         })
     }
     useEffect(() => {
-        getRecipeDetail()
+        getRecipeDetail().then()
     }, [])
     //评论的显示和隐藏
     const disShow = () => {
@@ -151,8 +150,7 @@ const FoodDetail: FC<IProps> = () => {
             type: 2,
         }
         await cancelCollectApi(data)
-            .then((res) => {
-                console.log(res)
+            .then(() => {
                 JudgeCollect()
             })
             .catch((e) => {
@@ -168,8 +166,6 @@ const FoodDetail: FC<IProps> = () => {
             type: 2,
         }
         JudgeCollectApi(data).then((res) => {
-            console.log(res.data, '我当前的收藏状态')
-            console.log(data)
             setIsCollect(!res.data)
         })
     }
@@ -311,6 +307,7 @@ const FoodDetail: FC<IProps> = () => {
                                                         style={{
                                                             width: '100%',
                                                             height: 200,
+                                                            borderRadius: 20,
                                                         }}
                                                         className="mt-[10]"
                                                         resizeMode={'cover'}
@@ -336,7 +333,7 @@ const FoodDetail: FC<IProps> = () => {
                     </ViewShot>
                     {/*评论区域*/}
                     <View className="mt-[20]">
-                        <Comment foodId={RecipeDetail.id}>
+                        <Comment foodId={(route.params as { id: number }).id}>
                             {{
                                 show: show,
                             }}

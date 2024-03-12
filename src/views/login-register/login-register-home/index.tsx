@@ -26,7 +26,7 @@ const LoginHome: FC<IProps> = () => {
         //有token的话就跳转到tabs
         if (token) {
             //@ts-ignore
-            // navigation.navigate('tabs')
+            navigation.navigate('tabs')
         }
     }, [])
     return (
@@ -34,7 +34,6 @@ const LoginHome: FC<IProps> = () => {
             className="flex-1"
             style={{ backgroundColor: theme.colors.primary }}
         >
-            {/*<StatusBar backgroundColor={theme.colors.primary}></StatusBar>*/}
             <View
                 style={{
                     width: '100%',

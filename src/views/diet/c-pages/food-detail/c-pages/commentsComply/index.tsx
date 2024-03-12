@@ -24,7 +24,6 @@ const CommentsComply: FC<IProps> = () => {
     }
     //根据id来获取这条评论
     useEffect(() => {
-        console.log((route.params as { id: number }).id)
         getCommentById()
     }, [])
     return (

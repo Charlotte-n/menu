@@ -1,11 +1,15 @@
-import React from 'react'
-import { NavigationContainer } from '@react-navigation/native'
+import React, { useEffect, useRef } from 'react'
+import {
+    CommonActions,
+    NavigationContainer,
+    useNavigationContainerRef,
+} from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import TabBar from './src/route/tab-bar'
 import LoginRegisterHomeScreen from './src/route/login'
 import { Icon } from '@rneui/themed'
 import { MineOtherScreen } from './src/data/app-path'
-import { Provider } from 'react-redux'
+import { Provider, useDispatch } from 'react-redux'
 import store, { persistor } from './src/store'
 import { PersistGate } from 'redux-persist/es/integration/react'
 import UserAgree from './src/views/mine/profile/c-pages/user-agree'
@@ -18,12 +22,36 @@ import MyShare from './src/components/share'
 import FoodNutrients from './src/views/diet/c-pages/food-nutrients/food-nutritents'
 import FoodCategory from './src/views/diet/c-pages/food-category'
 import CommentsComply from './src/views/diet/c-pages/food-detail/c-pages/commentsComply'
+import RecipeCollect from './src/views/mine/collect/c-pages/recipe-collect'
+import RecognizeFood from './src/views/recognize-food'
+import AI from './src/views/more/c-pages/ai'
+import { changeNavigateAction } from './src/store/slice/common'
+
+//回到顶层
+export const navigationRef = React.createRef()
+//
+export function navigateToTop() {
+    if (navigationRef.current) {
+        navigationRef.current.dispatch(
+            CommonActions.reset({
+                index: 1,
+                actions: [
+                    navigationRef.current.navigate({
+                        routeName: 'LoginRegisterHomeScreen',
+                    }),
+                ],
+            }),
+        )
+    }
+}
+
 export default function App() {
     const Stack = createStackNavigator()
+
     return (
         <Provider store={store}>
             <PersistGate persistor={persistor} loading={null}>
-                <NavigationContainer>
+                <NavigationContainer ref={navigationRef}>
                     <Stack.Navigator
                         initialRouteName={
                             store.getState().LoginRegisterSlice.token
@@ -73,6 +101,21 @@ export default function App() {
                                 headerShadowVisible: false,
                                 headerTitleAlign: 'center',
                                 headerTitle: '用户协议',
+                                headerBackImage: () => (
+                                    <Icon
+                                        name={'left'}
+                                        type={'antdesign'}
+                                    ></Icon>
+                                ),
+                            }}
+                        ></Stack.Screen>
+                        <Stack.Screen
+                            name={'RecipeCollect'}
+                            component={RecipeCollect}
+                            options={{
+                                headerShadowVisible: false,
+                                headerTitleAlign: 'center',
+                                headerTitle: '食谱收藏',
                                 headerBackImage: () => (
                                     <Icon
                                         name={'left'}
@@ -202,6 +245,54 @@ export default function App() {
                                         </MyShare>
                                     )
                                 },
+                            }}
+                        ></Stack.Screen>
+                        <Stack.Screen
+                            name={'RecognizeFood'}
+                            component={RecognizeFood}
+                            options={{
+                                headerTitle: '查询食物',
+                                headerTitleAlign: 'center',
+                                headerBackImage: () => (
+                                    <Icon
+                                        name={'left'}
+                                        type={'antdesign'}
+                                    ></Icon>
+                                ),
+                                headerRight: () => {
+                                    return (
+                                        <MyShare>
+                                            {{
+                                                content: (
+                                                    <Image
+                                                        source={require('./assets/icon/分享.png')}
+                                                        style={{
+                                                            width: 25,
+                                                            height: 25,
+                                                            marginRight: 10,
+                                                        }}
+                                                    ></Image>
+                                                ),
+                                            }}
+                                        </MyShare>
+                                    )
+                                },
+                            }}
+                        ></Stack.Screen>
+                        {/*  其他功能  */}
+                        {/*小助手*/}
+                        <Stack.Screen
+                            name={'ai'}
+                            component={AI}
+                            options={{
+                                headerTitle: 'AI小助手',
+                                headerTitleAlign: 'center',
+                                headerBackImage: () => (
+                                    <Icon
+                                        name={'left'}
+                                        type={'antdesign'}
+                                    ></Icon>
+                                ),
                             }}
                         ></Stack.Screen>
                     </Stack.Navigator>

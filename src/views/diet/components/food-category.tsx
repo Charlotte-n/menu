@@ -14,10 +14,11 @@ import { useAppDispatch, useAppSelector } from '../../../store'
 import { changeFoodList } from '../../../store/slice/diet'
 import { shallowEqual } from 'react-redux'
 interface IProps {
-    children?: ReactNode
+    children?: any
 }
 
-const FoodCategoryByTime: FC<IProps> = () => {
+const FoodCategoryByTime: FC<IProps> = ({ children }) => {
+    const getRecipe = children.getRecipeData
     const [index, setIndex] = React.useState(0)
     const [refresh, setRefresh] = useState(true)
     const pageLoading = useRef(false)
@@ -149,11 +150,13 @@ const FoodCategoryByTime: FC<IProps> = () => {
     }
     useEffect(() => {
         Promise.all([
-            getFoodList(1),
             getFoodList(2),
             getFoodList(4),
             getFoodList(5),
             getFoodList(10),
+            getFoodList(1),
+
+            getRecipe(),
         ])
     }, [])
     useEffect(() => {
@@ -175,7 +178,7 @@ const FoodCategoryByTime: FC<IProps> = () => {
                     width: 20,
                     height: 5,
                     borderRadius: 20,
-                    marginHorizontal: 35,
+                    marginHorizontal: 32,
                 }}
                 scrollable={true}
                 containerStyle={{
@@ -184,8 +187,8 @@ const FoodCategoryByTime: FC<IProps> = () => {
                 titleStyle={{
                     fontSize: 14,
                     color: 'black',
-                    paddingLeft: 20,
-                    paddingRight: 20,
+                    paddingLeft: 15,
+                    paddingRight: 15,
                 }}
             >
                 <Tab.Item title="早餐" />
@@ -196,6 +199,7 @@ const FoodCategoryByTime: FC<IProps> = () => {
             </Tab>
 
             <TabView
+                animationType={'spring'}
                 value={index}
                 onChange={(e) => {
                     setIndex(e)

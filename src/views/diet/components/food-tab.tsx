@@ -77,7 +77,7 @@ export const Item = ({ data }: { data: SingleFoodListType }) => {
                         <Icon
                             type={'antdesign'}
                             name={'pluscircle'}
-                            size={15}
+                            size={20}
                             color={theme.colors.deep01Primary}
                             style={{
                                 marginLeft: 5,
@@ -108,9 +108,7 @@ const FoodTab: FC<IProps> = ({
 }) => {
     const { getFoodList } = children
     const { loadMore } = children
-    useEffect(() => {
-        console.log('我的食谱为', FoodList)
-    }, [])
+
     return (
         <View>
             <ScrollView
@@ -151,9 +149,9 @@ const FoodTab: FC<IProps> = ({
                 {FoodList.length ? (
                     <View
                         style={{
-                            height: 40,
+                            height: 50,
                             zIndex: 10,
-                            paddingTop: 10,
+                            paddingTop: 5,
                         }}
                     >
                         {pageLoadingFull ? (

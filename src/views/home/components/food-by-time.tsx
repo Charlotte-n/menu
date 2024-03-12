@@ -33,12 +33,19 @@ const FoodByTime: FC<IProps> = ({ baseData, image, type }) => {
         >
             {image}
             <View className="flex-1">
-                <AutoText fontSize={6}>{name}</AutoText>
+                <AutoText
+                    fontSize={5}
+                    style={{
+                        marginBottom: 5,
+                    }}
+                >
+                    {name}
+                </AutoText>
                 <AutoText
                     style={{
                         color: '#B6B5BB',
                     }}
-                    fontSize={4.5}
+                    fontSize={4.3}
                 >
                     推荐{recommend}千卡
                 </AutoText>

@@ -21,8 +21,6 @@ import {
 import MyImagePicker from '../image-picker'
 import { getSearchImage } from '../../utils/uploadImg'
 import { useAppSelector } from '../../store'
-import { FoodListByCategoryApi } from '../../apis/food'
-import { FoodListByCategoryType } from '../../apis/types/food'
 import { shallowEqual } from 'react-redux'
 interface IProps {
     children?: any
@@ -36,11 +34,6 @@ const MyCamera: FC<IProps> = ({ children }) => {
     const { hasPermission, requestPermission } = useCameraPermission()
     const [sizeImage, setSizeImage] = useState('')
     const camera = useRef<any>()
-    const { RecognizeFoodInfo } = useAppSelector((state) => {
-        return {
-            RecognizeFoodInfo: state.DietSlice.RecognizeFoodInfo,
-        }
-    }, shallowEqual)
     const device: any = useCameraDevice('back')
     if (device == null) return <Text>123</Text>
     useEffect(() => {
@@ -57,17 +50,17 @@ const MyCamera: FC<IProps> = ({ children }) => {
             const photo = await camera.current.takePhoto({})
             setSelectedImage(photo.path)
             setIsEdit(true)
-            //获得了图片进行用户编辑
         }
     }
     const upload = async (res: string) => {
         try {
             setSizeImage(res)
+            setSelectedImage(selectedImage)
         } catch (error) {
             console.error('Error compressing image', error)
-            setSelectedImage(selectedImage)
         }
     }
+    //进行上传
     useEffect(() => {
         if (isEdit) {
             PhotoEditor.Edit({
@@ -79,21 +72,13 @@ const MyCamera: FC<IProps> = ({ children }) => {
             })
         }
     }, [isEdit, selectedImage])
+
     useEffect(() => {
         if (sizeImage) {
             getSearchImage(sizeImage).then()
             //判断是否有名字
-            FoodListByCategoryApi({ title: RecognizeFoodInfo[0].name }).then(
-                (res) => {
-                    console.log(res)
-                    //@ts-ignore
-                    navigation.navigate('food-nutrients', {
-                        id:
-                            (res.data as FoodListByCategoryType).foods[0]?.id ||
-                            0,
-                    })
-                },
-            )
+            //@ts-ignore
+            navigation.navigate('RecognizeFood')
         }
     }, [sizeImage])
 
@@ -130,21 +115,19 @@ const MyCamera: FC<IProps> = ({ children }) => {
                         餐前拍一拍
                     </Text>
                     <View className="flex-row items-center mt-[30]">
-                        <TouchableOpacity>
-                            <MyImagePicker getImage={getSearchImage}>
-                                {{
-                                    content: (
-                                        <Image
-                                            source={require('../../../assets/images/picture.png')}
-                                            style={{
-                                                width: 40,
-                                                height: 40,
-                                            }}
-                                        ></Image>
-                                    ),
-                                }}
-                            </MyImagePicker>
-                        </TouchableOpacity>
+                        <MyImagePicker getImage={getSearchImage}>
+                            {{
+                                content: (
+                                    <Image
+                                        source={require('../../../assets/images/picture.png')}
+                                        style={{
+                                            width: 40,
+                                            height: 40,
+                                        }}
+                                    ></Image>
+                                ),
+                            }}
+                        </MyImagePicker>
 
                         <View className="flex-1 ml-[90]">
                             <TouchableOpacity onPress={() => takePicture()}>

@@ -1,8 +1,5 @@
 import { getUserInfo, uploadAvatar } from '../apis/mine'
-import {
-    changeUserInfoAction,
-    changeUserProfileAction,
-} from '../store/slice/login-register-slice'
+import { changeUserInfoAction } from '../store/slice/login-register-slice'
 import store from '../store'
 import { recognizeFood } from '../apis/diet'
 import { changeRecognizeFoodInfoAction } from '../store/slice/diet'
@@ -24,6 +21,7 @@ const getImage = async (value: string) => {
     await uploadImage()
 }
 export const getSearchImage = async (value: string) => {
+    console.log(123)
     const uploadImage = async () => {
         //进行一下压缩
         const manipResult = await manipulateAsync(

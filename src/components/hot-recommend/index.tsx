@@ -42,18 +42,20 @@ const Index: FC<IProps> = ({ title, data }) => {
                     {title}
                 </Text>
             </View>
-            <View className="pl-[10] pr-[10] flex-row">
-                {data.map((item) => {
+            <View className="pl-[10] pr-[10] flex-row mb-[5]">
+                {data?.map((item) => {
                     return (
                         <TouchableOpacity
                             key={item.id}
                             style={{
                                 width:
-                                    (Dimensions.get('window').width - 40) / 3,
+                                    (Dimensions.get('window').width - 30) / 3,
                             }}
                             onPress={() => {
                                 //@ts-ignore
-                                navigation.navigate('food-detail')
+                                navigation.navigate('food-detail', {
+                                    id: item.id,
+                                })
                             }}
                         >
                             <HotRecommendItem data={item}></HotRecommendItem>

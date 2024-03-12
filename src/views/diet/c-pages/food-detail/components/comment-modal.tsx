@@ -7,7 +7,7 @@ import {
     Keyboard,
     ToastAndroid,
 } from 'react-native'
-import { BottomSheet, Button } from '@rneui/themed'
+import { BottomSheet, Button, Icon } from '@rneui/themed'
 import theme from '../../../../../styles/theme/color'
 import { PostFoodCommentData } from '../../../../../apis/types/food'
 import { getCommentsApi, PostCommentsApi } from '../../../../../apis/food'
@@ -25,9 +25,8 @@ const CommentModal: FC<IProps> = ({ children, foodId }) => {
     const inputRef = useRef<any>(null)
     const disShow = children.disShow
     const disShowEdit = children.disShowEdit
-    const { comments, userInfo, parentId } = useAppSelector((state) => {
+    const { userInfo, parentId } = useAppSelector((state) => {
         return {
-            comments: state.FoodSlice.comment,
             userInfo: state.LoginRegisterSlice.userInfo,
             parentId: state.FoodSlice.parentId,
         }
@@ -52,20 +51,22 @@ const CommentModal: FC<IProps> = ({ children, foodId }) => {
             ToastAndroid.show('内容不能为空', ToastAndroid.SHORT)
             return
         }
-        const data: PostFoodCommentData = {
-            content: comment,
-            dishId: foodId,
-            userId: userInfo.id,
-            parentId: parentId,
+        try {
+            const data: PostFoodCommentData = {
+                content: comment,
+                dishId: foodId,
+                userId: userInfo.id,
+                parentId: parentId,
+            }
+            await PostCommentsApi(data)
+            await getComment()
+        } catch (e) {
+            console.log(e)
         }
-        const res = await PostCommentsApi(data)
-        console.log(res)
-        await getComment()
     }
     const getComment = async () => {
         //获取评论列表
         const res = await getCommentsApi(foodId)
-        console.log(res.data)
         dispatch(changeCommentAction(res.data))
     }
 
@@ -76,7 +77,18 @@ const CommentModal: FC<IProps> = ({ children, foodId }) => {
                 height: 300,
             }}
         >
-            <View className="flex-row pl-[10] pr-[10] items-center bg-white  h-[100]">
+            <View className="bg-white items-end justify-end pt-[5]">
+                <TouchableOpacity
+                    className=" pr-[20]"
+                    onPress={() => {
+                        disShow()
+                        disShowEdit()
+                    }}
+                >
+                    <Icon type="antdesign" name="close"></Icon>
+                </TouchableOpacity>
+            </View>
+            <View className="flex-row pl-[10] pr-[10] items-center bg-white  h-[80]">
                 <TextInput
                     ref={inputRef}
                     className="flex-1 mr-[10] pl-[10] pr-[10]  border-solid  border-b-amber-200 h-[45]"

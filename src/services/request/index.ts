@@ -2,6 +2,8 @@ import axios, { AxiosRequestConfig } from 'axios'
 import type { AxiosInstance } from 'axios'
 import type { HYRequestConfig } from './type'
 import store from '../../store/index'
+import { changeTokenAction } from '../../store/slice/login-register-slice'
+import { navigateToTop } from '../../../App'
 // 拦截器: 蒙版Loading/token/修改配置
 
 /**
@@ -39,6 +41,14 @@ class HYRequest {
                 return res.data
             },
             (err) => {
+                if (
+                    err.response?.data.code === 401 ||
+                    !err.response?.data.code
+                ) {
+                    store.dispatch(changeTokenAction(''))
+                    // navigateToTop()
+                }
+
                 return err
             },
         )

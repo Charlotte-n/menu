@@ -1,17 +1,16 @@
-import React, { memo, useEffect, useRef, useState } from 'react'
-import type { FC, ReactNode } from 'react'
+import React, { memo, useEffect, useState } from 'react'
+import type { FC } from 'react'
 import { Image, TextInput, TouchableOpacity, View, Text } from 'react-native'
 import AutoText from '../../../../../components/auto-text'
 import { useAppDispatch, useAppSelector } from '../../../../../store'
 import { shallowEqual } from 'react-redux'
 import theme from '../../../../../styles/theme/color'
 import { useNavigation } from '@react-navigation/native'
-import { getCommentsApi, PostCommentsApi } from '../../../../../apis/food'
+import { getCommentsApi } from '../../../../../apis/food'
 import {
     changeCommentAction,
     changeParentIdAction,
 } from '../../../../../store/slice/food'
-import { PostFoodCommentData } from '../../../../../apis/types/food'
 
 interface IProps {
     children?: any

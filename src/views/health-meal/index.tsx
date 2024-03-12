@@ -22,7 +22,7 @@ const HealthMeal: FC<IProps> = () => {
     const pageNum = useRef(1)
     const num = useRef(10)
     const dispatch = useAppDispatch()
-    const [refresh, setRefresh] = useState(false)
+    const [refresh, setRefresh] = useState(true)
     const { MealList } = useAppSelector((state) => {
         return {
             MealList: state.MealSlice.mealList,

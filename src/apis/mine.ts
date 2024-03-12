@@ -1,7 +1,6 @@
 import hyRequest from '../services'
 import { LoginData } from './types/mine'
 import { CommonResponseType } from './types'
-import { BASE_URL } from '../services/config'
 
 enum URL {
     LOGINURL = '/api/user/login',
