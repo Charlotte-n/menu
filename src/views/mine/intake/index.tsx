@@ -40,7 +40,6 @@ const Intake: FC<IProps> = () => {
                 cellulose: res.data.calories[3],
             }
             dispatch(changeDailyIntaked(dailyIntaked))
-            console.log(result)
             setIntakeFoodList(result)
             setTotal(res.data.calories)
         })

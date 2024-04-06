@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState } from 'react'
 import type { FC, ReactNode } from 'react'
 import { View } from 'nativewind/dist/preflight'
-import { Dimensions, Image, ScrollView, StatusBar } from 'react-native'
+import { Dimensions, Image, ScrollView } from 'react-native'
 import HotRecommend from '../../components/hot-recommend'
 import EchartBigPie from './components/echart-big-pie'
 import EchartSmallPie from './components/echart-small-pie'
@@ -34,16 +34,22 @@ const Home: FC<IProps> = () => {
             dailyIntake: state.HomeSlice.dailyIntake,
         }
     }, shallowEqual)
-    const { userInfo } = useAppSelector((state) => {
+    const { userInfo, token } = useAppSelector((state) => {
         return {
             userInfo: state.LoginRegisterSlice.userInfo,
+            token: state.LoginRegisterSlice.token,
         }
     }, shallowEqual)
     //弹窗显示
     const [dialogVisible, setDialogVisible] = useState(false)
     const toggleDialog = async () => {
         //判断信息
-        if (userInfo.height && userInfo.weight && userInfo.habit) {
+        if (
+            userInfo.height &&
+            userInfo.weight &&
+            userInfo.exercise >= 0 &&
+            userInfo.target >= 0
+        ) {
             //获取用户的每日摄入量，放入仓库存储
             DailyIntakeApi(userInfo.id).then((res) => {
                 dispatch(changeDailyIntake(res.data))
@@ -51,7 +57,7 @@ const Home: FC<IProps> = () => {
             setDialogVisible(false)
             return
         }
-        setDialogVisible(false)
+        setDialogVisible(true)
     }
     const cancel = () => {
         setDialogVisible(false)
@@ -79,7 +85,7 @@ const Home: FC<IProps> = () => {
             id: '0',
             icon: (
                 <Image
-                    source={require('../../../assets/icon/早餐.png')}
+                    source={require('../../../assets/icon/breakfast.png')}
                     style={{
                         width: transformAdaption(30),
                         height: transformAdaption(30),
@@ -94,7 +100,7 @@ const Home: FC<IProps> = () => {
             id: '1',
             icon: (
                 <Image
-                    source={require('../../../assets/icon/午餐.png')}
+                    source={require('../../../assets/icon/lunch.png')}
                     style={{
                         width: transformAdaption(30),
                         height: transformAdaption(30),

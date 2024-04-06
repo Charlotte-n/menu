@@ -5,7 +5,6 @@ interface initialState {
     userInfo: User
     token: string
     profile: User
-    healthTarget: string
 }
 const initialState: initialState = {
     userInfo: {
@@ -13,7 +12,6 @@ const initialState: initialState = {
     } as User,
     token: '',
     profile: {} as User,
-    healthTarget: '',
 }
 
 export const LoginRegisterSlice = createSlice({
@@ -33,9 +31,6 @@ export const LoginRegisterSlice = createSlice({
         changeUserProfileAction(state, { payload }) {
             state.profile = payload
         },
-        changeHealthTargetAction(state, { payload }) {
-            state.healthTarget = payload
-        },
     },
 })
 // 每个 case reducer 函数会生成对应的 Action creators
@@ -44,7 +39,6 @@ export const {
     changeTokenAction,
     clearUserInfoAction,
     changeUserProfileAction,
-    changeHealthTargetAction,
 } = LoginRegisterSlice.actions
 
 export default LoginRegisterSlice.reducer

@@ -51,7 +51,6 @@ const Register: FC<IProps> = ({ navigation }) => {
     //校验邮箱是否正确
     const verifyEmailRule = () => {
         setIsEmail(verifyEmail(email))
-        console.log(verifyEmail(email))
         if (!verifyEmail(email)) {
             emailInput.current?.shake()
         }
@@ -118,6 +117,7 @@ const Register: FC<IProps> = ({ navigation }) => {
                 password,
             }
             const res = await verifyCodeApi(param)
+            console.log(res)
             if (res.code === 1) {
                 setIsVerifyCode(true)
                 //验证成功跳转到登录页面

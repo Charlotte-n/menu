@@ -29,6 +29,10 @@ const FoodCard: FC<IProps> = ({ data }) => {
             <Card
                 containerStyle={{
                     borderRadius: 10,
+                    backgroundColor: 'white',
+                }}
+                wrapperStyle={{
+                    backgroundColor: 'white',
                 }}
             >
                 {data.image ? (

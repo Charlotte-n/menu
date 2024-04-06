@@ -6,6 +6,7 @@ import LoginHome from '../views/login-register/login-register-home'
 import Login from '../views/login-register/login'
 import Register from '../views/login-register/register'
 import theme from '../styles/theme/color'
+import FindPassword from '../views/login-register/find-password'
 interface IProps {
     children?: ReactNode
 }
@@ -37,6 +38,16 @@ const LoginRegisterHomeScreen = () => {
             <Stack.Screen
                 name={'Register'}
                 component={Register}
+                options={{
+                    headerShown: false,
+                    headerStyle: {
+                        backgroundColor: theme.colors.primary,
+                    },
+                }}
+            ></Stack.Screen>
+            <Stack.Screen
+                name={'FindPassword'}
+                component={FindPassword}
                 options={{
                     headerShown: false,
                     headerStyle: {

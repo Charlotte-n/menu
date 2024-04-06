@@ -12,7 +12,7 @@ import {
 import PhotoEditor from 'react-native-photo-editor'
 import { Icon } from '@rneui/themed'
 import SafeAreaView from 'react-native-safe-area-view'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import {
     Camera,
     useCameraDevice,
@@ -31,19 +31,20 @@ const MyCamera: FC<IProps> = ({ children }) => {
     const [selectedImage, setSelectedImage] = useState('')
     // const [type, setType] = useState(CameraType.back)
     const [isEdit, setIsEdit] = useState(false)
-    const { hasPermission, requestPermission } = useCameraPermission()
     const [sizeImage, setSizeImage] = useState('')
     const camera = useRef<any>()
     const device: any = useCameraDevice('back')
-    if (device == null) return <Text>123</Text>
-    useEffect(() => {
-        console.log(hasPermission)
-        ;(async () => {
-            if (!hasPermission) {
-                await requestPermission()
-            }
-        })()
-    }, [])
+
+    if (device == null)
+        return (
+            <Text
+                style={{
+                    textAlign: 'center',
+                }}
+            >
+                此设备不支持摄像
+            </Text>
+        )
     //照相
     const takePicture = async () => {
         if (camera.current) {
@@ -60,13 +61,15 @@ const MyCamera: FC<IProps> = ({ children }) => {
             console.error('Error compressing image', error)
         }
     }
-    //进行上传
+    //拍照上传
     useEffect(() => {
         if (isEdit) {
             PhotoEditor.Edit({
                 path: selectedImage,
                 onDone: (res) => {
                     upload(res).then()
+                    //@ts-ignore
+                    navigation.navigate('RecognizeFood')
                 },
                 onCancel: () => {},
             })
@@ -76,16 +79,13 @@ const MyCamera: FC<IProps> = ({ children }) => {
     useEffect(() => {
         if (sizeImage) {
             getSearchImage(sizeImage).then()
-            //判断是否有名字
-            //@ts-ignore
-            navigation.navigate('RecognizeFood')
         }
     }, [sizeImage])
 
     return (
         <SafeAreaView style={{ height: Dimensions.get('screen').height }}>
             <StatusBar></StatusBar>
-            <ScrollView>
+            <ScrollView className="flex-1 bg-white">
                 <Camera
                     ref={camera}
                     device={device}
@@ -106,7 +106,7 @@ const MyCamera: FC<IProps> = ({ children }) => {
                     </TouchableOpacity>
                 </Camera>
                 <View
-                    className="pl-[20] pr-[20] pt-[30] bg-white"
+                    className="pl-[20] pr-[20] pt-[30]"
                     style={{
                         height: Dimensions.get('screen').height / 3.5,
                     }}
@@ -115,21 +115,25 @@ const MyCamera: FC<IProps> = ({ children }) => {
                         餐前拍一拍
                     </Text>
                     <View className="flex-row items-center mt-[30]">
-                        <MyImagePicker getImage={getSearchImage}>
-                            {{
-                                content: (
-                                    <Image
-                                        source={require('../../../assets/images/picture.png')}
-                                        style={{
-                                            width: 40,
-                                            height: 40,
-                                        }}
-                                    ></Image>
-                                ),
-                            }}
-                        </MyImagePicker>
-
-                        <View className="flex-1 ml-[90]">
+                        <View>
+                            <MyImagePicker
+                                getImage={getSearchImage}
+                                type="camera"
+                            >
+                                {{
+                                    content: (
+                                        <Image
+                                            source={require('../../../assets/images/picture.png')}
+                                            style={{
+                                                width: 40,
+                                                height: 40,
+                                            }}
+                                        ></Image>
+                                    ),
+                                }}
+                            </MyImagePicker>
+                        </View>
+                        <View className="m-auto">
                             <TouchableOpacity onPress={() => takePicture()}>
                                 <Image
                                     source={require('../../../assets/images/takepicture.png')}

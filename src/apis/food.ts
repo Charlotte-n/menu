@@ -20,6 +20,7 @@ enum BASEURL {
     RECIPE_LIST = '/api/dish/getdishes',
     COMMENT_ID = '/api/user/getcomment',
     GET_RANDOM_FOOD = '/api/dish/recommend',
+    POST_DO_LIKE = '/api/user/dolike',
 }
 
 /**
@@ -70,11 +71,12 @@ export const getRandomRecipeApi = () => {
 /**
  * 获取用户的评论
  * @param FoodId
+ * @param userId
  * @constructor
  */
-export const getCommentsApi = (FoodId: number) => {
+export const getCommentsApi = (FoodId: number, userId: number) => {
     return hyRequest.get<CommonResponseType<FoodCommentListData>>({
-        url: BASEURL.GET_COMMENTS + '/' + FoodId,
+        url: BASEURL.GET_COMMENTS + '/' + FoodId + '/' + userId,
     })
 }
 
@@ -82,9 +84,9 @@ export const getCommentsApi = (FoodId: number) => {
  * 根据id获取评论
  * @param id
  */
-export const getCommentByIdApi = (id: number) => {
+export const getCommentByIdApi = (id: number, userid: number) => {
     return hyRequest.get<CommonResponseType<FoodCommentSingleData>>({
-        url: BASEURL.COMMENT_ID + '/' + id,
+        url: BASEURL.COMMENT_ID + '/' + id + '/' + userid,
     })
 }
 
@@ -97,5 +99,21 @@ export const PostCommentsApi = (data: PostFoodCommentData) => {
     return hyRequest.post<CommonResponseType<any>>({
         url: BASEURL.POST_COMMENTS,
         data,
+    })
+}
+
+/**
+ * 点赞
+ * @param userid
+ * @param commentId
+ * @constructor
+ */
+export const PostDoLikeApi = (userid: number, commentId: number) => {
+    return hyRequest.post({
+        url: BASEURL.POST_DO_LIKE,
+        params: {
+            userid,
+            commentId,
+        },
     })
 }

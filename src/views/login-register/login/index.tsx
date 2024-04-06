@@ -16,6 +16,7 @@ import { StackActions } from '@react-navigation/native'
 //@ts-ignore
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import SeePassWord from '../component/see-password'
+import AutoText from '../../../components/auto-text'
 interface IProps {
     children?: ReactNode
     navigation: any
@@ -55,7 +56,7 @@ const Login: FC<IProps> = ({ navigation }) => {
             }
             try {
                 const res = await LoginApi(param)
-                console.log(res.data, res.code)
+                console.log(res, '登录之后获取的信息,token')
                 if (res.code === 1) {
                     dispatch(changeUserInfoAction(res.data.user))
                     dispatch(changeTokenAction(res.data.token))
@@ -73,6 +74,11 @@ const Login: FC<IProps> = ({ navigation }) => {
                 console.log('出现错误了', e)
             }
         }
+    }
+
+    //找回密码
+    const findPassword = () => {
+        navigation.navigate('FindPassword')
     }
 
     return (
@@ -170,7 +176,17 @@ const Login: FC<IProps> = ({ navigation }) => {
                             secureTextEntry={!isSee}
                         />
                     </View>
-                    <View className="" style={styles.LoginButton}>
+                    <View className="flex-row justify-between items-center pl-[10]">
+                        <TouchableOpacity onPress={() => findPassword()}>
+                            <AutoText
+                                style={{
+                                    color: theme.colors.deep01Primary,
+                                }}
+                            >
+                                忘记密码?
+                            </AutoText>
+                        </TouchableOpacity>
+
                         <Button
                             title={'登录'}
                             icon={
@@ -215,9 +231,7 @@ const styles = StyleSheet.create({
         color: '#3D0007',
         marginBottom: 15,
     },
-    LoginButton: {
-        alignItems: 'flex-end',
-    },
+
     Back: {
         position: 'absolute',
         borderRadius: 100,

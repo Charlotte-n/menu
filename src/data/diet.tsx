@@ -48,7 +48,7 @@ export const FoodCategory = [
         id: 1,
         icon: (
             <Image
-                source={require('../../assets/icon/主食.png')}
+                source={require('../../assets/icon/zhushi.png')}
                 style={{
                     width: Dimensions.get('screen').width / 5 - 40,
                     height: 30,
@@ -61,7 +61,7 @@ export const FoodCategory = [
         id: 2,
         icon: (
             <Image
-                source={require('../../assets/icon/肉类.png')}
+                source={require('../../assets/icon/meat.png')}
                 style={{
                     width: Dimensions.get('screen').width / 5 - 40,
                     height: 30,
@@ -87,7 +87,7 @@ export const FoodCategory = [
         id: 4,
         icon: (
             <Image
-                source={require('../../assets/icon/猕猴桃.png')}
+                source={require('../../assets/icon/mihoutao.png')}
                 style={{
                     width: Dimensions.get('screen').width / 5 - 40,
                     height: 30,
@@ -113,7 +113,7 @@ export const FoodCategory = [
         id: 6,
         icon: (
             <Image
-                source={require('../../assets/icon/饮料.png')}
+                source={require('../../assets/icon/juice.png')}
                 style={{
                     width: Dimensions.get('screen').width / 5 - 40,
                     height: 30,
@@ -147,44 +147,6 @@ export const FoodCategory = [
             />
         ),
         name: '调味品',
-    },
-]
-
-export const ingredients = [
-    {
-        id: '0',
-        name: '鸡腿',
-        number: '3只',
-    },
-    {
-        id: '1',
-        name: '小米椒',
-        number: '2个',
-    },
-    {
-        id: '2',
-        name: '青椒',
-        number: '1个',
-    },
-    {
-        id: '3',
-        name: '蒜末',
-        number: '适量',
-    },
-    {
-        id: '4',
-        name: '白芝麻',
-        number: '1勺',
-    },
-    {
-        id: '5',
-        name: '辣椒粉',
-        number: '1勺',
-    },
-    {
-        id: '6',
-        name: '金针菇',
-        number: '1把',
     },
 ]
 

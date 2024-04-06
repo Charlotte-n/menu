@@ -1,25 +1,19 @@
 import React, { memo, useEffect, useRef, useState } from 'react'
 import type { FC, ReactNode } from 'react'
 import { Dimensions, Image, ScrollView, View } from 'react-native'
-import { useRoute } from '@react-navigation/native'
 import AutoText from '../../components/auto-text'
-import {
-    FoodListByCategoryType,
-    SingleFoodListType,
-} from '../../apis/types/food'
 import ViewShot from 'react-native-view-shot'
-import { Item } from '../diet/components/food-tab'
-import { FoodListByCategoryApi } from '../../apis/food'
 import { changeUrl } from '../../store/slice/diet'
 import { useAppDispatch, useAppSelector } from '../../store'
 import { shallowEqual } from 'react-redux'
+import theme from '../../styles/theme/color'
+import { Text } from '@rneui/themed'
 
 interface IProps {
     children?: ReactNode
 }
 
 const RecognizeFood: FC<IProps> = () => {
-    const FoodDetail = useRef([] as SingleFoodListType[])
     const view = useRef<any>()
     const [url, setUrl] = useState('')
     const dispatch = useAppDispatch()
@@ -35,34 +29,13 @@ const RecognizeFood: FC<IProps> = () => {
             setUrl(url)
         })
     }
-    const getFoodDetail = () => {
-        for (let value of RecognizeFoodInfo) {
-            FoodListByCategoryApi({ title: value.name })
-                .then((res) => {
-                    if (FoodDetail.current.length) {
-                        return
-                    }
-                    if ((res?.data as FoodListByCategoryType).foods.length) {
-                        FoodDetail.current = (
-                            res?.data as FoodListByCategoryType
-                        ).foods
-                    } else {
-                        FoodDetail.current = []
-                    }
-                })
-                .catch((e) => {
-                    console.log(e)
-                })
-        }
-    }
     useEffect(() => {
         //获取食物
-        getFoodDetail()
         capturePic()
         dispatch(changeUrl(url))
     }, [url])
     return (
-        <ScrollView className="flex-1 bg-white">
+        <ScrollView className="flex-1 bg-white ">
             <ViewShot
                 ref={view}
                 options={{
@@ -72,10 +45,36 @@ const RecognizeFood: FC<IProps> = () => {
                     result: 'base64',
                 }}
             >
-                {FoodDetail.current.length ? (
-                    <View className="pl-[20] pr-[20] mt-[10]">
-                        {FoodDetail.current.map((item) => {
-                            return <Item data={item} key={item.id}></Item>
+                {RecognizeFoodInfo.length !== 0 &&
+                RecognizeFoodInfo[0].name !== '非菜' ? (
+                    <View className="pl-[20] pr-[20] mt-[10] mb-[20]">
+                        {RecognizeFoodInfo.map((item, index) => {
+                            return (
+                                <View
+                                    key={index}
+                                    className="flex-row  items-end border rounded mt-[15] pt-[10] pb-[10] pl-[5] pr-[5]"
+                                    style={{
+                                        borderColor: theme.colors.deep01Primary,
+                                    }}
+                                >
+                                    <View className="flex-1 flex-row items-center">
+                                        <View>
+                                            <AutoText
+                                                numberOfLines={1}
+                                                className="w-[50]"
+                                                style={{
+                                                    width: 120,
+                                                }}
+                                            >
+                                                {item.name}
+                                            </AutoText>
+                                            <Text style={{ fontSize: 12 }}>
+                                                {item.calorie}Kcal/100g
+                                            </Text>
+                                        </View>
+                                    </View>
+                                </View>
+                            )
                         })}
                     </View>
                 ) : (

@@ -2,15 +2,14 @@ import React, { memo, useRef, useState } from 'react'
 import type { FC, ReactNode } from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 import { Dialog, Icon } from '@rneui/themed'
-import AutoText from '../../../../../components/auto-text'
 import { useAppSelector } from '../../../../../store'
 import { shallowEqual } from 'react-redux'
-import { BodyData, BodyTargetData, targetData } from '../../../../../data/mine'
+import { targetData } from '../../../../../data/mine'
 import WheelPicker from 'react-native-wheely'
 
 interface IProps {
     children?: ReactNode
-    target: string
+    target: number
     setTarget: any
     height?: number
     fontSize?: number
@@ -18,14 +17,13 @@ interface IProps {
 
 const HealthTarget: FC<IProps> = ({ height, fontSize, target, setTarget }) => {
     const [isShow, setIsShow] = useState(false)
-    const { healthTarget } = useAppSelector((state) => {
+    const { userInfo } = useAppSelector((state) => {
         return {
-            healthTarget: state.LoginRegisterSlice.healthTarget,
+            userInfo: state.LoginRegisterSlice.userInfo,
         }
     }, shallowEqual)
     //进行联动
-    const selected = useRef(healthTarget)
-
+    const selected = useRef(userInfo.target)
     return (
         <TouchableOpacity
             className="flex-row items-center border-[#F1F3F4] border-b"
@@ -45,10 +43,11 @@ const HealthTarget: FC<IProps> = ({ height, fontSize, target, setTarget }) => {
             </Text>
             <View className="flex-row items-center">
                 <Text style={{ fontSize: 15, fontWeight: '300' }}>
-                    {selected.current
+                    {selected.current != null &&
+                    (selected.current as number) >= 0
                         ? targetData[Number(selected.current)]
                         : target
-                          ? target
+                          ? targetData[Number(selected.current)]
                           : ''}
                 </Text>
                 <Icon
@@ -67,6 +66,10 @@ const HealthTarget: FC<IProps> = ({ height, fontSize, target, setTarget }) => {
                     <Dialog.Title title={'健康目标'}></Dialog.Title>
                     <TouchableOpacity
                         onPress={() => {
+                            if (!selected.current) {
+                                setTarget(0)
+                                selected.current = 0
+                            }
                             setIsShow(false)
                         }}
                     >
@@ -78,7 +81,7 @@ const HealthTarget: FC<IProps> = ({ height, fontSize, target, setTarget }) => {
                     selectedIndex={Number(selected.current)}
                     options={targetData}
                     onChange={(index) => {
-                        selected.current = String(index)
+                        selected.current = index
                         setTarget(selected.current)
                     }}
                 />

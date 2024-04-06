@@ -14,7 +14,6 @@ import HabitPicker from './habit-picker'
 import { getUserInfo } from '../../../../apis/mine'
 import { changeUserInfoAction } from '../../../../store/slice/login-register-slice'
 import { getIntakeDailyApi } from '../../../../apis/home'
-import { GetDailyIntakeData } from '../../../../apis/types/home'
 import HealthTarget from './health-target'
 
 const BodyContent = (props: any, ref: any) => {
@@ -25,35 +24,37 @@ const BodyContent = (props: any, ref: any) => {
     }, shallowEqual)
     const { id } = userInfo
     const dispatch = useAppDispatch()
-    const { height, weight, birth, sex, habit } = userInfo
+    const { height, weight, birth, sex } = userInfo
     const [Sex, setSex] = useState(() => userInfo.sex)
     const [Birth, setBirth] = useState('')
     const [Height, setHeight] = useState(() => userInfo.height)
     const [Weight, setWeight] = useState(() => userInfo.weight)
-    const [Habit, setHabit] = useState(() => userInfo.habit)
-    const [target, setTarget] = useState('')
-
+    const [Habit, setHabit] = useState(() => userInfo.exercise)
+    const [target, setTarget] = useState(() => userInfo.target)
     //获取到填写的数据
     const updateProfile = async () => {
         const param = {
-            sex: String(Sex),
+            sex: Number(Sex),
             birth: Birth,
-            height: String(Height),
-            weight: String(Weight),
+            height: Number(Height),
+            weight: Number(Weight),
             userid: id,
-            target: String(Habit),
-            gym: '0',
-            exercise: Number(target),
+            exercise: Habit,
+            target: Number(target),
+            gym: 0,
         }
-        const res = await getIntakeDailyApi(param)
-        //获取用户信息
-        if (res.code === 1) {
-            Alert.alert('更新成功')
+        try {
+            const res = await getIntakeDailyApi(param)
+            console.log(res, '用户信息')
             //获取用户信息
-            const userInfo = await getUserInfo(id)
-            console.log(userInfo)
-            //放到profile中
-            dispatch(changeUserInfoAction(userInfo.data.user))
+            if (res.code === 1) {
+                Alert.alert('更新成功')
+                const userInfo = await getUserInfo(id)
+                console.log(userInfo.data.user)
+                dispatch(changeUserInfoAction(userInfo.data.user))
+            }
+        } catch (e) {
+            console.log(e, '更新出错了')
         }
     }
     //传递给父组件的方法
@@ -85,9 +86,12 @@ const BodyContent = (props: any, ref: any) => {
                 content={weight}
                 setValue={setWeight}
             ></HighPicker>
-            <HabitPicker habit={habit} setHabit={setHabit}></HabitPicker>
+            <HabitPicker
+                habit={Habit as number}
+                setHabit={setHabit}
+            ></HabitPicker>
             <HealthTarget
-                target={target}
+                target={target as number}
                 setTarget={setTarget}
                 height={60}
                 fontSize={14}

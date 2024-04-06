@@ -48,6 +48,8 @@ export interface FoodCommentSingleData {
     content: string
     date: Array<number>
     children: FoodCommentChildren[]
+    likeNum: number
+    isLike: boolean
 }
 
 export interface FoodCommentChildren {
@@ -58,6 +60,8 @@ export interface FoodCommentChildren {
     avatar?: string
     content: string
     date: Array<number>
+    likeNum: number
+    isLike: boolean
 }
 
 //食谱列表

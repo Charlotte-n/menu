@@ -2,12 +2,12 @@ export interface GetDailyIntakeData {
     birth: string
     exercise: string | number
     fat?: number
-    gym: string
-    height: string
-    sex: string
-    target: string
+    gym: number | string
+    height: number | string
+    sex: number | string
+    target: number | string
     userid: number
-    weight: string
+    weight: number | string
 }
 
 export interface ResponseDailyIntake {

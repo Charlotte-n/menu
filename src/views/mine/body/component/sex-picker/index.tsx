@@ -14,9 +14,6 @@ const SexPicker: FC<IProps> = ({ sex, setSex, height, fontSize }) => {
     const [isShow, setIsShow] = useState(false)
     //进行联动
     const selected = useRef(String(sex))
-    useEffect(() => {
-        console.log(sex)
-    }, [])
     return (
         <TouchableOpacity
             className="flex-row items-center border-[#F1F3F4] border-b"
@@ -45,9 +42,11 @@ const SexPicker: FC<IProps> = ({ sex, setSex, height, fontSize }) => {
                         ? selected.current === '0'
                             ? '男'
                             : '女'
-                        : String(sex) === '0'
-                          ? '男'
-                          : '女'}
+                        : sex
+                          ? String(sex) === '0'
+                              ? '男'
+                              : '女'
+                          : ''}
                 </Text>
                 <Icon
                     type={'antdesign'}

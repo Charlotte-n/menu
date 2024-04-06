@@ -1,9 +1,5 @@
-import React, { useEffect, useRef } from 'react'
-import {
-    CommonActions,
-    NavigationContainer,
-    useNavigationContainerRef,
-} from '@react-navigation/native'
+import React from 'react'
+import { CommonActions, NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import TabBar from './src/route/tab-bar'
 import LoginRegisterHomeScreen from './src/route/login'
@@ -25,11 +21,13 @@ import CommentsComply from './src/views/diet/c-pages/food-detail/c-pages/comment
 import RecipeCollect from './src/views/mine/collect/c-pages/recipe-collect'
 import RecognizeFood from './src/views/recognize-food'
 import AI from './src/views/more/c-pages/ai'
-import { changeNavigateAction } from './src/store/slice/common'
+import DietCommunicate from './src/route/diet-communicate'
+import UserPage from './src/views/user/c-pages/user-page'
+import Group from './src/views/more/c-pages/group'
+import GroupRoute from './src/route/group'
 
 //回到顶层
 export const navigationRef = React.createRef()
-//
 export function navigateToTop() {
     if (navigationRef.current) {
         navigationRef.current.dispatch(
@@ -47,6 +45,13 @@ export function navigateToTop() {
 
 export default function App() {
     const Stack = createStackNavigator()
+    const moreFunction = [
+        {
+            name: 'ai',
+            title: 'AI小助手',
+            component: AI,
+        },
+    ]
 
     return (
         <Provider store={store}>
@@ -58,6 +63,9 @@ export default function App() {
                                 ? 'tabs'
                                 : 'LoginRegisterHomeScreen'
                         }
+                        screenOptions={{
+                            headerShadowVisible: false,
+                        }}
                     >
                         <Stack.Screen
                             name={'LoginRegisterHomeScreen'}
@@ -185,7 +193,7 @@ export default function App() {
                                             {{
                                                 content: (
                                                     <Image
-                                                        source={require('./assets/icon/分享.png')}
+                                                        source={require('./assets/icon/share.png')}
                                                         style={{
                                                             width: 25,
                                                             height: 25,
@@ -233,7 +241,7 @@ export default function App() {
                                             {{
                                                 content: (
                                                     <Image
-                                                        source={require('./assets/icon/分享.png')}
+                                                        source={require('./assets/icon/share.png')}
                                                         style={{
                                                             width: 25,
                                                             height: 25,
@@ -265,7 +273,7 @@ export default function App() {
                                             {{
                                                 content: (
                                                     <Image
-                                                        source={require('./assets/icon/分享.png')}
+                                                        source={require('./assets/icon/share.png')}
                                                         style={{
                                                             width: 25,
                                                             height: 25,
@@ -281,18 +289,47 @@ export default function App() {
                         ></Stack.Screen>
                         {/*  其他功能  */}
                         {/*小助手*/}
+                        {moreFunction.map((item) => {
+                            return (
+                                <Stack.Screen
+                                    key={item.name}
+                                    name={item.name}
+                                    component={item.component}
+                                    options={{
+                                        headerTitle: item.title,
+                                        headerTitleAlign: 'center',
+                                        headerBackImage: () => (
+                                            <Icon
+                                                name={'left'}
+                                                type={'antdesign'}
+                                            ></Icon>
+                                        ),
+                                    }}
+                                ></Stack.Screen>
+                            )
+                        })}
+                        {/*饮食圈广场*/}
                         <Stack.Screen
-                            name={'ai'}
-                            component={AI}
+                            name={'communicate'}
+                            component={DietCommunicate}
                             options={{
-                                headerTitle: 'AI小助手',
-                                headerTitleAlign: 'center',
-                                headerBackImage: () => (
-                                    <Icon
-                                        name={'left'}
-                                        type={'antdesign'}
-                                    ></Icon>
-                                ),
+                                headerShown: false,
+                            }}
+                        ></Stack.Screen>
+                        {/*组队监督*/}
+                        <Stack.Screen
+                            name={'group'}
+                            component={GroupRoute}
+                            options={{
+                                headerShown: false,
+                            }}
+                        ></Stack.Screen>
+                        {/*    用户页面*/}
+                        <Stack.Screen
+                            name={'userPage'}
+                            component={UserPage}
+                            options={{
+                                headerTitle: '用户详情',
                             }}
                         ></Stack.Screen>
                     </Stack.Navigator>

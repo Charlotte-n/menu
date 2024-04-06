@@ -5,6 +5,8 @@ import HomeSlice from './slice/home'
 import FoodSlice from './slice/food'
 import MealSlice from './slice/meal'
 import CommonSlice from './slice/common'
+import FoodCommunicateSlice from './slice/food-communicate'
+import GroupSlice from './slice/group'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import { persistReducer, persistStore } from 'redux-persist'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -16,6 +18,7 @@ import {
     REGISTER,
     REHYDRATE,
 } from 'redux-persist/es/constants'
+import { useImperativeHandle } from 'react'
 
 const persistConfig = {
     key: 'userInfo',
@@ -37,20 +40,35 @@ const persistMealConfig = {
     key: 'MealData',
     storage: AsyncStorage,
 }
+const persistFoodCommunicateConfig = {
+    key: 'FoodCommunicateData',
+    storage: AsyncStorage,
+}
+const persistGroupConfig = {
+    key: 'GroupData',
+    storage: AsyncStorage,
+    blacklist: ['currentTime'],
+}
 
 const LoginStorePersist = persistReducer(persistConfig, LoginRegisterSlice)
 const HomeStorePersist = persistReducer(persistHomeConfig, HomeSlice)
 const FoodStorePersist = persistReducer(persistFoodConfig, FoodSlice)
 const DietStorePersist = persistReducer(persistDietConfig, DietSlice)
-// const MealStorePersist = persistReducer(persistMealConfig, MealSlice)
+const FoodCommunicatePersist = persistReducer(
+    persistFoodCommunicateConfig,
+    FoodCommunicateSlice,
+)
+const GroupStorePersist = persistReducer(persistGroupConfig, GroupSlice)
 const store = configureStore({
     reducer: {
         LoginRegisterSlice: LoginStorePersist,
-        DietSlice: DietSlice,
+        DietSlice: DietStorePersist,
         HomeSlice: HomeStorePersist,
         FoodSlice: FoodStorePersist,
         MealSlice: MealSlice,
         CommonSlice: CommonSlice,
+        FoodCommunicateSlice: FoodCommunicateSlice,
+        GroupSlice: GroupStorePersist,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

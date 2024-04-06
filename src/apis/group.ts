@@ -1,0 +1,226 @@
+import hyRequest from '../services'
+import {
+    CategoryGroupsType,
+    ClockCalendarData,
+    ClockCalendarParams,
+    clockParam,
+    createGroupParam,
+    GambitData,
+    groupClassificationType,
+    GroupInfoType,
+    RankingMemberBody,
+    RankingType,
+} from './types/group'
+import { CommonResponseType } from './types'
+
+enum BASEURL {
+    CREATE_GROUP = '/api/group/create',
+    SEARCH_GROUP = '/api/group/searchname',
+    JOIN_GROUP = '/api/group/join',
+    QUIT_GROUP = '/api/group/out',
+    DELETE_GROUP_NUMBER = '/api/group/delete',
+    GROUP_DETAIL = '/api/group/groupdetail',
+    SHOW_GROUP_THREE = '/api/group/show',
+    GROUP_CLASSIFICATION = '/api/group/classification',
+    SHOW_GAMBIT = '/api/group/showgambit',
+    MEMBER_RANKING = '/api/group/ordermember',
+    USER_CLOCK = '/api/group/clock',
+    GET_GROUPS_CATEGORY = '/api/group/allGroupCategory',
+    CLOCK_CALENDAR = '/api/group/clockDate',
+}
+
+/**
+ * 创建一个小组
+ * @param data
+ */
+export const createGroupApi = (data: any) => {
+    return hyRequest.post<CommonResponseType<any>>({
+        url: BASEURL.CREATE_GROUP,
+        data,
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    })
+}
+/**
+ * 搜索小组
+ * @param groupName
+ * @param userid
+ * @constructor
+ */
+export const searchGroupApi = (groupName: string, userid: number) => {
+    return hyRequest.get<CommonResponseType<any>>({
+        url: BASEURL.SEARCH_GROUP,
+        params: {
+            groupName,
+            userid,
+        },
+    })
+}
+
+/**
+ * 通过邀请码来加入小组
+ * @param userid
+ * @param code
+ * @constructor
+ */
+export const JoinGroupByCodeApi = (userid: number, code: string) => {
+    return hyRequest.get({
+        url: BASEURL.JOIN_GROUP,
+        params: {
+            userid,
+            code,
+        },
+    })
+}
+
+/**
+ * 退出小组
+ * @constructor
+ * @param userid
+ * @param groupId
+ */
+export const QuitGroupApi = (userid: number, groupId: number) => {
+    return hyRequest.get({
+        url: BASEURL.QUIT_GROUP,
+        params: {
+            userid,
+            groupId,
+        },
+    })
+}
+
+/**
+ * 删除小组成员
+ * @param userid
+ * @param groupId
+ * @constructor
+ */
+export const DeleteGroupNumberApi = (userid: number, groupId: number) => {
+    return hyRequest.get({
+        url: BASEURL.DELETE_GROUP_NUMBER,
+        params: {
+            userid,
+            groupId,
+        },
+    })
+}
+
+/**
+ * 获取小组的详细信息
+ * @constructor
+ * @param id
+ * @param userid
+ */
+export const GroupDetailApi = (id: number, userid: number) => {
+    return hyRequest.get<CommonResponseType<GroupInfoType>>({
+        url: BASEURL.GROUP_DETAIL + '/' + id + '/' + userid,
+    })
+}
+
+/**
+ * 获取打卡率前三的小组
+ */
+export const getThreeGroupApi = (id: number) => {
+    return hyRequest.get<CommonResponseType<GroupInfoType[]>>({
+        url: BASEURL.SHOW_GROUP_THREE + '/' + id,
+    })
+}
+
+/**
+ *获取分类小组
+ */
+export const getClassGroupApi = () => {
+    return hyRequest.get<CommonResponseType<groupClassificationType>>({
+        url: BASEURL.GROUP_CLASSIFICATION,
+    })
+}
+
+/**
+ * 显示话题
+ * @param id
+ */
+export const showGambitApi = (id: number) => {
+    return hyRequest.get<CommonResponseType<GambitData>>({
+        url: BASEURL.SHOW_GAMBIT,
+        params: {
+            id,
+        },
+    })
+}
+
+/**
+ * 获取排行榜的前50名
+ * @param body
+ */
+export const showMemberRankingApi = (body: RankingMemberBody) => {
+    const { groupId, pageNum, pageSize, userId } = body
+    return hyRequest.post<CommonResponseType<RankingType>>({
+        url: BASEURL.MEMBER_RANKING,
+        data: {
+            groupId,
+            pageNum,
+            pageSize,
+            userId,
+        },
+    })
+}
+
+/**
+ * 打卡
+ * @param query
+ * @param images
+ * @constructor
+ */
+export const ClockApi = (query: clockParam, images: any) => {
+    const { content, groupId, userId } = query
+    return hyRequest.post<CommonResponseType<any>>({
+        url: BASEURL.USER_CLOCK,
+        data: images,
+        params: {
+            content,
+            groupId,
+            userId,
+        },
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    })
+}
+
+/**
+ * 获取分类小组
+ * @param category
+ */
+export const getCategoryGroupsApi = (category: string) => {
+    return hyRequest.get<CommonResponseType<CategoryGroupsType[]>>({
+        url: BASEURL.GET_GROUPS_CATEGORY,
+        params: {
+            category,
+        },
+    })
+}
+
+/**
+ * 打卡日历
+ * @param data
+ * @constructor
+ */
+export const ClockCalendarApi = (data: ClockCalendarParams) => {
+    const { groupId, newDateTime, userId } = data
+    return hyRequest.post<CommonResponseType<ClockCalendarData>>({
+        url: BASEURL.CLOCK_CALENDAR,
+        params: {
+            groupId,
+            newDateTime,
+            userId,
+        },
+    })
+}
+
+/**
+ * 展示打卡内容
+ */
+export const getClockContentApi = ()=>{
+    return hyRequest.get({})
+}

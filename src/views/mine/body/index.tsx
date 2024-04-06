@@ -30,7 +30,6 @@ const Body: FC<IProps> = () => {
     }
     //触发更新用户资料
     const updateUserProfile = () => {
-        console.log(123)
         childrenRef.current.updateProfile()
     }
     useEffect(() => {

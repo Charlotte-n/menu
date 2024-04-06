@@ -28,7 +28,8 @@ class HYRequest {
                 const token = store.getState().LoginRegisterSlice.token
                 // loading/token
                 if (token) {
-                    config.headers.token = token
+                    config.headers.token =
+                        'eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MTMzMzU2NTMsInVzZXIiOm51bGx9.VgBXhr2qnNEg0sVuYyuT0XuIzXZpS68reBGfc_g_Huw'
                 }
                 return config
             },

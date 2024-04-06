@@ -51,8 +51,6 @@ const IntakeItem: FC<IProps> = ({ data, time, children }) => {
         g: 100,
     }
     const decline = async (operator: number) => {
-        //修改食物
-        console.log(changeFood, '上传的内容')
         changeFood.operator = operator
         await addCaloriesApi(changeFood).then((res) => {
             console.log(res)
@@ -65,7 +63,7 @@ const IntakeItem: FC<IProps> = ({ data, time, children }) => {
         //修改食物
         changeFood.operator = operator
         await addCaloriesApi(changeFood).then((res) => {
-            console.log(res)
+            // console.log(res)
         })
         //更新食物
         await GetDailyIntake()

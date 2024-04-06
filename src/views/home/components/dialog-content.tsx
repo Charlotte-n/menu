@@ -1,5 +1,5 @@
-import React, { memo, useEffect, useRef, useState } from 'react'
-import type { FC, ReactNode } from 'react'
+import React, { memo, useEffect, useState } from 'react'
+import type { FC } from 'react'
 import { Alert, View } from 'react-native'
 import SexPicker from '../../mine/body/component/sex-picker'
 import DatePicker from '../../mine/body/component/date-picker'
@@ -12,8 +12,8 @@ import { getIntakeDailyApi } from '../../../apis/home'
 import { changeDailyIntake } from '../../../store/slice/home'
 import { Button } from '@rneui/themed'
 import theme from '../../../styles/theme/color'
-import { updateUserProfile } from '../../../apis/mine'
-import { changeHealthTargetAction } from '../../../store/slice/login-register-slice'
+import { getUserInfo } from '../../../apis/mine'
+import { changeUserInfoAction } from '../../../store/slice/login-register-slice'
 
 interface IProps {
     children?: any
@@ -27,7 +27,7 @@ const DialogContent: FC<IProps> = ({ children }) => {
     }, shallowEqual)
     const dispatch = useAppDispatch()
     const { cancel } = children
-    const [sex, setSex] = useState('0')
+    const [sex, setSex] = useState('')
     const [birth, setBirth] = useState('')
     const [height, setHeight] = useState('')
     const [weight, setWeight] = useState('')
@@ -36,31 +36,27 @@ const DialogContent: FC<IProps> = ({ children }) => {
     //收集信息就可以了
     const getDailyIntake = async () => {
         const param = {
+            sex: String(sex),
+            birth: birth,
+            height: String(height),
+            weight: String(weight),
             userid: userInfo.id,
-            target,
-            sex,
-            birth,
-            height,
-            weight,
-            gym: '0',
-            exercise: habit,
-        }
-        const updateUserInfoParam = {
-            id: userInfo.id,
-            sex: Number(sex),
-            birth,
-            height,
-            weight,
-            habit: habit,
+            exercise: Number(habit),
+            target: String(target),
+            gym: 0,
         }
         console.log(param)
         try {
             const res = await getIntakeDailyApi(param)
             //更新用户的信息
-            await updateUserProfile(updateUserInfoParam)
             if (res.code === 1) {
                 dispatch(changeDailyIntake(res.data))
-                dispatch(changeHealthTargetAction(target))
+                //重新获取用户信息
+                getUserInfo(userInfo.id).then((res) => {
+                    dispatch(
+                        changeUserInfoAction((res.data as { user: any }).user),
+                    )
+                })
                 cancel()
             } else {
                 //填写
@@ -74,7 +70,7 @@ const DialogContent: FC<IProps> = ({ children }) => {
     return (
         <View>
             <SexPicker
-                sex={Number(sex)}
+                sex={sex as any}
                 setSex={setSex}
                 height={40}
                 fontSize={14}
@@ -110,7 +106,7 @@ const DialogContent: FC<IProps> = ({ children }) => {
                 fontSize={14}
             ></HabitPicker>
             <HealthTarget
-                target={target}
+                target={Number(target)}
                 setTarget={setTarget}
                 height={40}
                 fontSize={14}

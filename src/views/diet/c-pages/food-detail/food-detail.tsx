@@ -58,6 +58,7 @@ const FoodDetail: FC<IProps> = () => {
         await RecipeListApi({
             id: (route.params as { id: number }).id,
         }).then((res) => {
+            console.log(res)
             //数据的处理
             let materials = (res.data.dishes[0].materials as string)
                 .trim()
@@ -97,19 +98,20 @@ const FoodDetail: FC<IProps> = () => {
     const capturePic = () => {
         view.current.capture().then((uri: string) => {
             setUrl(uri)
+            dispatch(changeUrl(uri))
         })
     }
     useEffect(() => {
         capturePic()
-        dispatch(changeUrl(url))
-    }, [url])
-
+    }, [RecipeDetail])
     //#获取评论
     const getComments = () => {
         //食物id
-        getCommentsApi((route.params as { id: number }).id).then((res) => {
-            dispatch(changeCommentAction(res.data))
-        })
+        getCommentsApi((route.params as { id: number }).id, userInfo.id).then(
+            (res) => {
+                dispatch(changeCommentAction(res.data))
+            },
+        )
     }
     useEffect(() => {
         getComments()
@@ -184,57 +186,60 @@ const FoodDetail: FC<IProps> = () => {
             <ScrollView
                 style={{
                     flex: 1,
-                    backgroundColor: theme.colors.primary,
+                    // backgroundColor: theme.colors.primary,
                 }}
                 showsVerticalScrollIndicator={false}
             >
                 <Card
                     containerStyle={{
+                        backgroundColor: 'white',
                         marginTop: 120,
+                        width: Dimensions.get('screen').width,
+                        marginHorizontal: 0,
+                        paddingHorizontal: 0,
                         borderTopLeftRadius: 40,
                         borderTopEndRadius: 40,
-                        width: Dimensions.get('screen').width,
-                        paddingHorizontal: 15,
-                        paddingVertical: 0,
-                        marginHorizontal: 0,
-                        flex: 1,
-                        minHeight: 600,
                     }}
                 >
-                    {/*创建BFC*/}
-                    <View className="h-[130]">
-                        <View className="absolute top-[-100] items-center self-center">
-                            {RecipeDetail.image ? (
-                                <Image
-                                    source={{
-                                        uri: RecipeDetail.image as string,
-                                    }}
-                                    style={{ width: 180, height: 180 }}
-                                    className="rounded-full"
-                                ></Image>
-                            ) : null}
-                            <Text
-                                style={{
-                                    marginTop: 10,
-                                    fontSize: 20,
-                                    minHeight: 100,
-                                }}
-                            >
-                                {RecipeDetail.name?.trim()}
-                            </Text>
-                        </View>
-                    </View>
                     {/*    做法*/}
                     <ViewShot
                         ref={view}
                         options={{
-                            fileName: 'food',
+                            fileName: 'food-detail-health',
                             format: 'png',
                             quality: 0.4,
                             result: 'base64',
                         }}
                     >
-                        <View className="mt-[20]">
+                        {/*创建BFC*/}
+                        <View
+                            className="pl-[10] pr-[10]"
+                            style={{
+                                minHeight: 150,
+                            }}
+                        >
+                            <View className="absolute top-[-100] items-center self-center">
+                                {RecipeDetail.image ? (
+                                    <Image
+                                        source={{
+                                            uri: RecipeDetail.image as string,
+                                        }}
+                                        style={{ width: 180, height: 180 }}
+                                        className="rounded-full"
+                                    ></Image>
+                                ) : null}
+                                <Text
+                                    style={{
+                                        marginTop: 10,
+                                        fontSize: 20,
+                                        minHeight: 100,
+                                    }}
+                                >
+                                    {RecipeDetail.name?.trim()}
+                                </Text>
+                            </View>
+                        </View>
+                        <View className="mt-[20] ml-[15] mr-[15]">
                             <Text
                                 className="text-[#C0AE7D]"
                                 style={{
@@ -244,7 +249,7 @@ const FoodDetail: FC<IProps> = () => {
                             >
                                 材料
                             </Text>
-                            <View className="pl-[15] pr-[15]">
+                            <View className="pl-[15] pr-[15] ">
                                 {(RecipeDetail.materials as string[])?.map(
                                     (item, index) => {
                                         return (
@@ -255,7 +260,7 @@ const FoodDetail: FC<IProps> = () => {
                                                 <Text
                                                     style={{
                                                         fontSize: 14,
-                                                        width: 200,
+                                                        flex: 1,
                                                     }}
                                                 >
                                                     {item?.trim()}
@@ -275,64 +280,62 @@ const FoodDetail: FC<IProps> = () => {
                                 )}
                             </View>
                         </View>
-                        <View className="mt-[20]">
-                            <Text
-                                style={{
-                                    fontSize: 20,
-                                    fontWeight: 'bold',
-                                }}
-                                className="text-[#C0AE7D]"
-                            >
-                                {RecipeDetail.name}的做法
-                            </Text>
-                            {(RecipeDetail.stepImg as string[])?.map(
-                                (item, index) => {
-                                    return (
-                                        <View key={item}>
-                                            <Text
-                                                style={{
-                                                    fontSize: 16,
-                                                    fontWeight: 'bold',
-                                                }}
-                                                className="text-[#C0AE7D] mt-[15]"
-                                            >
-                                                步骤{index + 1}
-                                            </Text>
-                                            {RecipeDetail.stepImg.length ? (
-                                                <View>
-                                                    <Image
-                                                        source={{
-                                                            uri: item?.trim(),
-                                                        }}
-                                                        style={{
-                                                            width: '100%',
-                                                            height: 200,
-                                                            borderRadius: 20,
-                                                        }}
-                                                        className="mt-[10]"
-                                                        resizeMode={'cover'}
-                                                    ></Image>
-                                                </View>
-                                            ) : null}
-
-                                            <Text
-                                                className="mt-[10]"
-                                                style={{
-                                                    fontSize: 15,
-                                                }}
-                                            >
-                                                {RecipeDetail.step[
-                                                    index
-                                                ]?.trim()}
-                                            </Text>
-                                        </View>
-                                    )
-                                },
-                            )}
-                        </View>
                     </ViewShot>
+                    <View className="mt-[20] ml-[15] mr-[15]">
+                        <Text
+                            style={{
+                                fontSize: 20,
+                                fontWeight: 'bold',
+                            }}
+                            className="text-[#C0AE7D]"
+                        >
+                            {RecipeDetail.name}的做法
+                        </Text>
+                        {(RecipeDetail.stepImg as string[])?.map(
+                            (item, index) => {
+                                return (
+                                    <View key={item}>
+                                        <Text
+                                            style={{
+                                                fontSize: 16,
+                                                fontWeight: 'bold',
+                                            }}
+                                            className="text-[#C0AE7D] mt-[15]"
+                                        >
+                                            步骤{index + 1}
+                                        </Text>
+                                        {RecipeDetail.stepImg.length ? (
+                                            <View>
+                                                <Image
+                                                    source={{
+                                                        uri: item?.trim(),
+                                                    }}
+                                                    style={{
+                                                        width: '100%',
+                                                        height: 200,
+                                                        borderRadius: 20,
+                                                    }}
+                                                    className="mt-[10]"
+                                                    resizeMode={'cover'}
+                                                ></Image>
+                                            </View>
+                                        ) : null}
+
+                                        <Text
+                                            className="mt-[10]"
+                                            style={{
+                                                fontSize: 15,
+                                            }}
+                                        >
+                                            {RecipeDetail.step[index]?.trim()}
+                                        </Text>
+                                    </View>
+                                )
+                            },
+                        )}
+                    </View>
                     {/*评论区域*/}
-                    <View className="mt-[20]">
+                    <View className="mt-[20] ml-[15] mr-[15]">
                         <Comment foodId={(route.params as { id: number }).id}>
                             {{
                                 show: show,

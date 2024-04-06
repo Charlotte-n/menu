@@ -12,13 +12,19 @@ interface IProps {
 }
 
 const DrawerContent: FC<IProps> = () => {
-    const { profile, healthTarget } = useAppSelector((state) => {
+    const { profile } = useAppSelector((state) => {
         return {
             profile: state.LoginRegisterSlice.userInfo,
-            healthTarget: state.LoginRegisterSlice.healthTarget,
         }
     }, shallowEqual)
-
+    const birth = profile.birth
+        ? profile.birth[0] +
+          '-' +
+          '0' +
+          profile.birth[1] +
+          '-' +
+          profile.birth[2]
+        : ''
     const profileData = [
         {
             id: '0',
@@ -38,17 +44,17 @@ const DrawerContent: FC<IProps> = () => {
         {
             id: '3',
             title: '出生日期',
-            content: profile.birth ? profile.birth.join('-') : '无',
+            content: profile.birth ? birth : '无',
         },
         {
             id: '4',
             title: '运动习惯',
-            content: BodyData[Number(profile.habit)],
+            content: BodyData[Number(profile.exercise)],
         },
         {
             id: '5',
             title: '健康目标',
-            content: targetData[Number(healthTarget)],
+            content: targetData[Number(profile.target)],
         },
     ]
     return (
@@ -76,11 +82,19 @@ const DrawerContent: FC<IProps> = () => {
                     ></Image>
                 )}
 
-                <AutoText fontSize={7}>{profile.username}</AutoText>
+                <AutoText
+                    fontSize={5}
+                    style={{
+                        width: 120,
+                    }}
+                    numberOfLines={1}
+                >
+                    {profile.username}
+                </AutoText>
             </View>
             {/*    身体数据*/}
             <View>
-                {profileData.map((item, index) => {
+                {profileData?.map((item, index) => {
                     return (
                         <View
                             key={item.id}

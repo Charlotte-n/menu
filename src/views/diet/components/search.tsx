@@ -26,7 +26,7 @@ const SearchFilter: FC<IProps> = ({ type, children, category_id, isEdit }) => {
     //获取到图片
     const gotoCamera = () => {
         //@ts-ignore
-        navigation.navigate('camera')
+        navigation.navigate('camera', { type: 'search' })
     }
     //获取到搜索的食物
     const searchFoodData = () => {
@@ -60,9 +60,6 @@ const SearchFilter: FC<IProps> = ({ type, children, category_id, isEdit }) => {
             setSearchFoodResult((res.data as FoodListByCategoryType).foods)
         })
     }
-    useEffect(() => {
-        console.log(isEdit)
-    }, [])
     return (
         <View
             style={{
@@ -71,43 +68,55 @@ const SearchFilter: FC<IProps> = ({ type, children, category_id, isEdit }) => {
                 borderStyle: 'solid',
                 borderWidth: 1,
             }}
-            className="flex-row items-center pl-[13] pr-[13] pt-[10] pb-[10]  rounded-[10px]"
+            className="flex-row justify-between items-center pl-[13] pr-[13] pt-[10] pb-[10]  rounded-[10px]"
         >
-            <TouchableOpacity
-                onPress={() => {
-                    if (type === 'search') {
-                        if (search) {
-                            searchFoodData()
-                        }
-                    }
-                    if (type === 'category') {
-                        if (search) {
-                            searchFoodByCategoryTitle(category_id as number)
-                        } else {
-                            searchFoodByCategory(category_id as number)
-                        }
-                    }
-                }}
-            >
-                <Icon
-                    name={'search'}
-                    type={'fontAwesome'}
-                    color={theme.colors.deep01Primary}
-                    style={{
-                        marginRight: 10,
-                    }}
-                ></Icon>
-            </TouchableOpacity>
-            {/*搜索栏*/}
-            {type === 'home' ? (
+            <View className="flex-row">
                 <TouchableOpacity
                     onPress={() => {
-                        //@ts-ignore
-                        navigation.navigate('search')
+                        if (type === 'search') {
+                            if (search) {
+                                searchFoodData()
+                            }
+                        }
+                        if (type === 'category') {
+                            if (search) {
+                                searchFoodByCategoryTitle(category_id as number)
+                            } else {
+                                searchFoodByCategory(category_id as number)
+                            }
+                        }
                     }}
                 >
+                    <Icon
+                        name={'search'}
+                        type={'fontAwesome'}
+                        color={theme.colors.deep01Primary}
+                        style={{
+                            marginRight: 10,
+                        }}
+                    ></Icon>
+                </TouchableOpacity>
+                {/*搜索栏*/}
+                {type === 'home' ? (
+                    <TouchableOpacity
+                        onPress={() => {
+                            //@ts-ignore
+                            navigation.navigate('search')
+                        }}
+                    >
+                        <TextInput
+                            editable={false}
+                            placeholder={'搜索相关菜品食物的热量'}
+                            style={{
+                                width:
+                                    (Dimensions.get('screen').width - 40) / 1.4,
+                            }}
+                            onChangeText={(value) => setSearch(value)}
+                            value={search}
+                        ></TextInput>
+                    </TouchableOpacity>
+                ) : (
                     <TextInput
-                        editable={false}
                         placeholder={'搜索相关菜品食物的热量'}
                         style={{
                             width: (Dimensions.get('screen').width - 40) / 1.4,
@@ -115,17 +124,9 @@ const SearchFilter: FC<IProps> = ({ type, children, category_id, isEdit }) => {
                         onChangeText={(value) => setSearch(value)}
                         value={search}
                     ></TextInput>
-                </TouchableOpacity>
-            ) : (
-                <TextInput
-                    placeholder={'搜索相关菜品食物的热量'}
-                    style={{
-                        width: (Dimensions.get('screen').width - 40) / 1.4,
-                    }}
-                    onChangeText={(value) => setSearch(value)}
-                    value={search}
-                ></TextInput>
-            )}
+                )}
+            </View>
+
             {search && (
                 <TouchableOpacity onPress={() => clearAll()}>
                     <Icon

@@ -31,7 +31,7 @@ const DatePicker: FC<IProps> = ({ birth, setBirth, height, fontSize }) => {
     //刚开始的生日日期
     useEffect(() => {
         if (birth) {
-            setCurrentDate(birth.join('-'))
+            setCurrentDate(birth[0] + '-' + '0' + birth[1] + '-' + birth[2])
         } else {
             setBirth(moment(date).format('YYYY-MM-DD'))
         }
@@ -61,9 +61,7 @@ const DatePicker: FC<IProps> = ({ birth, setBirth, height, fontSize }) => {
                         fontWeight: '300',
                     }}
                 >
-                    {currentDate
-                        ? currentDate
-                        : String(moment(date).format('YYYY-MM-DD'))}
+                    {currentDate ? currentDate : ''}
                 </Text>
                 <Icon
                     type={'antdesign'}

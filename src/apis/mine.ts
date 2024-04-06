@@ -1,6 +1,7 @@
 import hyRequest from '../services'
 import { LoginData } from './types/mine'
 import { CommonResponseType } from './types'
+import { BASE_URL } from '../services/config'
 
 enum URL {
     LOGINURL = '/api/user/login',
@@ -9,6 +10,8 @@ enum URL {
     UPLOADAVATAR = '/api/common/upload',
     UPDATEUSERINFO = '/api/user/updatemsg',
     GETUSERINFO = '/api/user/msg',
+    LOGOUT = '/api/user/logout',
+    FIND_PASSWORD = '/api/user/findBack',
 }
 
 export interface LoginParamType {
@@ -125,5 +128,32 @@ export const updateUserProfile = (param: updateUserProfileParamType) => {
     return hyRequest.post({
         url: URL.UPDATEUSERINFO,
         data: param,
+    })
+}
+
+/**
+ * 注销用户
+ * @param id
+ */
+export const logoutApi = (id: number) => {
+    return hyRequest.get<CommonResponseType<any>>({
+        url: URL.LOGOUT + '/' + id,
+    })
+}
+
+/**
+ * 修改密码
+ * @param email
+ * @param password
+ * @param code
+ */
+export const findPassword = (email: string, password: string, code: string) => {
+    return hyRequest.get({
+        url: URL.FIND_PASSWORD,
+        params: {
+            email,
+            password,
+            code,
+        },
     })
 }

@@ -2,26 +2,27 @@ import React, { useEffect, useRef, useState } from 'react'
 import { TouchableOpacity, View } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import { useNavigation } from '@react-navigation/native'
-import { useAppSelector } from '../../store'
-import { shallowEqual } from 'react-redux'
+import { useCameraPermission } from 'react-native-vision-camera'
 
 const MyImagePicker = ({
     children,
     getImage,
+    type,
 }: {
     children: any
     getImage: any
+    type?: string
 }) => {
-    const { content } = children
+    const { hasPermission, requestPermission } = useCameraPermission()
     const navigation = useNavigation()
-    const { RecognizeFoodInfo } = useAppSelector((state) => {
-        return {
-            RecognizeFoodInfo: state.DietSlice.RecognizeFoodInfo,
-        }
-    }, shallowEqual)
-    //获取相机权限
+    const { content } = children
     useEffect(() => {
+        //获取相机权限
         ;(async () => {
+            //获取相机的权限
+            if (!hasPermission) {
+                await requestPermission()
+            }
             // 获取相册权限
             const { status } =
                 await ImagePicker.requestMediaLibraryPermissionsAsync()
@@ -30,6 +31,7 @@ const MyImagePicker = ({
             }
         })()
     }, [])
+
     const [image, setImage] = useState('')
     const result = useRef<any>()
     //获取图片
@@ -43,23 +45,24 @@ const MyImagePicker = ({
         result.current = res
         if (!result.current.canceled) {
             setImage((prevState: any) => {
-                return result.current.assets[0].uri as string
+                return (res!.assets as any)[0].uri as string
             })
         }
     }
     useEffect(() => {
         if (image) {
             getImage(image)
+            setTimeout(() => {
+                //判断是否有名字
+                if (type === 'camera') {
+                    //@ts-ignore
+                    navigation.navigate('RecognizeFood')
+                }
+            }, 600)
         }
     }, [image])
 
     //获取到识别的食物
-    useEffect(() => {
-        if (RecognizeFoodInfo[0]?.name) {
-            //@ts-ignore
-            navigation.navigate('RecognizeFood')
-        }
-    }, [RecognizeFoodInfo])
 
     return (
         <View>

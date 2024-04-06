@@ -6,6 +6,8 @@ import AutoText from '../../../../../components/auto-text'
 import WheelPicker from 'react-native-wheely'
 import { foodTime } from '../../../../../data/diet'
 import { BodyData } from '../../../../../data/mine'
+import { useAppSelector } from '../../../../../store'
+import { shallowEqual } from 'react-redux'
 interface IProps {
     children?: ReactNode
     habit: any
@@ -16,13 +18,19 @@ interface IProps {
 
 const HabitPicker: FC<IProps> = ({ habit, setHabit, height, fontSize }) => {
     const [isShow, setIsShow] = useState(false)
+    const { userInfo } = useAppSelector((state) => {
+        return {
+            userInfo: state.LoginRegisterSlice.userInfo,
+        }
+    }, shallowEqual)
     //进行联动
-    const selected = useRef(habit)
-
+    const selected = useRef(userInfo.exercise)
     return (
         <TouchableOpacity
             className="flex-row items-center border-[#F1F3F4] border-b"
-            onPress={() => setIsShow(true)}
+            onPress={() => {
+                setIsShow(true)
+            }}
             style={{
                 height: height ? height : 59,
             }}
@@ -38,9 +46,9 @@ const HabitPicker: FC<IProps> = ({ habit, setHabit, height, fontSize }) => {
             </Text>
             <View className="flex-row items-center">
                 <Text style={{ fontSize: 15, fontWeight: '300' }}>
-                    {selected.current
+                    {selected.current >= 0
                         ? BodyData[selected.current]
-                        : habit >= 0
+                        : Number(habit) >= 0
                           ? BodyData[selected.current]
                           : ''}
                 </Text>
@@ -60,6 +68,10 @@ const HabitPicker: FC<IProps> = ({ habit, setHabit, height, fontSize }) => {
                     <Dialog.Title title={'运动习惯'}></Dialog.Title>
                     <TouchableOpacity
                         onPress={() => {
+                            if (!selected.current) {
+                                setHabit(0)
+                                selected.current = 0
+                            }
                             setIsShow(false)
                         }}
                     >
@@ -68,11 +80,11 @@ const HabitPicker: FC<IProps> = ({ habit, setHabit, height, fontSize }) => {
                 </View>
 
                 <WheelPicker
-                    selectedIndex={selected.current}
+                    selectedIndex={Number(selected.current)}
                     options={BodyData}
                     onChange={(index) => {
                         selected.current = index
-                        setHabit(index)
+                        setHabit(selected.current)
                     }}
                 />
             </Dialog>

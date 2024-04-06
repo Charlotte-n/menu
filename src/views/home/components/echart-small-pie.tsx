@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react'
+import React, { memo } from 'react'
 import type { FC, ReactNode } from 'react'
 import { Text, View } from 'nativewind/dist/preflight'
 import { Dimensions } from 'react-native'

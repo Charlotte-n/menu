@@ -1,6 +1,12 @@
 import React, { memo, useEffect, useState } from 'react'
 import type { FC } from 'react'
-import { Image, ScrollView, TouchableOpacity, View } from 'react-native'
+import {
+    Dimensions,
+    Image,
+    ScrollView,
+    TouchableOpacity,
+    View,
+} from 'react-native'
 import { RefreshControl } from 'react-native-gesture-handler'
 import theme from '../../../styles/theme/color'
 import { ActivityIndicator } from 'nativewind/dist/preflight'
@@ -112,7 +118,10 @@ const FoodTab: FC<IProps> = ({
     return (
         <View>
             <ScrollView
-                className="h-[300] overflow-hidden"
+                className="overflow-hidden"
+                style={{
+                    height: Dimensions.get('window').height - 400,
+                }}
                 showsVerticalScrollIndicator={false}
                 refreshControl={
                     <RefreshControl

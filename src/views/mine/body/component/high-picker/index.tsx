@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useRef, useState } from 'react'
 import type { FC, ReactNode } from 'react'
-import { Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Keyboard, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { Dialog, Icon } from '@rneui/themed'
 import theme from '../../../../../styles/theme/color'
 
@@ -79,7 +79,15 @@ const HighPicker: FC<IProps> = ({
                 )
         }
     }
-    useEffect(() => {}, [])
+    const textInput = useRef<any>(null)
+    useEffect(() => {
+        setTimeout(() => {
+            textInput.current?.focus()
+        }, 500)
+        return () => {
+            Keyboard.dismiss()
+        }
+    }, [isShow])
     return (
         <TouchableOpacity
             className="flex-row items-center  border-[#F1F3F4] border-b"
@@ -113,6 +121,7 @@ const HighPicker: FC<IProps> = ({
             <Dialog isVisible={isShow}>
                 <Dialog.Title title={modelTitle} />
                 <TextInput
+                    ref={textInput}
                     style={{
                         borderColor: '#888888',
                         height: 40,

@@ -35,6 +35,9 @@ const EchartBingPie: FC<IProps> = () => {
                 ) || 0,
         },
     ]
+    useEffect(() => {
+        console.log(dailyIntake)
+    }, [])
     return (
         <View className="m-auto">
             <Svg width={180} height={180}>

@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useRef, useState } from 'react'
-import type { FC, ReactNode } from 'react'
+import type { FC } from 'react'
 import { Tab, TabView } from '@rneui/themed'
 import theme from '../../../styles/theme/color'
 import { FoodListByCategoryApi } from '../../../apis/food'
@@ -20,24 +20,42 @@ interface IProps {
 const FoodCategoryByTime: FC<IProps> = ({ children }) => {
     const getRecipe = children.getRecipeData
     const [index, setIndex] = React.useState(0)
-    const [refresh, setRefresh] = useState(true)
+    const [refresh, setRefresh] = useState(false)
     const pageLoading = useRef(false)
     const [pageLoadingFull, setPageLoadingFull] = useState(false)
-    const pageNum = useRef(1)
+    const pageNum = useRef(0)
+    const FoodList = useRef([] as SingleFoodListType[])
     const [FoodNum, setFoodNum] = useState(0)
     const num = useRef(10)
+    const dispatch = useAppDispatch()
+    //进行缓存
+    const {
+        breakFastFoodList,
+        lunchFoodList,
+        dinnerFoodList,
+        fruitFoodList,
+        otherFoodList,
+    } = useAppSelector((state) => {
+        return {
+            breakFastFoodList: state.DietSlice.breakFastFoodList,
+            lunchFoodList: state.DietSlice.lunchFastFoodList,
+            dinnerFoodList: state.DietSlice.dinnerFastFoodList,
+            fruitFoodList: state.DietSlice.fruitFoodList,
+            otherFoodList: state.DietSlice.otherFoodList,
+        }
+    }, shallowEqual)
     //上拉加载
     const loadMore = () => {
-        //当这个食物大于总的食物的时候，就返回
         if (num.current >= FoodNum) {
             setPageLoadingFull(true)
             return
         }
         //计算有多少个食物
         num.current += 10
+        //当这个食物大于总的食物的时候，就返回
         pageLoading.current = true
         pageNum.current += 1
-        getFoodList(activeId)
+        getFoodList()
         pageLoading.current = false
     }
     //获取食物列表
@@ -64,107 +82,100 @@ const FoodCategoryByTime: FC<IProps> = ({ children }) => {
             id: 10,
         },
     ]
-
-    //进行缓存
-    const {
-        breakFastFoodList,
-        lunchFoodList,
-        dinnerFoodList,
-        fruitFoodList,
-        otherFoodList,
-    } = useAppSelector((state) => {
-        return {
-            breakFastFoodList: state.DietSlice.breakFastFoodList,
-            lunchFoodList: state.DietSlice.lunchFastFoodList,
-            dinnerFoodList: state.DietSlice.dinnerFastFoodList,
-            fruitFoodList: state.DietSlice.fruitFoodList,
-            otherFoodList: state.DietSlice.otherFoodList,
-        }
-    }, shallowEqual)
-    const dispatch = useAppDispatch()
-    const getFoodList = (index: number, type?: string) => {
+    const dispatchFirst = (foods: SingleFoodListType[]) => {
+        dispatch(
+            changeFoodList({
+                index: activeId,
+                foods,
+            }),
+        )
+    }
+    const dispatchSecond = (foods: SingleFoodListType[]) => {
+        dispatch(
+            changeFoodList({
+                index: activeId,
+                foods: [
+                    ...new Set([...new Set([...FoodList.current]), ...foods]),
+                ],
+            }),
+        )
+        FoodList.current = [
+            ...new Set([...new Set([...FoodList.current]), ...foods]),
+        ]
+    }
+    const getFoodList = () => {
         const param = {
             pageNum: pageNum.current,
             pageSize: 10,
-            category_id: index,
+            category_id: activeId,
         }
-        let fooList: SingleFoodListType[]
-        switch (index) {
-            case 1:
-                fooList = breakFastFoodList
-                break
-            case 2:
-                fooList = lunchFoodList
-                break
-            case 4:
-                fooList = dinnerFoodList
-                break
-            case 5:
-                fooList = fruitFoodList
-                break
-            case 10:
-                fooList = otherFoodList
-                break
-        }
-        setRefresh(true)
         FoodListByCategoryApi(param).then((res) => {
             setFoodNum((res.data as FoodListByCategoryType).num)
-            //判断是不是下拉
-            if (type) {
-                dispatch(
-                    changeFoodList({
-                        index,
-                        foods: (res.data as FoodListByCategoryType).foods,
-                    }),
-                )
-                //恢复默认设置
-                num.current = 10
-                setPageLoadingFull(false)
-                pageNum.current = 1
-                setRefresh(false)
-                return
-            }
-            if (fooList.length === 0) {
-                dispatch(
-                    changeFoodList({
-                        index,
-                        foods: (res.data as FoodListByCategoryType).foods,
-                    }),
-                )
-            } else {
-                dispatch(
-                    changeFoodList({
-                        index,
-                        foods: [
-                            ...new Set([
-                                ...new Set([...fooList]),
-                                ...(res.data as FoodListByCategoryType).foods,
-                            ]),
-                        ],
-                    }),
-                )
+            switch (activeId) {
+                case 1:
+                    if (breakFastFoodList.length) {
+                        dispatchSecond(
+                            (res.data as FoodListByCategoryType).foods,
+                        )
+                        break
+                    }
+                    dispatchFirst((res.data as FoodListByCategoryType).foods)
+
+                    break
+                case 2:
+                    if (lunchFoodList.length) {
+                        dispatchSecond(
+                            (res.data as FoodListByCategoryType).foods,
+                        )
+                        break
+                    }
+                    dispatchFirst((res.data as FoodListByCategoryType).foods)
+                    break
+                case 4:
+                    if (dinnerFoodList.length) {
+                        dispatchSecond(
+                            (res.data as FoodListByCategoryType).foods,
+                        )
+
+                        break
+                    }
+                    dispatchFirst((res.data as FoodListByCategoryType).foods)
+                    break
+                case 5:
+                    if (fruitFoodList.length) {
+                        dispatchSecond(
+                            (res.data as FoodListByCategoryType).foods,
+                        )
+
+                        break
+                    }
+                    dispatchFirst((res.data as FoodListByCategoryType).foods)
+                    break
+                case 10:
+                    if (otherFoodList.length) {
+                        dispatchSecond(
+                            (res.data as FoodListByCategoryType).foods,
+                        )
+                        break
+                    }
+                    dispatchFirst((res.data as FoodListByCategoryType).foods)
+                    break
             }
         })
-        setRefresh(false)
-        return 123
     }
+    //初始化获取数据
     useEffect(() => {
-        Promise.all([
-            getFoodList(2),
-            getFoodList(4),
-            getFoodList(5),
-            getFoodList(10),
-            getFoodList(1),
-
-            getRecipe(),
-        ])
+        getRecipe().then()
     }, [])
     useEffect(() => {
-        //恢复默认设置
+        pageNum.current = 0
         num.current = 10
+        FoodList.current = []
+        getFoodList()
+        //恢复默认设置
         setPageLoadingFull(false)
-        pageNum.current = 1
     }, [activeId])
+
     return (
         <>
             <Tab
@@ -310,7 +321,7 @@ const FoodCategoryByTime: FC<IProps> = ({ children }) => {
                     }}
                 >
                     <FoodTab
-                        index={10}
+                        index={9}
                         refresh={refresh}
                         setRefresh={setRefresh}
                         FoodList={otherFoodList}
