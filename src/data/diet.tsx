@@ -50,8 +50,8 @@ export const FoodCategory = [
             <Image
                 source={require('../../assets/icon/zhushi.png')}
                 style={{
-                    width: Dimensions.get('screen').width / 5 - 40,
-                    height: 30,
+                    width: Dimensions.get('screen').width / 5 - 45,
+                    height: 35,
                 }}
             />
         ),
@@ -63,8 +63,8 @@ export const FoodCategory = [
             <Image
                 source={require('../../assets/icon/meat.png')}
                 style={{
-                    width: Dimensions.get('screen').width / 5 - 40,
-                    height: 30,
+                    width: Dimensions.get('screen').width / 5 - 45,
+                    height: 35,
                 }}
             />
         ),
@@ -76,8 +76,8 @@ export const FoodCategory = [
             <Image
                 source={require('../../assets/icon/nai.png')}
                 style={{
-                    width: Dimensions.get('screen').width / 5 - 40,
-                    height: 30,
+                    width: Dimensions.get('screen').width / 5 - 45,
+                    height: 35,
                 }}
             />
         ),
@@ -89,8 +89,8 @@ export const FoodCategory = [
             <Image
                 source={require('../../assets/icon/mihoutao.png')}
                 style={{
-                    width: Dimensions.get('screen').width / 5 - 40,
-                    height: 30,
+                    width: Dimensions.get('screen').width / 5 - 45,
+                    height: 35,
                 }}
             />
         ),
@@ -102,8 +102,8 @@ export const FoodCategory = [
             <Image
                 source={require('../../assets/icon/jianguo.png')}
                 style={{
-                    width: Dimensions.get('screen').width / 5 - 40,
-                    height: 30,
+                    width: Dimensions.get('screen').width / 5 - 45,
+                    height: 35,
                 }}
             />
         ),
@@ -115,8 +115,8 @@ export const FoodCategory = [
             <Image
                 source={require('../../assets/icon/juice.png')}
                 style={{
-                    width: Dimensions.get('screen').width / 5 - 40,
-                    height: 30,
+                    width: Dimensions.get('screen').width / 5 - 45,
+                    height: 35,
                 }}
             />
         ),
@@ -128,8 +128,8 @@ export const FoodCategory = [
             <Image
                 source={require('../../assets/icon/you.png')}
                 style={{
-                    width: Dimensions.get('screen').width / 5 - 40,
-                    height: 30,
+                    width: Dimensions.get('screen').width / 5 - 45,
+                    height: 35,
                 }}
             />
         ),
@@ -141,8 +141,8 @@ export const FoodCategory = [
             <Image
                 source={require('../../assets/icon/tiaowei.png')}
                 style={{
-                    width: Dimensions.get('screen').width / 5 - 40,
-                    height: 30,
+                    width: Dimensions.get('screen').width / 5 - 45,
+                    height: 35,
                 }}
             />
         ),

@@ -128,7 +128,7 @@ const Ranking: FC<IProps> = () => {
                                     )}
 
                                     <AutoText fontSize={4}>
-                                        {item.name}
+                                        {item.username}
                                     </AutoText>
                                 </View>
                                 {/*TODO:打卡率*/}

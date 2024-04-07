@@ -17,7 +17,6 @@ interface IProps {
 
 const CalendarDay: FC<IProps> = () => {
     const route = useRoute()
-    const data = ''
     const { userInfo, currentTime } = useAppSelector((state) => {
         return {
             userInfo: state.LoginRegisterSlice.userInfo,
@@ -25,13 +24,13 @@ const CalendarDay: FC<IProps> = () => {
         }
     }, shallowEqual)
     const ClockCalendarBody: ClockCalendarParams = {
-        newDateTime: '2024-04-05',
+        // newDateTime: '2024-04-05',
         userId: userInfo.id,
         groupId: (route.params as { id: number }).id,
     }
     const ClockCalendar = () => {
         ClockCalendarApi(ClockCalendarBody).then((res) => {
-            console.log(res.data)
+            console.log(res)
         })
     }
     useEffect(() => {

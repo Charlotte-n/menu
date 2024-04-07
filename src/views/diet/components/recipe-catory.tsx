@@ -21,7 +21,7 @@ const RecipeCategory: FC<IProps> = () => {
                 style={{
                     width: Dimensions.get('screen').width / 5,
                 }}
-                className="flex-col justify-center"
+                className="flex-col justify-center items-center"
                 onPress={() => {
                     //@ts-ignore
                     navigation.navigate('category', {
@@ -31,7 +31,9 @@ const RecipeCategory: FC<IProps> = () => {
                 }}
             >
                 {image}
-                <Text style={{ fontSize: 13 }}>{name}</Text>
+                <Text style={{ fontSize: 13, textAlign: 'center' }}>
+                    {name}
+                </Text>
             </TouchableOpacity>
         )
     }

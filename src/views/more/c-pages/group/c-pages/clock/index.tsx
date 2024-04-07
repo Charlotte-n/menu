@@ -16,7 +16,7 @@ import { ClockApi } from '../../../../../../apis/group'
 import { clockParam } from '../../../../../../apis/types/group'
 import { useAppDispatch, useAppSelector } from '../../../../../../store'
 import { shallowEqual } from 'react-redux'
-import { useRoute } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { changeCurrentTimeAction } from '../../../../../../store/slice/group'
 import moment from 'moment'
 
@@ -26,6 +26,7 @@ interface IProps {
 
 const Clock: FC<IProps> = () => {
     const route = useRoute()
+    const navigation = useNavigation()
     const dispatch = useAppDispatch()
     const [images, setImages] = useState([] as string[])
     const { userInfo } = useAppSelector((state) => {
@@ -37,7 +38,7 @@ const Clock: FC<IProps> = () => {
         setImages((prevState) => [...prevState, image])
     }
     const [clockP, setClockParam] = useState<clockParam>({
-        content: '123',
+        content: '',
         userId: userInfo.id,
         groupId: (route.params as { id: number }).id,
     })
@@ -51,7 +52,14 @@ const Clock: FC<IProps> = () => {
                 type: 'image/jpeg',
             } as any)
         })
-        await ClockApi(clockP, formData)
+        const res = await ClockApi(clockP, formData)
+        if (res.code === 1) {
+            //@ts-ignore
+            navigation.navigate('groupDetailHome', {
+                id: (route.params as { id: number }).id,
+                time: new Date().toString(),
+            })
+        }
         dispatch(
             changeCurrentTimeAction(moment(new Date()).format('YYYY-MM-DD')),
         )
@@ -130,6 +138,12 @@ const Clock: FC<IProps> = () => {
                             paddingHorizontal: 10,
                             paddingBottom: 10,
                         }}
+                        onChangeText={(value: string) =>
+                            setClockParam((prevState) => {
+                                prevState.content = value
+                                return prevState
+                            })
+                        }
                         placeholder={'请输入打卡内容'}
                         textAlignVertical="top"
                         multiline={true}

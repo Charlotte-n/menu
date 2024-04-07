@@ -134,7 +134,7 @@ const EchartSmallPie: FC<IProps> = () => {
                                     style={{
                                         fontSize: 18,
                                         textAlign: 'center',
-                                        left: 25,
+                                        left: 35,
                                         width: 30,
                                         top: -5,
                                     }}
@@ -147,7 +147,7 @@ const EchartSmallPie: FC<IProps> = () => {
                                     style={{
                                         fontSize: 9,
                                         textAlign: 'center',
-                                        left: 25,
+                                        left: 35,
                                     }}
                                 >
                                     千卡

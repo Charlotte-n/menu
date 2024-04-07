@@ -15,13 +15,15 @@ import theme from '../../../../../../styles/theme/color'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import {
     DeleteGroupNumberApi,
+    getClockContentApi,
     getThreeGroupApi,
     GroupDetailApi,
     JoinGroupByCodeApi,
-    QuitGroupApi,
-    showGambitApi,
 } from '../../../../../../apis/group'
-import { GambitData, GroupInfoType } from '../../../../../../apis/types/group'
+import {
+    ClockContentType,
+    GroupInfoType,
+} from '../../../../../../apis/types/group'
 import { useAppSelector } from '../../../../../../store'
 import { shallowEqual, useDispatch } from 'react-redux'
 import {
@@ -54,19 +56,34 @@ const GroupDetailHome: FC<IProps> = () => {
             },
         )
     }
-    //获取队伍详细信息
-    const [groupGambit, setGroupGambit] = useState([] as GambitData)
-    const getGroupGambit = () => {
-        showGambitApi((route.params as { id: number }).id).then((res) => {
-            console.log(res)
-            setGroupGambit(res.data)
-        })
+    const [ClockContent, setClockContent] = useState([] as ClockContentType)
+    //获取打卡内容
+    const GetClockContent = () => {
+        try {
+            getClockContentApi((route.params as { id: number }).id).then(
+                (res) => {
+                    res.data.map((item) => {
+                        if (item.image) {
+                            item.image = (item.image as string).split('|')
+                            item.image.pop()
+                        }
+                        return item
+                    })
+                    setClockContent(res.data)
+                },
+            )
+        } catch (e) {
+            console.log(e, '获取打卡内容接口出错了')
+        }
     }
     //判断是否加入了
     useEffect(() => {
         getGroupDetail()
-        getGroupGambit()
+        GetClockContent()
     }, [])
+    useEffect(() => {
+        GetClockContent()
+    }, [(route.params as { time: string }).time])
     //打卡
     const handleClock = () => {
         //@ts-ignore
@@ -92,7 +109,9 @@ const GroupDetailHome: FC<IProps> = () => {
     //加入小组
     const JoinGroup = () => {
         JoinGroupByCodeApi(userInfo.id, groupDetail.codeInfo).then((res) => {
-            Alert.alert('成功加入小组')
+            if (res.code == 1) {
+                Alert.alert('成功加入小组')
+            }
         })
         getGroupDetail()
     }
@@ -116,9 +135,11 @@ const GroupDetailHome: FC<IProps> = () => {
             userInfo.id,
             (route.params as { id: number }).id,
         ).then((res) => {
-            getThreeGroup()
-            ToastAndroid.show('退出成功', 10)
-            getGroupDetail()
+            if (res.code === 1) {
+                getThreeGroup()
+                ToastAndroid.show('退出成功', 10)
+                getGroupDetail()
+            }
         })
         disShowBottom()
     }
@@ -189,7 +210,6 @@ const GroupDetailHome: FC<IProps> = () => {
                             style={{
                                 paddingHorizontal: 5,
                                 borderWidth: 1,
-                                width: 50,
                                 borderRadius: 20,
                                 marginRight: 10,
                             }}
@@ -278,7 +298,7 @@ const GroupDetailHome: FC<IProps> = () => {
                             </View>
                         </View>
                         {/*打卡内容*/}
-                        {groupGambit.map((item, index) => {
+                        {ClockContent.map((item) => {
                             return (
                                 <View key={item.id}>
                                     <View
@@ -309,18 +329,39 @@ const GroupDetailHome: FC<IProps> = () => {
                                                     source={require('../../../../../../../assets/images/bg_login_header.png')}
                                                 ></Image>
                                                 <AutoText fontSize={3.5}>
-                                                    减肥小可爱
+                                                    减肥嘻嘻奥可爱
                                                 </AutoText>
                                             </View>
                                             {/*内容*/}
-                                            <AutoText
-                                                style={{
-                                                    top: -20,
-                                                    left: 10,
-                                                }}
-                                            >
-                                                {item.content}
-                                            </AutoText>
+                                            <View>
+                                                <AutoText
+                                                    style={{
+                                                        top: -20,
+                                                        left: 10,
+                                                    }}
+                                                >
+                                                    {item.content}
+                                                </AutoText>
+                                                {item.image
+                                                    ? (
+                                                          item.image as string[]
+                                                      ).map((item, index) => (
+                                                          <Image
+                                                              key={index}
+                                                              source={{
+                                                                  uri: item,
+                                                              }}
+                                                              style={{
+                                                                  width: 100,
+                                                                  height: 100,
+                                                                  borderRadius: 10,
+                                                                  paddingHorizontal: 10,
+                                                                  paddingVertical: 20,
+                                                              }}
+                                                          ></Image>
+                                                      ))
+                                                    : null}
+                                            </View>
                                         </View>
                                     </View>
                                 </View>

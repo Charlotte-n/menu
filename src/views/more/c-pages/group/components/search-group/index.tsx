@@ -328,7 +328,6 @@ const SearchGroup: FC<IProps> = () => {
                                                   <AutoText
                                                       fontSize={3.5}
                                                       style={{
-                                                          width: 150 / 2,
                                                           marginRight: 10,
                                                           backgroundColor:
                                                               theme.colors
@@ -346,7 +345,6 @@ const SearchGroup: FC<IProps> = () => {
                                                   <AutoText
                                                       fontSize={3.5}
                                                       style={{
-                                                          width: 150 / 2.5,
                                                           backgroundColor:
                                                               theme.colors
                                                                   .secondary,
