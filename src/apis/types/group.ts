@@ -1,5 +1,3 @@
-import { getCategoryGroupsApi } from '../group'
-
 export interface createGroupParam {
     groupName: string
     groupSize: number | string
@@ -88,7 +86,7 @@ export interface ClockCalendarParams {
 
 export interface ClockCalendarData {
     checkout: number
-    dateTime: string
+    datetime: string
 }
 
 export interface RankingMemberBody {
@@ -107,6 +105,8 @@ export interface SingleClockContentType {
     id: number
     image: string | string[]
     userId: number
+    avatar: string
+    username: string
 }
 
 //endregion

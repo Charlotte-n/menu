@@ -103,25 +103,43 @@ const More: FC<IProps> = ({ isVisible, children }) => {
                         </TouchableOpacity>
                     </View>
                     {/*    内容*/}
-                    <View className="mt-[20] flex-row">
+                    <View>
                         {moreFunction.map((item) => {
                             return (
-                                <TouchableOpacity
+                                <View
                                     key={item.key}
-                                    className="w-[70] h-[70] items-center justify-center mr-[20]"
+                                    className="mt-[20] "
                                     style={{
-                                        borderRadius: 10,
-                                        borderWidth: 1,
-                                        borderColor: theme.colors.deep01Primary,
-                                        marginBottom: 10,
+                                        borderBottomWidth: 1,
+                                        borderColor: theme.colors.secondary,
                                     }}
-                                    onPress={() => item.toPage()}
                                 >
-                                    {item.Image}
-                                    <AutoText fontSize={4}>
+                                    <AutoText
+                                        fontSize={5}
+                                        style={{
+                                            marginBottom: 5,
+                                        }}
+                                    >
                                         {item.title}
                                     </AutoText>
-                                </TouchableOpacity>
+                                    <TouchableOpacity
+                                        key={item.key}
+                                        className="w-[70] h-[70] items-center justify-center mr-[20]"
+                                        style={{
+                                            borderRadius: 10,
+                                            borderWidth: 1,
+                                            borderColor:
+                                                theme.colors.deep01Primary,
+                                            marginBottom: 10,
+                                        }}
+                                        onPress={() => item.toPage()}
+                                    >
+                                        {item.Image}
+                                        <AutoText fontSize={4}>
+                                            {item.title}
+                                        </AutoText>
+                                    </TouchableOpacity>
+                                </View>
                             )
                         })}
                     </View>

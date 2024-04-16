@@ -12,8 +12,15 @@ import AutoText from '../../../../../../components/auto-text'
 import { Avatar, Button, Card, Icon } from '@rneui/themed'
 import theme from '../../../../../../styles/theme/color'
 import ImagePicker from '../../../../../../components/image-picker'
-import { ClockApi } from '../../../../../../apis/group'
-import { clockParam } from '../../../../../../apis/types/group'
+import {
+    ClockApi,
+    ClockCalendarApi,
+    ClockContentApi,
+} from '../../../../../../apis/group'
+import {
+    ClockCalendarParams,
+    clockParam,
+} from '../../../../../../apis/types/group'
 import { useAppDispatch, useAppSelector } from '../../../../../../store'
 import { shallowEqual } from 'react-redux'
 import { useNavigation, useRoute } from '@react-navigation/native'
@@ -52,13 +59,26 @@ const Clock: FC<IProps> = () => {
                 type: 'image/jpeg',
             } as any)
         })
-        const res = await ClockApi(clockP, formData)
+        let res: any
+        //文字或者图片上传
+        if (images.length) {
+            res = await ClockApi(clockP, formData)
+        } else {
+            res = await ClockContentApi(clockP)
+        }
         if (res.code === 1) {
+            //打卡日历
+            const data: ClockCalendarParams = {
+                groupId: (route.params as { id: number }).id,
+                userId: userInfo.id,
+                newDateTime: moment(new Date()).format('YYYY-MM-DD'),
+            }
             //@ts-ignore
             navigation.navigate('groupDetailHome', {
                 id: (route.params as { id: number }).id,
                 time: new Date().toString(),
             })
+            await ClockCalendarApi(data)
         }
         dispatch(
             changeCurrentTimeAction(moment(new Date()).format('YYYY-MM-DD')),

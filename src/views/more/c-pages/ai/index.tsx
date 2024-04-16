@@ -8,6 +8,7 @@ import {
     TextInput,
     View,
     StyleSheet,
+    Dimensions,
 } from 'react-native'
 import AutoText from '../../../../components/auto-text'
 import { Button } from '@rneui/themed'
@@ -210,13 +211,13 @@ const AI: FC<IProps> = () => {
 
     return (
         <ScrollView
-            className="bg-gray-50 pl-[20] pr-[20] pt-[10]  relative"
+            className="bg-gray-50 pl-[20] pr-[20] pt-[10]  relative flex-1"
             showsVerticalScrollIndicator={false}
         >
             {/*显示对话内容的区域*/}
             <ScrollView
                 style={{
-                    height: 600,
+                    height: Dimensions.get('window').height - 200,
                     marginBottom: 80,
                 }}
                 showsVerticalScrollIndicator={false}
@@ -234,7 +235,7 @@ const AI: FC<IProps> = () => {
                 style={{
                     marginBottom: 10,
                     position: 'absolute',
-                    bottom: 10,
+                    bottom: 0,
                 }}
                 className="flex-row"
             >

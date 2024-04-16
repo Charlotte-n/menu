@@ -1807,6 +1807,11 @@
   dependencies:
     merge-options "^3.0.4"
 
+"@react-native-community/blur@^4.4.0":
+  version "4.4.0"
+  resolved "https://registry.npmmirror.com/@react-native-community/blur/-/blur-4.4.0.tgz#b2440dab17d94e480fbc4470e03155573b5b7375"
+  integrity sha512-P+xdT2LIq1ewOsF3zx7C0nu4dj7nxl2NVTsMXEzRDjM3bWMdrrEbTRA7uwPV5ngn7/BXIommBPlT/JW4SAedrw==
+
 "@react-native-community/cli-clean@12.3.0":
   version "12.3.0"
   resolved "https://r.cnpmjs.org/@react-native-community/cli-clean/-/cli-clean-12.3.0.tgz#667b32daa58b4d11d5b5ab9eb0a2e216d500c90b"
@@ -7483,7 +7488,7 @@ react-native-swipe-gestures@^1.0.5:
 
 react-native-swipe-list-view@^3.2.9:
   version "3.2.9"
-  resolved "https://r2.cnpmjs.org/react-native-swipe-list-view/-/react-native-swipe-list-view-3.2.9.tgz#d725c7cdf481dd5df12a00dbfe0120013b5f2e59"
+  resolved "https://registry.npmmirror.com/react-native-swipe-list-view/-/react-native-swipe-list-view-3.2.9.tgz#d725c7cdf481dd5df12a00dbfe0120013b5f2e59"
   integrity sha512-SjAEuHc/D6ovp+RjDUhfNmw6NYOntdT7+GFhfMGfP/BSLMuMWynpzJy9GKQeyB8sI78T6Lzip21TVbongOg1Mw==
 
 react-native-tab-view@^3.5.2:

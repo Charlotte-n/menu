@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from 'react'
+import React, { memo, useEffect, useRef, useState } from 'react'
 import type { FC, ReactNode } from 'react'
 import { View } from 'react-native'
 import { Calendar } from 'react-native-calendars'
@@ -24,15 +24,44 @@ const CalendarDay: FC<IProps> = () => {
         }
     }, shallowEqual)
     const ClockCalendarBody: ClockCalendarParams = {
-        // newDateTime: '2024-04-05',
         userId: userInfo.id,
         groupId: (route.params as { id: number }).id,
     }
+    const [date, setDate] = useState({})
+    const [array, setArray] = useState([] as any)
     const ClockCalendar = () => {
-        ClockCalendarApi(ClockCalendarBody).then((res) => {
-            console.log(res)
-        })
+        try {
+            ClockCalendarApi(ClockCalendarBody).then((res) => {
+                if (res.code === 1) {
+                    setArray(
+                        res.data.datetime ? res.data.datetime.split('|') : [],
+                    )
+                    res.data.datetime
+                        ? res.data.datetime
+                              .split('|')
+                              .filter((item) => {
+                                  return item !== ' '
+                              })
+                              .map((value) => {
+                                  setDate((prevState) => {
+                                      ;(prevState as any)[value.trim()] = {
+                                          selectedColor:
+                                              theme.colors.deep01Primary,
+                                          selected: true,
+                                      }
+                                      return prevState
+                                  })
+                              })
+                        : null
+                }
+            })
+        } catch (e) {
+            console.log(e, '打卡日历接口出错了')
+        }
     }
+    useEffect(() => {
+        ClockCalendar()
+    }, [date])
     useEffect(() => {
         ClockCalendar()
     }, [])
@@ -45,11 +74,15 @@ const CalendarDay: FC<IProps> = () => {
                         textAlign: 'center',
                     }}
                 >
-                    减脂打卡监督小分队
+                    {(route.params as { name: string }).name}
                 </AutoText>
             </View>
             <Calendar
                 initialDate={moment(new Date()).format('YYYY-MM-DD')}
+                theme={{
+                    todayTextColor: theme.colors.deep01Primary,
+                    arrowColor: theme.colors.deep01Primary,
+                }}
                 minDate={'2022-05-10'}
                 onDayPress={(day) => {
                     // console.log('selected day', day)
@@ -65,12 +98,7 @@ const CalendarDay: FC<IProps> = () => {
                 onPressArrowLeft={(subtractMonth) => subtractMonth()}
                 onPressArrowRight={(addMonth) => addMonth()}
                 enableSwipeMonths={true}
-                markedDates={{
-                    '2024-03-26': {
-                        selected: true,
-                        color: theme.colors.deep01Primary,
-                    },
-                }}
+                markedDates={date}
             />
             <View className="mt-[20] ml-[50]">
                 <View className="flex-row">

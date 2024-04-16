@@ -13,6 +13,7 @@ import MoreGroup from '../views/more/c-pages/group/c-pages/more-group'
 import { useAppSelector } from '../store'
 import { shallowEqual } from 'react-redux'
 import MemberManage from '../views/more/c-pages/group/c-pages/member-manage'
+import Search from '../views/more/c-pages/group/c-pages/search'
 
 interface IProps {
     children?: ReactNode
@@ -73,6 +74,8 @@ const GroupRoute: FC<IProps> = ({ navigation }) => {
                     headerTitleStyle: {
                         fontSize: 15,
                     },
+                    headerShown: false,
+                    headerStatusBarHeight: 30,
                 }}
             ></Stack.Screen>
             {/*打卡日历*/}
@@ -129,6 +132,16 @@ const GroupRoute: FC<IProps> = ({ navigation }) => {
                 component={MemberManage}
                 options={{
                     headerTitle: '成员管理',
+                    headerTitleStyle: {
+                        fontSize: 15,
+                    },
+                }}
+            ></Stack.Screen>
+            <Stack.Screen
+                name={'search'}
+                component={Search}
+                options={{
+                    headerTitle: '搜索页面',
                     headerTitleStyle: {
                         fontSize: 15,
                     },

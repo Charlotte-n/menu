@@ -56,21 +56,30 @@ const CategoryGroup: FC<IProps> = () => {
     return (
         <>
             <View
-                className="ml-[20] mt-[230] mr-[20] bg-white  pl-[10] pt-[10] pr-[10] pb-[10]"
+                className="ml-[12] mt-[230] mr-[12] bg-white  pl-[10] pt-[10] pr-[10] pb-[10]"
                 style={{
                     borderRadius: 10,
                 }}
             >
-                <AutoText
-                    fontSize={5.5}
+                <View
+                    className="flex-row flex  items-center"
                     style={{
                         borderBottomWidth: 0.5,
                         paddingBottom: 10,
                         borderColor: '#cccccc',
                     }}
                 >
-                    分类小组
-                </AutoText>
+                    <Image
+                        style={{
+                            width: 30,
+                            height: 30,
+                            marginRight: 10,
+                        }}
+                        source={require('../../../../../../../assets/icon/classify.png')}
+                    ></Image>
+                    <AutoText fontSize={5.5}>分类小组</AutoText>
+                </View>
+
                 {/*分类小组*/}
                 <View className=" pb-[15]">
                     {groupCategory &&
@@ -133,8 +142,8 @@ const CategoryGroup: FC<IProps> = () => {
                                                             {item.avatar ? (
                                                                 <Image
                                                                     style={{
-                                                                        width: 40,
-                                                                        height: 40,
+                                                                        width: 50,
+                                                                        height: 50,
                                                                         borderRadius: 100,
                                                                         marginBottom: 5,
                                                                     }}
@@ -145,8 +154,8 @@ const CategoryGroup: FC<IProps> = () => {
                                                             ) : (
                                                                 <Image
                                                                     style={{
-                                                                        width: 35,
-                                                                        height: 35,
+                                                                        width: 50,
+                                                                        height: 50,
                                                                         borderRadius: 100,
                                                                         marginBottom: 5,
                                                                     }}
@@ -155,7 +164,7 @@ const CategoryGroup: FC<IProps> = () => {
                                                             )}
 
                                                             <AutoText
-                                                                fontSize={4}
+                                                                fontSize={4.5}
                                                                 numberOfLines={
                                                                     1
                                                                 }

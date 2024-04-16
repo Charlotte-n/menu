@@ -173,11 +173,22 @@ export const showMemberRankingApi = (body: RankingMemberBody) => {
  * @param images
  * @constructor
  */
+export const ClockContentApi = (query: clockParam) => {
+    const { content, groupId, userId } = query
+    return hyRequest.post({
+        url: BASEURL.USER_CLOCK,
+        params: {
+            content,
+            groupId,
+            userId,
+        },
+    })
+}
 export const ClockApi = (query: clockParam, images: any) => {
     const { content, groupId, userId } = query
     return hyRequest.post<CommonResponseType<any>>({
         url: BASEURL.USER_CLOCK,
-        data: images,
+        data: images ? images : null,
         params: {
             content,
             groupId,
